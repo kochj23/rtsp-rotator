@@ -103,4 +103,304 @@
 
 @end
 
+
 @interface RTSPCameraTypeManager ()
+@property (nonatomic, strong) NSMutableArray<RTSPStandardCameraConfig *> *allRTSPCameras;
+@end
+
+@implementation RTSPCameraTypeManager
+
++ (instancetype)sharedManager {
+    static RTSPCameraTypeManager *shared = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        shared = [[RTSPCameraTypeManager alloc] init];
+    });
+    return shared;
+}
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        _allRTSPCameras = [NSMutableArray array];
+        [self loadCameras];
+    }
+    return self;
+}
+
+- (NSArray<RTSPStandardCameraConfig *> *)rtspCameras {
+    return [self.allRTSPCameras copy];
+}
+
+- (NSArray<RTSPGoogleHomeCameraConfig *> *)googleHomeCameras {
+}
+
+- (void)addRTSPCamera:(RTSPStandardCameraConfig *)camera {
+    [self.allRTSPCameras addObject:camera];
+    [self saveCameras];
+
+    NSLog(@"[CameraTypeManager] Added RTSP camera: %@", camera.name);
+
+    if ([self.delegate respondsToSelector:@selector(cameraTypeManager:didUpdateCamera:)]) {
+        [self.delegate cameraTypeManager:self didUpdateCamera:camera];
+    }
+}
+
+- (void)addGoogleHomeCamera:(RTSPGoogleHomeCameraConfig *)camera {
+    [self saveCameras];
+
+    NSLog(@"[CameraTypeManager] Added Google Home camera: %@", camera.name);
+
+    if ([self.delegate respondsToSelector:@selector(cameraTypeManager:didUpdateCamera:)]) {
+        [self.delegate cameraTypeManager:self didUpdateCamera:camera];
+    }
+}
+
+- (void)removeCameraWithID:(NSString *)cameraID {
+    RTSPCameraConfig *camera = [self cameraWithID:cameraID];
+
+    if ([camera isKindOfClass:[RTSPStandardCameraConfig class]]) {
+        [self.allRTSPCameras removeObject:(RTSPStandardCameraConfig *)camera];
+    } else if ([camera isKindOfClass:[RTSPGoogleHomeCameraConfig class]]) {
+    }
+
+    [self saveCameras];
+    NSLog(@"[CameraTypeManager] Removed camera: %@", cameraID);
+}
+
+- (RTSPCameraConfig *)cameraWithID:(NSString *)cameraID {
+    for (RTSPStandardCameraConfig *camera in self.allRTSPCameras) {
+        if ([camera.cameraID isEqualToString:cameraID]) {
+            return camera;
+        }
+    }
+
+        if ([camera.cameraID isEqualToString:cameraID]) {
+            return camera;
+        }
+    }
+
+    return nil;
+}
+
+- (void)testCameraConnection:(RTSPCameraConfig *)camera completion:(void (^)(BOOL, NSDictionary * _Nullable, NSError * _Nullable))completion {
+    NSMutableDictionary *diagnostics = [NSMutableDictionary dictionary];
+    diagnostics[@"cameraID"] = camera.cameraID;
+    diagnostics[@"cameraName"] = camera.name;
+    diagnostics[@"cameraType"] = camera.cameraType;
+    diagnostics[@"testStartTime"] = [NSDate date];
+
+    if ([camera isKindOfClass:[RTSPStandardCameraConfig class]]) {
+        RTSPStandardCameraConfig *rtspCamera = (RTSPStandardCameraConfig *)camera;
+
+        [rtspCamera testConnectionWithCompletion:^(BOOL success, NSError *error) {
+            diagnostics[@"testEndTime"] = [NSDate date];
+            diagnostics[@"connectionSuccess"] = @(success);
+            diagnostics[@"feedURL"] = rtspCamera.feedURL.absoluteString;
+
+            if (error) {
+                diagnostics[@"error"] = error.localizedDescription;
+                diagnostics[@"errorCode"] = @(error.code);
+            }
+
+            RTSPCameraConnectionStatus status = success ? RTSPCameraConnectionStatusConnected : RTSPCameraConnectionStatusFailed;
+
+            if ([self.delegate respondsToSelector:@selector(cameraTypeManager:cameraConnectionChanged:status:)]) {
+                [self.delegate cameraTypeManager:self cameraConnectionChanged:camera status:status];
+            }
+
+            if (completion) completion(success, diagnostics, error);
+        }];
+
+    } else if ([camera isKindOfClass:[RTSPGoogleHomeCameraConfig class]]) {
+        RTSPGoogleHomeCameraConfig *ghCamera = (RTSPGoogleHomeCameraConfig *)camera;
+
+        [ghCamera refreshStreamWithCompletion:^(BOOL success, NSError *error) {
+            diagnostics[@"testEndTime"] = [NSDate date];
+            diagnostics[@"connectionSuccess"] = @(success);
+            diagnostics[@"deviceID"] = ghCamera.deviceID;
+            diagnostics[@"isStreaming"] = @(ghCamera.isStreaming);
+
+            if (ghCamera.streamExpiresAt) {
+                diagnostics[@"streamExpiresAt"] = ghCamera.streamExpiresAt;
+            }
+
+            if (error) {
+                diagnostics[@"error"] = error.localizedDescription;
+            }
+
+            RTSPCameraConnectionStatus status = success ? RTSPCameraConnectionStatusConnected : RTSPCameraConnectionStatusFailed;
+
+            if ([self.delegate respondsToSelector:@selector(cameraTypeManager:cameraConnectionChanged:status:)]) {
+                [self.delegate cameraTypeManager:self cameraConnectionChanged:camera status:status];
+            }
+
+            if (completion) completion(success, diagnostics, error);
+        }];
+    }
+}
+
+- (NSArray<RTSPCameraConfig *> *)camerasOfType:(NSString *)type {
+    if ([type isEqualToString:@"RTSP"]) {
+        return [self.allRTSPCameras copy];
+    } else if ([type isEqualToString:@"GoogleHome"]) {
+    }
+    return @[];
+}
+
+- (BOOL)importCamerasFromFile:(NSString *)filePath error:(NSError **)error {
+    NSData *data = [NSData dataWithContentsOfFile:filePath];
+    if (!data) {
+        if (error) {
+            *error = [NSError errorWithDomain:@"RTSPCameraTypeManager"
+                                        code:2001
+                                    userInfo:@{NSLocalizedDescriptionKey: @"Failed to read file"}];
+        }
+        return NO;
+    }
+
+    NSDictionary *config = [NSJSONSerialization JSONObjectWithData:data options:0 error:error];
+    if (!config) {
+        return NO;
+    }
+
+    // Import RTSP cameras
+    NSArray *rtspCameras = config[@"rtspCameras"];
+    for (NSDictionary *cameraDict in rtspCameras) {
+        RTSPStandardCameraConfig *camera = [[RTSPStandardCameraConfig alloc] init];
+        camera.name = cameraDict[@"name"];
+        camera.feedURL = [NSURL URLWithString:cameraDict[@"url"]];
+        camera.username = cameraDict[@"username"];
+        camera.password = cameraDict[@"password"];
+        camera.location = cameraDict[@"location"];
+        [self addRTSPCamera:camera];
+    }
+
+    NSLog(@"[CameraTypeManager] Imported %lu cameras from file", (unsigned long)rtspCameras.count);
+    return YES;
+}
+
+- (BOOL)exportCamerasToFile:(NSString *)filePath error:(NSError **)error {
+    NSMutableDictionary *config = [NSMutableDictionary dictionary];
+
+    NSMutableArray *rtspArray = [NSMutableArray array];
+    for (RTSPStandardCameraConfig *camera in self.allRTSPCameras) {
+        [rtspArray addObject:@{
+            @"name": camera.name ?: @"",
+            @"url": camera.feedURL.absoluteString ?: @"",
+            @"username": camera.username ?: @"",
+            @"password": camera.password ?: @"",
+            @"location": camera.location ?: @""
+        }];
+    }
+    config[@"rtspCameras"] = rtspArray;
+
+    NSMutableArray *ghArray = [NSMutableArray array];
+        [ghArray addObject:@{
+            @"name": camera.name ?: @"",
+            @"deviceID": camera.deviceID ?: @"",
+            @"deviceType": camera.deviceType ?: @"",
+            @"roomName": camera.roomName ?: @""
+        }];
+    }
+    config[@"googleHomeCameras"] = ghArray;
+
+    NSData *data = [NSJSONSerialization dataWithJSONObject:config options:NSJSONWritingPrettyPrinted error:error];
+    if (!data) {
+        return NO;
+    }
+
+    return [data writeToFile:filePath atomically:YES];
+}
+
+- (void)discoverRTSPCamerasWithCompletion:(void (^)(NSArray<RTSPStandardCameraConfig *> *))completion {
+    // ONVIF discovery would go here
+    // This is a placeholder for network camera discovery
+
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSLog(@"[CameraTypeManager] Starting ONVIF camera discovery...");
+
+        // In production, this would use ONVIF WS-Discovery protocol
+        // For now, return empty array
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (completion) {
+                completion(@[]);
+            }
+        });
+    });
+}
+
+- (BOOL)saveCameras {
+    NSString *appSupport = [NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) firstObject];
+    NSString *appFolder = [appSupport stringByAppendingPathComponent:@"RTSP Rotator"];
+
+    NSFileManager *fm = [NSFileManager defaultManager];
+    if (![fm fileExistsAtPath:appFolder]) {
+        [fm createDirectoryAtPath:appFolder withIntermediateDirectories:YES attributes:nil error:nil];
+    }
+
+    NSString *camerasPath = [appFolder stringByAppendingPathComponent:@"camera_types.dat"];
+
+    NSDictionary *data = @{
+        @"rtspCameras": self.allRTSPCameras,
+        
+    };
+
+    NSError *error = nil;
+    NSData *archiveData = [NSKeyedArchiver archivedDataWithRootObject:data requiringSecureCoding:YES error:&error];
+
+    if (error) {
+        NSLog(@"[CameraTypeManager] Failed to save cameras: %@", error);
+        return NO;
+    }
+
+    BOOL success = [archiveData writeToFile:camerasPath atomically:YES];
+    if (success) {
+        NSLog(@"[CameraTypeManager] Saved %lu RTSP",
+              (unsigned long)self.allRTSPCameras.count);
+    }
+
+    return success;
+}
+
+- (BOOL)loadCameras {
+    NSString *appSupport = [NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) firstObject];
+    NSString *camerasPath = [[appSupport stringByAppendingPathComponent:@"RTSP Rotator"] stringByAppendingPathComponent:@"camera_types.dat"];
+
+    if (![[NSFileManager defaultManager] fileExistsAtPath:camerasPath]) {
+        NSLog(@"[CameraTypeManager] No saved cameras found");
+        return NO;
+    }
+
+    NSError *error = nil;
+    NSData *archiveData = [NSData dataWithContentsOfFile:camerasPath];
+
+    NSSet *classes = [NSSet setWithArray:@[
+        [NSDictionary class],
+        [NSArray class],
+        [NSMutableArray class],
+        [RTSPStandardCameraConfig class],
+        [RTSPCameraConfig class],
+        [NSString class],
+        [NSURL class],
+        [NSNumber class],
+        [NSDate class]
+    ]];
+
+    NSDictionary *data = [NSKeyedUnarchiver unarchivedObjectOfClasses:classes fromData:archiveData error:&error];
+
+    if (error) {
+        NSLog(@"[CameraTypeManager] Failed to load cameras: %@", error);
+        return NO;
+    }
+
+    self.allRTSPCameras = [NSMutableArray arrayWithArray:data[@"rtspCameras"]];
+
+    NSLog(@"[CameraTypeManager] Loaded %lu RTSP",
+          (unsigned long)self.allRTSPCameras.count);
+
+    return YES;
+}
+
+@end
