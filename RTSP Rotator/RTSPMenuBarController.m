@@ -7,7 +7,6 @@
 
 #import "RTSPMenuBarController.h"
 #import "RTSPWallpaperController.h"
-#import "RTSPGoogleHomeAdapter.h"
 #import "RTSPUniFiProtectAdapter.h"
 #import "RTSPDashboardManager.h"
 #import "RTSPCameraTypeManager.h"
@@ -50,7 +49,6 @@
     [mainMenu addItem:[self createFileMenu]];
 
     // 3. Google Home Cameras Menu
-    [mainMenu addItem:[self createGoogleHomeCamerasMenu]];
 
     // 4. UniFi Protect Menu
     [mainMenu addItem:[self createUniFiProtectMenu]];
@@ -164,54 +162,6 @@
 
 #pragma mark - Google Home Cameras Menu
 
-- (NSMenuItem *)createGoogleHomeCamerasMenu {
-    NSMenuItem *googleHomeMenuItem = [[NSMenuItem alloc] init];
-    NSMenu *googleHomeMenu = [[NSMenu alloc] initWithTitle:@"Google Home"];
-
-    // Authenticate
-    [googleHomeMenu addItem:[self menuItem:@"Authenticate with Google..."
-                                    action:@selector(authenticateGoogleHome:)
-                                       key:@""]];
-
-    [googleHomeMenu addItem:[NSMenuItem separatorItem]];
-
-    // Discover Cameras
-    [googleHomeMenu addItem:[self menuItem:@"Discover Cameras"
-                                    action:@selector(discoverGoogleHomeCameras:)
-                                       key:@""]];
-
-    // Refresh All Streams
-    [googleHomeMenu addItem:[self menuItem:@"Refresh All Streams"
-                                    action:@selector(refreshGoogleHomeStreams:)
-                                       key:@""]];
-
-    [googleHomeMenu addItem:[NSMenuItem separatorItem]];
-
-    // Add Camera Manually
-    [googleHomeMenu addItem:[self menuItem:@"Add Camera Manually..."
-                                    action:@selector(addGoogleHomeCamera:)
-                                       key:@""]];
-
-    // Manage Cameras
-    [googleHomeMenu addItem:[self menuItem:@"Manage Cameras..."
-                                    action:@selector(manageGoogleHomeCameras:)
-                                       key:@""]];
-
-    [googleHomeMenu addItem:[NSMenuItem separatorItem]];
-
-    // Test Connection
-    [googleHomeMenu addItem:[self menuItem:@"Test All Connections"
-                                    action:@selector(testGoogleHomeCameras:)
-                                       key:@""]];
-
-    // Settings
-    [googleHomeMenu addItem:[self menuItem:@"Google Home Settings..."
-                                    action:@selector(showGoogleHomeSettings:)
-                                       key:@""]];
-
-    googleHomeMenuItem.submenu = googleHomeMenu;
-    return googleHomeMenuItem;
-}
 
 #pragma mark - UniFi Protect Menu
 
@@ -703,33 +653,6 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"RTSPImportCamerasFromFile" object:nil];
 }
 
-- (void)authenticateGoogleHome:(id)sender {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"RTSPAuthenticateGoogleHome" object:nil];
-}
-
-- (void)discoverGoogleHomeCameras:(id)sender {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"RTSPDiscoverGoogleHomeCameras" object:nil];
-}
-
-- (void)refreshGoogleHomeStreams:(id)sender {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"RTSPRefreshGoogleHomeStreams" object:nil];
-}
-
-- (void)addGoogleHomeCamera:(id)sender {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"RTSPAddGoogleHomeCamera" object:nil];
-}
-
-- (void)manageGoogleHomeCameras:(id)sender {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"RTSPManageGoogleHomeCameras" object:nil];
-}
-
-- (void)testGoogleHomeCameras:(id)sender {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"RTSPTestGoogleHomeCameras" object:nil];
-}
-
-- (void)showGoogleHomeSettings:(id)sender {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"RTSPShowGoogleHomeSettings" object:nil];
-}
 
 - (void)connectUniFiProtect:(id)sender {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"RTSPConnectUniFiProtect" object:nil];
