@@ -4,9 +4,8 @@
 //
 //  Created by Jordan Koch on 10/10/25.
 //
+#import <Cocoa/Cocoa.h>
 
-#import <ScreenSaver/ScreenSaver.h>
-
-@interface RTSP_RotatorView : ScreenSaverView
-
+// Custom window class that allows proper event handling
+@interface RTSPWallpaperWindow : NSWindow
 @end

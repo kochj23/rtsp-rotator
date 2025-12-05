@@ -1,0 +1,43 @@
+# RTSP Rotator Feed Configuration
+#
+# This file defines the RTSP video feeds that will be rotated through.
+# Save this file as ~/rtsp_feeds.txt for the application to use it.
+#
+# Format:
+#   - One RTSP URL per line
+#   - Lines starting with # are comments
+#   - Empty lines are ignored
+#   - Whitespace is automatically trimmed
+#
+# RTSP URL Format:
+#   rtsp://[username:password@]host[:port]/path
+#
+# Examples:
+#   - Basic: rtsp://192.168.1.100:554/stream
+#   - With auth: rtsp://admin:password@192.168.1.100:554/stream
+#   - Named host: rtsp://camera.local/live
+#
+
+# Example Camera Feeds (replace with your actual cameras)
+
+# Office Camera
+rtsp://192.168.1.100:554/stream1
+
+# Lobby Camera
+rtsp://192.168.1.101:554/stream2
+
+# Parking Lot Camera
+rtsp://192.168.1.102:554/stream3
+
+# Warehouse Camera
+rtsp://admin:password@192.168.1.103:554/h264
+
+# External Camera (with domain name)
+rtsp://camera.example.com:554/live
+
+# Notes:
+# - Default RTSP port is 554 (can be omitted if using default)
+# - Some cameras require authentication (username:password@)
+# - Test URLs in VLC media player first to verify they work
+# - H.264 codec is recommended for best compatibility
+# - TCP is forced for all connections (reliable but slightly higher latency)
