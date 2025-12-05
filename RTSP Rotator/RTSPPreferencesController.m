@@ -7,7 +7,6 @@
 
 #import "RTSPPreferencesController.h"
 #import "RTSPUniFiProtectAdapter.h"
-#import "RTSPGoogleHomeAdapter.h"
 
 #pragma mark - Configuration Manager Implementation
 
