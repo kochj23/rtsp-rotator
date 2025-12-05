@@ -764,16 +764,6 @@ static NSString * const kRetryAttemptsKey = @"RTSPRetryAttempts";
     unifiAdapter.password = self.unifiPasswordField.stringValue;
     [unifiAdapter saveConfiguration];
 
-    // Update Google Home adapter with stored credentials
-    RTSPGoogleHomeAdapter *googleAdapter = [RTSPGoogleHomeAdapter sharedAdapter];
-    if (!googleAdapter.authentication) {
-        googleAdapter.authentication = [[RTSPGoogleHomeAuth alloc] init];
-    }
-    googleAdapter.authentication.clientID = self.googleClientIDField.stringValue;
-    googleAdapter.authentication.clientSecret = self.googleClientSecretField.stringValue;
-    googleAdapter.authentication.projectID = self.googleProjectIDField.stringValue;
-    [googleAdapter saveAuthentication];
-
     // Save to persistent storage
     [self.configManager save];
 
