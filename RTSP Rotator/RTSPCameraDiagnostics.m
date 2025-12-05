@@ -356,9 +356,7 @@
 - (void)testAllCamerasWithProgress:(void (^)(NSInteger, NSInteger))progressHandler completion:(void (^)(NSArray<RTSPCameraDiagnosticReport *> *))completion {
     RTSPCameraTypeManager *manager = [RTSPCameraTypeManager sharedManager];
 
-    NSMutableArray *allCameras = [NSMutableArray array];
-    [allCameras addObjectsFromArray:manager.rtspCameras];
-    [allCameras addObjectsFromArray:manager.googleHomeCameras];
+    NSMutableArray *allCameras = [NSMutableArray arrayWithArray:manager.rtspCameras];
 
     NSMutableArray<RTSPCameraDiagnosticReport *> *allReports = [NSMutableArray array];
     __block NSInteger tested = 0;
@@ -455,9 +453,7 @@
 - (void)performHealthChecks {
     RTSPCameraTypeManager *manager = [RTSPCameraTypeManager sharedManager];
 
-    NSMutableArray *allCameras = [NSMutableArray array];
-    [allCameras addObjectsFromArray:manager.rtspCameras];
-    [allCameras addObjectsFromArray:manager.googleHomeCameras];
+    NSMutableArray *allCameras = [NSMutableArray arrayWithArray:manager.rtspCameras];
 
     for (RTSPCameraConfig *camera in allCameras) {
         if (camera.enabled) {
