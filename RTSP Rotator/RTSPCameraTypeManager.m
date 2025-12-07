@@ -132,7 +132,8 @@
     return [self.allRTSPCameras copy];
 }
 
-- (NSArray<RTSPGoogleHomeCameraConfig *> *)googleHomeCameras {
+- (NSArray<RTSPCameraConfig *> *)allCameras {
+    return [self.allRTSPCameras copy];
 }
 
 - (void)addRTSPCamera:(RTSPStandardCameraConfig *)camera {
@@ -146,22 +147,13 @@
     }
 }
 
-- (void)addGoogleHomeCamera:(RTSPGoogleHomeCameraConfig *)camera {
-    [self saveCameras];
-
-    NSLog(@"[CameraTypeManager] Added Google Home camera: %@", camera.name);
-
-    if ([self.delegate respondsToSelector:@selector(cameraTypeManager:didUpdateCamera:)]) {
-        [self.delegate cameraTypeManager:self didUpdateCamera:camera];
-    }
-}
+// Google Home camera support removed - use UniFi Protect adapter for Google Home integration
 
 - (void)removeCameraWithID:(NSString *)cameraID {
     RTSPCameraConfig *camera = [self cameraWithID:cameraID];
 
     if ([camera isKindOfClass:[RTSPStandardCameraConfig class]]) {
         [self.allRTSPCameras removeObject:(RTSPStandardCameraConfig *)camera];
-    } else if ([camera isKindOfClass:[RTSPGoogleHomeCameraConfig class]]) {
     }
 
     [self saveCameras];
@@ -170,11 +162,6 @@
 
 - (RTSPCameraConfig *)cameraWithID:(NSString *)cameraID {
     for (RTSPStandardCameraConfig *camera in self.allRTSPCameras) {
-        if ([camera.cameraID isEqualToString:cameraID]) {
-            return camera;
-        }
-    }
-
         if ([camera.cameraID isEqualToString:cameraID]) {
             return camera;
         }
@@ -212,38 +199,25 @@
             if (completion) completion(success, diagnostics, error);
         }];
 
-    } else if ([camera isKindOfClass:[RTSPGoogleHomeCameraConfig class]]) {
-        RTSPGoogleHomeCameraConfig *ghCamera = (RTSPGoogleHomeCameraConfig *)camera;
+    } else {
+        // Unknown camera type
+        diagnostics[@"testEndTime"] = [NSDate date];
+        diagnostics[@"connectionSuccess"] = @(NO);
+        diagnostics[@"error"] = @"Unknown camera type";
 
-        [ghCamera refreshStreamWithCompletion:^(BOOL success, NSError *error) {
-            diagnostics[@"testEndTime"] = [NSDate date];
-            diagnostics[@"connectionSuccess"] = @(success);
-            diagnostics[@"deviceID"] = ghCamera.deviceID;
-            diagnostics[@"isStreaming"] = @(ghCamera.isStreaming);
+        RTSPCameraConnectionStatus status = RTSPCameraConnectionStatusFailed;
 
-            if (ghCamera.streamExpiresAt) {
-                diagnostics[@"streamExpiresAt"] = ghCamera.streamExpiresAt;
-            }
+        if ([self.delegate respondsToSelector:@selector(cameraTypeManager:cameraConnectionChanged:status:)]) {
+            [self.delegate cameraTypeManager:self cameraConnectionChanged:camera status:status];
+        }
 
-            if (error) {
-                diagnostics[@"error"] = error.localizedDescription;
-            }
-
-            RTSPCameraConnectionStatus status = success ? RTSPCameraConnectionStatusConnected : RTSPCameraConnectionStatusFailed;
-
-            if ([self.delegate respondsToSelector:@selector(cameraTypeManager:cameraConnectionChanged:status:)]) {
-                [self.delegate cameraTypeManager:self cameraConnectionChanged:camera status:status];
-            }
-
-            if (completion) completion(success, diagnostics, error);
-        }];
+        if (completion) completion(NO, diagnostics, nil);
     }
 }
 
 - (NSArray<RTSPCameraConfig *> *)camerasOfType:(NSString *)type {
     if ([type isEqualToString:@"RTSP"]) {
         return [self.allRTSPCameras copy];
-    } else if ([type isEqualToString:@"GoogleHome"]) {
     }
     return @[];
 }
@@ -295,15 +269,8 @@
     }
     config[@"rtspCameras"] = rtspArray;
 
-    NSMutableArray *ghArray = [NSMutableArray array];
-        [ghArray addObject:@{
-            @"name": camera.name ?: @"",
-            @"deviceID": camera.deviceID ?: @"",
-            @"deviceType": camera.deviceType ?: @"",
-            @"roomName": camera.roomName ?: @""
-        }];
-    }
-    config[@"googleHomeCameras"] = ghArray;
+    // Google Home cameras removed - use UniFi Protect adapter
+    config[@"googleHomeCameras"] = @[];
 
     NSData *data = [NSJSONSerialization dataWithJSONObject:config options:NSJSONWritingPrettyPrinted error:error];
     if (!data) {
@@ -343,8 +310,7 @@
     NSString *camerasPath = [appFolder stringByAppendingPathComponent:@"camera_types.dat"];
 
     NSDictionary *data = @{
-        @"rtspCameras": self.allRTSPCameras,
-        
+        @"rtspCameras": self.allRTSPCameras
     };
 
     NSError *error = nil;
@@ -357,7 +323,7 @@
 
     BOOL success = [archiveData writeToFile:camerasPath atomically:YES];
     if (success) {
-        NSLog(@"[CameraTypeManager] Saved %lu RTSP",
+        NSLog(@"[CameraTypeManager] Saved %lu RTSP cameras",
               (unsigned long)self.allRTSPCameras.count);
     }
 
