@@ -459,7 +459,7 @@ This MLX integration is part of RTSP Rotator and follows the MIT License.
 ## Credits
 
 - Jordan Koch - Author
-- Built with Claude Code
+- Built by Jordan Koch
 - Powered by Apple CoreML and Vision frameworks
 - Optimized for Apple Silicon
 
