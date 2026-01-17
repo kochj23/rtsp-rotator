@@ -14,6 +14,7 @@
 #import "RTSPCameraTypeManager.h"
 #import "RTSPCameraDiagnostics.h"
 #import "RTSPFeedMetadata.h"
+#import "RTSPGlassmorphicBackgroundView.h"
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 
 // Phase 1 Features
@@ -51,6 +52,7 @@
 @property (nonatomic, strong) RTSPStatusMenuController *statusMenuController;
 @property (nonatomic, strong) RTSPMenuBarController *menuBarController;
 @property (nonatomic, strong) NSWindowController *mainWindowController;
+@property (nonatomic, strong) RTSPGlassmorphicBackgroundView *glassmorphicBackground;
 
 // Phase 1 Components
 @property (nonatomic, strong) RTSPTransitionController *transitionController;
@@ -174,6 +176,11 @@
     contentView.wantsLayer = YES;
     contentView.layer.backgroundColor = [[NSColor blackColor] CGColor];
 
+    // Add glassmorphic background as the base layer
+    self.glassmorphicBackground = [[RTSPGlassmorphicBackgroundView alloc] initWithFrame:frame];
+    [contentView addSubview:self.glassmorphicBackground positioned:NSWindowBelow relativeTo:nil];
+    [self.glassmorphicBackground startAnimations];
+
     self.window.contentView = contentView;
 
     // Initialize wallpaper controller with the window's content view
@@ -259,6 +266,9 @@
     // Cleanup wallpaper controller
     [self.wallpaperController stop];
 
+    // Stop glassmorphic background animations
+    [self.glassmorphicBackground stopAnimations];
+
     // Clean up strong references to prevent retain cycles
     self.wallpaperController = nil;
     self.statusMenuController = nil;
@@ -272,6 +282,7 @@
     self.ptzController = nil;
     self.smartAlerts = nil;
     self.eventLogger = nil;
+    self.glassmorphicBackground = nil;
 
     NSLog(@"[AppDelegate] dealloc - all observers and resources cleaned up");
 }
