@@ -1,494 +1,628 @@
 # RTSP Rotator v2.4.0
 
-A powerful macOS application for displaying RTSP camera feeds with **AI-powered object detection**. Perfect for home security, business monitoring, and smart automation.
+**A professional macOS application for RTSP camera feeds with AI-powered object detection**
 
-**✅ Latest Update (January 2026) - v2.4.0:**
-- **🆕 CSV Camera Import** - Bulk import cameras from CSV files for rapid deployment!
-- **🆕 OSD Toggle** - On-screen display control for camera names and status
-- **🧠 MLX Object Detection** - Real-time AI detection of people, vehicles, animals, packages
-- **🎯 Smart Alerts** - Zone-based alerts with cooldown periods
-- **🔒 100% On-Device** - Complete privacy, no cloud processing
+Perfect for home security, business monitoring, smart automation, and video wall applications with enterprise-grade features including real-time machine learning detection.
 
-**Previous Features:**
-- **UniFi Protect Integration** - Automatic camera discovery and bulk import
-- **Configuration Export/Import** - Cross-platform config management
-- **Multi-Dashboard System** - Organize up to 36+ cameras
-- **Google Home Integration** - Native Google Home/Nest support
-- **REST API** - Remote control for home automation
+---
 
-## What's New in v2.4.0
+## What is RTSP Rotator?
 
-### 🆕 CSV Camera Import
-**Bulk camera import for rapid deployment!**
+RTSP Rotator is a professional macOS application that displays and automatically rotates through multiple RTSP camera feeds with powerful AI-powered object detection capabilities. Whether you're monitoring a home security system, managing a business surveillance network, or building an intelligent video wall display, RTSP Rotator provides advanced features including real-time object detection, smart alerts, and comprehensive camera management in a native macOS application.
 
-- Import multiple cameras from CSV format: `name,url,type`
-- Automatic URL validation for RTSP, HTTP, and HTTPS protocols
-- Header row detection and automatic skipping
-- Comment line support (# prefix)
-- Quoted field handling for complex names
-- Error reporting with line numbers for invalid entries
-- Access via: File → Import Cameras from CSV
-- Creates bookmarks for all successfully imported cameras
+**Key Use Cases:**
+- **Home Security**: Monitor all cameras with AI-powered detection of people, vehicles, packages
+- **Business Surveillance**: Display feeds across multiple dashboards with zone-based alerting
+- **Video Walls**: Grid layouts supporting up to 12 simultaneous cameras with object detection
+- **NOC/SOC Displays**: Auto-cycling dashboards for 36+ cameras
+- **Smart Home Integration**: REST API for home automation with detection triggers
+- **Intelligent Monitoring**: Real-time object detection without cloud processing
 
-**Example CSV Format:**
-```csv
-name,url
-Living Room,rtsp://192.168.1.100:554/stream
-Front Door,rtsp://admin:pass@192.168.1.101/main
-"Garage (Main)",rtsp://192.168.1.102:554/stream1
-```
+**What Sets RTSP Rotator Apart:**
+- **MLX Object Detection**: On-device AI detection using Apple's MLX framework
+- **100% Privacy**: All AI processing happens locally on your Mac
+- **80+ Object Classes**: Detect people, vehicles, animals, packages, and more
+- **Zone-Based Alerts**: Monitor specific areas with configurable alert rules
+- **Real-time Performance**: 30-60 FPS on Apple Silicon, 15-30 FPS on Intel
 
-### 🆕 On-Screen Display (OSD) Control
-**Toggle camera information overlay!**
+---
 
-- Show/hide camera names on video feeds
-- Display timestamp and status indicators
-- Persistent state via UserDefaults
-- Toggle via: View → Toggle OSD
-- Visual notification on state change
-- Per-application OSD preferences
+## Features
 
-## 🧠 AI Object Detection (v2.3.0)
+### AI Object Detection (v2.3.0+)
 
-RTSP Rotator now includes **powerful on-device machine learning** for real-time object detection!
-
-### Key Features
-- **Real-time Detection**: Identify people, vehicles, animals, packages, and 80+ object classes
-- **Smart Alerts**: Configurable alerts per object type with cooldown periods
-- **Detection Zones**: Monitor specific areas only (driveway, front porch, etc.)
+#### Real-Time MLX Detection
+- **80+ Object Classes**: People, vehicles (cars, trucks, buses), animals (dogs, cats, birds), packages, and more
+- **On-Device Processing**: 100% local AI using Apple's MLX framework - no cloud required
+- **High Performance**: 30-60 FPS on Apple Silicon (M1/M2/M3), 15-30 FPS on Intel Macs
 - **Visual Overlays**: Animated bounding boxes with labels and confidence scores
-- **Complete Privacy**: 100% on-device processing, no cloud required
-- **Performance**: 30-60 FPS on Apple Silicon, 15-30 FPS on Intel
-- **Statistics**: Full event logging with CSV export
+- **Complete Privacy**: All detection happens on your Mac, videos never leave your network
 
-### Quick Start
+#### Smart Alerts System
+- **Per-Object Type Alerts**: Configure alerts for specific objects (person, car, dog, package, etc.)
+- **Cooldown Periods**: Prevent alert spam with configurable cooldown (default: 30 seconds)
+- **macOS Notifications**: System notifications with detection details
+- **Alert History**: Full event logging with timestamps and confidence scores
+
+#### Detection Zones
+- **Custom Zone Definition**: Monitor specific areas only (driveway, front porch, backyard)
+- **Polygon Zones**: Draw precise detection areas on video feeds
+- **Zone-Specific Alerts**: Different alert rules for different zones
+- **Multiple Zones**: Set up multiple zones per camera
+
+#### Detection Analytics
+- **Event Statistics**: Track detection counts, peak times, patterns
+- **CSV Export**: Export detection data for analysis
+- **Confidence Filtering**: Filter detections by confidence threshold
+- **Detection Timeline**: Visual timeline of all detections
+
+#### Model Support
+- **YOLOv8 CoreML**: Fast, accurate object detection
+- **Custom Models**: Support for custom-trained CoreML models
+- **Model Management**: Easy model download and installation
+- **Automatic Updates**: Model update checking
+
+**Getting Started with Object Detection:**
 ```bash
 # Download a CoreML model
 cd "/Volumes/Data/xcode/RTSP Rotator"
 ./download_models.sh
 
 # Add model to Xcode project and rebuild
+# See MLX_OBJECT_DETECTION.md for complete guide
 ```
 
-### Documentation
-- **[MLX_OBJECT_DETECTION.md](MLX_OBJECT_DETECTION.md)** - Complete feature guide
-- **[MLX_INTEGRATION_GUIDE.md](MLX_INTEGRATION_GUIDE.md)** - Developer integration
-- **download_models.sh** - Model download helper
-
----
-
-## What's New in v2.2.0
-
-### 🆕 UniFi Protect Integration
-**Automatic camera discovery and import for UniFi Protect ecosystems!**
-
-15. **UniFi Protect Adapter** - Seamless integration with UniFi cameras
-    - Automatic camera discovery via UniFi Protect controller
-    - Bulk import of all cameras with one click
-    - Real-time connection status monitoring
-    - Secure authentication (HTTPS/HTTP with self-signed cert support)
-    - Optimized RTSP URL generation
-    - Health testing before import
-    - **📖 See [DOCS/UNIFI_PROTECT.md](DOCS/UNIFI_PROTECT.md) for complete documentation**
-
-### 🔄 Configuration Export/Import System (v2.1.1)
-**Cross-platform configuration management for multi-device deployments!**
-
-14. **Configuration Export/Import** - Export all settings to JSON format
-    - Export to local file or upload to remote URL
-    - Import from file or download from URL
-    - Auto-sync between devices (macOS, iOS, tvOS, screensaver)
-    - Merge or replace modes
-    - Centralized configuration management
-    - **📖 See [CONFIGURATION_EXPORT.md](CONFIGURATION_EXPORT.md) for documentation**
-
-### 🚀 13 Major Features from v2.1
-
-**Phase 1 - Quick Wins:**
-1. **Feed Bookmarks** - ⌘1-9 keyboard shortcuts for instant camera access
-2. **Custom Transitions** - 11 transition effects (fade, slide, zoom, etc.)
-3. **Full-Screen Mode** - Overlay controls with auto-hide
-4. **Audio Monitoring** - Real-time audio level meters with alerts
-5. **Motion Detection** - AI-powered motion detection with confidence scoring
-
-**Phase 2 - High-Impact Features:**
-6. **Picture-in-Picture** - Floating window for monitoring critical cameras
-7. **Thumbnail Grid** - Live preview grid of all cameras
-8. **PTZ Control** - Full pan/tilt/zoom control for compatible cameras
-9. **REST API Server** - HTTP API for home automation integration
-10. **Feed Failover** - Automatic backup feed switching
-
-**Phase 3 - Advanced Features:**
-11. **Smart Alerts** - Vision framework object detection (people, vehicles, animals)
-12. **Cloud Storage** - Auto-upload to iCloud, Dropbox, Google Drive, or S3
-13. **Event Timeline** - Comprehensive event logging with CSV/PDF export
-
-**📖 See [NEW_FEATURES_V2.1.md](NEW_FEATURES_V2.1.md) for v2.1 feature documentation**
-
-## Features
-
-### Core Features
-- **Standard macOS Application**: Proper app bundle with Dock integration, menu bar, and window management
-- **Multi-Dashboard Support**: Create unlimited dashboards, each supporting up to 12 cameras simultaneously
+### Core Functionality
 - **Automatic Feed Rotation**: Cycles through multiple RTSP streams at configurable intervals
+- **Multi-Dashboard System**: Create unlimited dashboards, each supporting up to 12 cameras simultaneously
 - **Grid Layouts**: View 1, 4, 6, 9, or 12 cameras simultaneously (1×1, 2×2, 3×2, 3×3, 4×3)
 - **AVFoundation-Powered**: Uses Apple's native framework for robust RTSP stream handling
 - **Zero External Dependencies**: No need to install VLCKit or other frameworks
-- **Configuration UI**: Full preferences window with comprehensive camera management
+- **Standard macOS Application**: Proper .app bundle with Dock integration, menu bar, window management
 - **Persistent Storage**: All configuration saved automatically
 - **Audio Control**: Individual camera mute control
 
 ### Camera Management
-- **RTSP Camera Support**: Full support for standard RTSP cameras with detailed configuration
-- **Google Home/Nest Integration**: Native support for Google Home cameras via SDM API
-- **UniFi Protect Integration**: Automatic camera discovery and import for UniFi ecosystems
+- **RTSP Camera Support**: Full support for standard RTSP cameras with authentication
+- **Google Home/Nest Integration**: Native support via Smart Device Management API
+- **UniFi Protect Integration**: Automatic camera discovery and bulk import
+- **CSV Camera Import (v2.4.0)**: Bulk import from CSV files with validation
+  - Import format: `name,url,type`
+  - Automatic URL validation (RTSP, HTTP, HTTPS)
+  - Header row detection and skipping
+  - Comment line support (# prefix)
+  - Quoted field handling for complex names
+  - Error reporting with line numbers
+  - Access: File → Import Cameras from CSV
 - **Camera Type Separation**: Separate management for different camera types
-- **Comprehensive Diagnostics**: Connection tests, stream analysis, health monitoring
-- **Status Indicators**: Color-coded status lights (Green/Yellow/Red/Blue/Gray)
-- **Feed Metadata**: Custom display names, categories, health tracking, statistics
+- **Feed Bookmarks**: ⌘1-9 keyboard shortcuts for instant camera access
+- **Feed Testing**: Test connectivity before adding feeds
+- **Camera Diagnostics**: Real-time health monitoring with visual status indicators
+
+### Dashboard Features
+- **Dashboard Designer (v2.3.0)**: Visual interface for managing dashboards
+  - Browse existing dashboards in dedicated window
+  - View layout and camera assignments
+  - Create, delete, rename, duplicate dashboards
+  - Configure grid layouts (1×1 through 4×3)
+  - Access via Dashboard → Open Dashboard Designer
+- **Dashboard Auto-Cycling (v2.3.0)**: Automatic rotation through saved dashboards
+  - Configurable cycle interval (default: 30 seconds)
+  - Sequential cycling through all dashboards
+  - Smooth transitions between views
+  - Persistent state across app restarts
+  - Perfect for monitoring 36+ cameras
+- **Dashboard Layouts**: 1×1, 2×2, 3×2, 3×3, 4×3 (up to 12 cameras per dashboard)
+- **Unlimited Dashboards**: Organize cameras by location, priority, or function
+
+### Display & Visual Features
+- **On-Screen Display (OSD) (v2.4.0)**: Toggle camera names and status overlays
+  - Show/hide camera names on video feeds
+  - Display timestamps and status indicators
+  - Menu bar toggle: View → Toggle OSD
+  - Persistent preferences via UserDefaults
+  - Visual notification on state change
+- **Custom Transitions**: 11 transition effects (fade, slide, zoom, etc.)
+- **Full-Screen Mode**: Overlay controls with auto-hide
+- **Picture-in-Picture**: Floating window for monitoring critical cameras
+- **Thumbnail Grid**: Live preview grid of all cameras
+- **Status Indicators**: Color-coded health (🟢Green/🟡Yellow/🔴Red/🔵Blue/⚪Gray)
 
 ### Advanced Features
-- **On-Screen Display (OSD)**: Visual feedback for feed changes and diagnostics
+- **REST API Server**: HTTP API for home automation integration
+- **PTZ Control**: Full pan/tilt/zoom control for compatible cameras
+- **Motion Detection**: AI-powered motion detection with confidence scoring
+- **Smart Alerts**: Vision framework object detection (people, vehicles, animals)
+- **Audio Monitoring**: Real-time audio level meters with alerts
 - **Recording & Snapshots**: Capture screenshots or record video from streams
+- **Event Timeline**: Comprehensive event logging with CSV/PDF export
+- **Cloud Storage**: Auto-upload to iCloud, Dropbox, Google Drive, or S3
+- **Feed Failover**: Automatic backup feed switching
+- **Configuration Export/Import**: JSON format for cross-platform deployment
 - **Status Menu Bar**: Quick access to controls and dashboard switching
 - **Global Keyboard Shortcuts**: System-wide hotkeys for common actions
-- **Import/Export**: Bulk camera import with CSV support
-- **Feed Testing**: Test connectivity before adding feeds
 - **Multi-Monitor Support**: Display on specific monitors
-- **Health Tracking**: Monitor feed uptime, connection quality, framerate, bitrate
-- **Automatic Health Monitoring**: Periodic health checks with alerts
-- **Dashboard Auto-Cycling**: Automatically rotate between dashboards
+- **Health Tracking**: Monitor uptime, connection quality, framerate, bitrate
+
+---
+
+## What's New in v2.4.0 (January 2026)
+
+### 🆕 CSV Camera Import
+**Bulk camera import for rapid deployment:**
+
+```csv
+# Example format
+name,url,type
+Living Room,rtsp://192.168.1.100:554/stream,rtsp
+Front Door,rtsp://admin:pass@192.168.1.101/main,rtsp
+"Garage (Main)",rtsp://192.168.1.102:554/stream1,rtsp
+```
+
+- Automatic URL validation (RTSP, HTTP, HTTPS)
+- Header row detection and skipping
+- Comment line support (# prefix)
+- Quoted field handling for names with commas
+- Error reporting with line numbers
+- Creates bookmarks for all imported cameras
+- Access: File → Import Cameras from CSV
+
+### 🆕 On-Screen Display (OSD) Control
+**Toggle camera information overlay:**
+
+- Show/hide camera names on video feeds
+- Display timestamps and status indicators
+- Persistent state across sessions
+- Toggle via View → Toggle OSD
+- Visual notifications on state change
+- Per-application OSD preferences
+
+### 🧠 AI Object Detection (v2.3.0)
+**Powerful on-device machine learning:**
+
+- **Real-time Detection**: 80+ object classes at 30-60 FPS
+- **Smart Alerts**: Configurable per object type with cooldown
+- **Detection Zones**: Monitor specific areas only
+- **Visual Overlays**: Bounding boxes with confidence scores
+- **Complete Privacy**: 100% on-device, no cloud required
+- **Statistics**: Event logging with CSV export
+
+**Quick Start:**
+```bash
+# Download CoreML model
+cd "/Volumes/Data/xcode/RTSP Rotator"
+./download_models.sh
+
+# Model will be added to project automatically
+```
+
+**Documentation:**
+- **[MLX_OBJECT_DETECTION.md](MLX_OBJECT_DETECTION.md)** - Complete feature guide
+- **[MLX_INTEGRATION_GUIDE.md](MLX_INTEGRATION_GUIDE.md)** - Developer integration guide
+- **download_models.sh** - Model download helper script
+
+---
+
+## Security
+
+### Security Features
+- **RTSP Authentication**: Username/password support for camera access
+- **OAuth 2.0**: Secure Google Home authentication
+- **Local Network**: No external routing by default
+- **Credential Storage**: Stored in NSUserDefaults (Keychain recommended for production)
+- **HTTPS Support**: rtsps:// for encrypted RTSP streams
+- **Token Management**: Google OAuth tokens managed securely
+
+### Privacy
+- **No Telemetry**: No data sent to external services
+- **Local Processing**: All video and AI processing on-device
+- **No Cloud Storage**: (unless explicitly configured by user)
+- **Audit Logging**: All events logged locally only
+- **MLX Detection**: 100% on-device AI, videos never leave your Mac
+
+### Best Practices
+- Use authentication on all RTSP cameras
+- Change default camera passwords
+- Use VLANs to isolate camera network
+- Enable rtsps:// for encrypted streams when available
+- Regularly update firmware on cameras
+- Consider Keychain for credential storage in production
+- Keep CoreML models updated for best detection accuracy
+
+---
 
 ## Requirements
 
-- macOS 10.15 (Catalina) or later recommended
-- macOS 11.0 (Big Sur) or later for modern UserNotifications
-- Xcode 14.0 or later (for building)
-- **No external dependencies!** AVFoundation is built into macOS
+### System Requirements
+- **macOS 10.15 (Catalina) or later** (11.0+ recommended for modern features)
+- **macOS 12.0+ recommended** for MLX object detection
+- **Architecture**: Universal (Apple Silicon and Intel)
+  - **Apple Silicon (M1/M2/M3)**: Best performance for object detection (30-60 FPS)
+  - **Intel Macs**: Good performance (15-30 FPS)
+- **Xcode 14.0+** (for building from source)
+
+### Network Requirements
+- **Bandwidth**: 2-8 Mbps per camera
+- **12 cameras @ 720p**: ~50-80 Mbps total
+- **Wired Gigabit Ethernet**: Strongly recommended for 12+ cameras
+- **Port 554**: RTSP default port (must be accessible)
+
+### MLX Object Detection Requirements
+- **macOS 12.0+**: Required for CoreML 5 features
+- **CoreML Model**: YOLOv8 or compatible model (provided via download_models.sh)
+- **Memory**: 4GB+ RAM recommended for object detection
+- **CPU/GPU**: Apple Silicon recommended for best performance
+
+### Dependencies
+**None!** RTSP Rotator uses only built-in macOS frameworks:
+- AVFoundation (video playback)
+- Vision (object detection)
+- CoreML (machine learning)
+- AppKit (UI)
+- Foundation (core functionality)
+
+---
 
 ## Installation
 
-### Quick Start
+### Option 1: Pre-built Binary (Recommended)
 
-1. **Clone or download** the project
-
-2. **Open the project:**
+1. **Download DMG:**
    ```bash
-   cd "/Users/kochj/Desktop/xcode/RTSP Rotator"
+   # From binaries folder
+   open "/Volumes/Data/xcode/binaries/20260127-RTSPRotator-v2.4.0/RTSPRotator-v2.4.0-build240.dmg"
+   ```
+
+2. **Install:**
+   - Drag RTSP Rotator.app to Applications folder
+   - Double-click to launch
+
+3. **Install Object Detection (Optional):**
+   ```bash
+   # Download CoreML models
+   cd "/Volumes/Data/xcode/RTSP Rotator"
+   ./download_models.sh
+   ```
+
+### Option 2: Build from Source
+
+1. **Clone repository:**
+   ```bash
+   git clone https://github.com/kochj23/RTSPRotator.git
+   cd RTSPRotator
+   ```
+
+2. **Open in Xcode:**
+   ```bash
    open "RTSP Rotator.xcodeproj"
    ```
 
-3. **Build in Xcode:**
-   - Select the "RTSP Rotator" scheme
-   - Product > Build (⌘B)
-   - Product > Run (⌘R)
+3. **Build:**
+   - Select "RTSP Rotator" scheme
+   - Product → Build (⌘B)
+   - Product → Run (⌘R)
 
-4. **The application will:**
-   - Launch as a standard macOS app
-   - Show main window with video display
-   - Display status menu icon for quick access
-   - Open preferences if no cameras are configured
+4. **Archive for Distribution:**
+   ```bash
+   xcodebuild archive -project "RTSP Rotator.xcodeproj" -scheme "RTSP Rotator" -configuration Release -archivePath "/tmp/RTSPRotator.xcarchive"
+   ```
 
-**That's it!** No external frameworks to install.
+---
 
 ## Configuration
 
-### Multi-Dashboard Setup
+### First Launch Setup
 
-The application supports organizing cameras into multiple dashboards:
+1. **Add Your First Camera:**
+   - File → Add Camera (or ⌘N)
+   - Enter camera name
+   - Enter RTSP URL: `rtsp://user:pass@192.168.1.100:554/stream`
+   - Click Add
 
-1. **Open Preferences** from the status menu or application menu
-2. **Create Dashboards:**
-   - Click "Add Dashboard"
-   - Name it (e.g., "External Cameras", "Internal Cameras")
-   - Select layout (1×1, 2×2, 3×2, 3×3, 4×3)
-   - Configure display options
+2. **Or Import from CSV:**
+   - File → Import Cameras from CSV
+   - Select your CSV file (format: `name,url,type`)
+   - Review import summary
 
-3. **Add Cameras:**
-   - Choose camera type (RTSP or Google Home)
-   - Enter camera details
-   - Assign to dashboard
-   - Enable/disable as needed
+3. **Create Dashboard:**
+   - Dashboard → Create New Dashboard
+   - Name it (e.g., "Main Cameras")
+   - Select layout (e.g., 2×2 for 4 cameras)
+   - Assign cameras to dashboard
 
-### RTSP Camera Configuration
+4. **Enable Object Detection (Optional):**
+   - Preferences → Object Detection
+   - Enable "Real-time Detection"
+   - Configure alert rules per object type
+   - Set up detection zones if desired
 
-RTSP cameras support detailed configuration:
+### RTSP URL Format
 
 ```
-URL Format: rtsp://[username:password@]host[:port]/path
+rtsp://[username:password@]host[:port]/path
 
-Required:
+Examples:
+rtsp://192.168.1.100:554/stream1
+rtsp://admin:password@camera.local:554/live
+rtsps://secure-camera.example.com/camera/stream
+```
+
+### Camera Configuration Options
+
+**Required:**
 - Name/Label
 - RTSP URL
 - Port (default: 554)
 
-Optional:
-- Username/Password
+**Optional:**
+- Username/Password (for authenticated cameras)
 - Stream Path
 - TLS/SSL (rtsps://)
 - Preferred Framerate
 - PTZ Control Support
 - Audio Settings
+- Health Check Interval
+- Object Detection Enabled
+
+### Object Detection Configuration
+
+**Enable Detection:**
+1. Select camera in Preferences
+2. Enable "Object Detection"
+3. Choose CoreML model (auto-detected if installed)
+4. Configure alert rules:
+   - Enable alerts for specific objects (person, car, dog, package)
+   - Set cooldown period (default: 30 seconds)
+   - Choose notification sound
+
+**Detection Zones:**
+1. Open camera detail view
+2. Click "Configure Zones"
+3. Draw polygon zones on video preview
+4. Name zones (e.g., "Driveway", "Front Door")
+5. Enable/disable per-zone alerts
+
+**Alert Examples:**
+- Alert on person detected in "Front Door" zone
+- Alert on vehicle in "Driveway" between 10pm-6am
+- Alert on package detected (delivery notification)
+- Alert on dog detected in "Backyard"
+
+### Dashboard Configuration
+
+**Create Multiple Dashboards:**
+```
+Dashboard 1: "Exterior Cameras" (12 outdoor cameras, 4×3 grid)
+Dashboard 2: "Interior Cameras" (9 indoor cameras, 3×3 grid)
+Dashboard 3: "Critical Areas" (4 priority cameras, 2×2 grid)
 ```
 
-Examples:
-- `rtsp://192.168.1.100:554/stream1`
-- `rtsp://admin:password@camera.local:554/live`
-- `rtsps://secure-camera.example.com/camera/stream`
+**Auto-Cycling Setup:**
+1. Dashboard → Toggle Dashboard Auto-Cycle
+2. Dashboard → Set Cycle Interval (e.g., 30 seconds)
+3. Dashboards will rotate automatically
 
-### Google Home Camera Setup
-
-1. **Prerequisites:**
-   - Google Home/Nest camera
-   - Google Cloud Project with Smart Device Management API enabled
-   - OAuth 2.0 credentials
-
-2. **Authentication:**
-   - Open Preferences > Google Home
-   - Click "Authenticate"
-   - Sign in with Google account
-   - Grant permissions
-
-3. **Import Cameras:**
-   - Click "Discover Cameras"
-   - Select cameras to import
-   - Assign to dashboards
-   - Configure refresh intervals
-
-**Note:** Google Home streams expire after 5 minutes and auto-refresh.
-
-### Dashboard Layouts
-
-Each dashboard supports different grid layouts:
-
-- **1×1**: Single camera, full screen
-- **2×2**: 4 cameras in a grid
-- **3×2**: 6 cameras (3 columns × 2 rows)
-- **3×3**: 9 cameras in a grid
-- **4×3**: 12 cameras (4 columns × 3 rows)
+---
 
 ## Usage
 
-### Running the Application
+### Basic Operation
 
-1. **Launch** from Xcode or built .app bundle
-2. **Main Window** appears showing selected dashboard
-3. **Status Menu** provides quick access to:
-   - Dashboard switching
-   - Preferences
-   - Diagnostics
-   - Quit
+**Launch Application:**
+```bash
+open ~/Applications/RTSP\ Rotator.app
+```
+
+**Status Menu:** Click menu bar icon for:
+- Quick dashboard switching
+- Camera controls
+- Object detection toggle
+- Preferences
+- Diagnostics
+- Quit
+
+**Keyboard Shortcuts:**
+- **⌘1-9**: Switch to bookmarked camera
+- **⌘F**: Toggle full screen
+- **⌘D**: Toggle object detection overlays
+- **⌘,**: Open preferences
+- **⌘Q**: Quit application
+- **Return/Enter**: Toggle audio mute
+
+### Object Detection Usage
+
+**View Detections:**
+- Bounding boxes appear automatically around detected objects
+- Labels show object type and confidence (e.g., "person 95%")
+- Colors indicate object category (people=green, vehicles=blue, etc.)
+
+**Review Detection History:**
+1. Window → Detection History
+2. View timeline of all detections
+3. Filter by object type, camera, time range
+4. Export to CSV for analysis
+
+**Configure Alerts:**
+1. Preferences → Object Detection → Alerts
+2. Enable alerts per object type
+3. Set cooldown periods
+4. Test notifications
 
 ### Dashboard Management
 
-**Switching Dashboards:**
-- Click status menu > Select dashboard
+**Switch Dashboards:**
+- Status menu → Select dashboard
 - Use keyboard shortcuts (configurable)
-- Enable auto-cycling for automatic rotation
+- Auto-cycling (if enabled)
 
-**Dashboard Auto-Cycling:**
-- Enable in dashboard settings
-- Set cycle interval (e.g., every 60 seconds)
-- Perfect for rotating through 36+ cameras
+**Edit Dashboard:**
+- Dashboard → Open Dashboard Designer
+- View all dashboards and layouts
+- Create/modify/delete dashboards
 
-### Camera Diagnostics
+### Camera Operations
 
-**Run Diagnostics:**
-1. Open Preferences > Diagnostics
-2. Click "Test All Cameras" or test individual cameras
-3. View detailed reports:
-   - Connection status and time
-   - Stream details (resolution, framerate, bitrate)
-   - Network metrics (latency, packet loss)
-   - Warnings and errors
+**Test Camera:**
+- Select camera in preferences
+- Click "Test Camera"
+- Review diagnostic report
 
-**Status Indicators:**
-- 🟢 **Green**: Healthy (all good)
-- 🟡 **Yellow**: Warning (minor issues)
-- 🔴 **Red**: Critical (not working)
-- 🔵 **Blue**: Testing in progress
-- ⚪ **Gray**: Unknown (not yet tested)
+**Adjust Settings:**
+- Right-click camera in grid
+- Adjust audio, quality, refresh rate
+- Enable/disable individual cameras
+- Toggle object detection per camera
 
-**Automatic Health Monitoring:**
-- Enable in Preferences > Diagnostics
-- Set check interval (default: 60 seconds)
-- Get notifications for unhealthy cameras
-
-### Keyboard Controls
-
-- **Return/Enter**: Toggle audio mute
-- **Cmd+,**: Open preferences
-- **Cmd+Q**: Quit application
-- **Cmd+F**: Toggle full screen
-
-Custom global shortcuts can be configured in Preferences.
-
-## Architecture
-
-### Application Structure
-
-```
-RTSP Rotator.app
-├── AppDelegate
-│   ├── Application lifecycle management
-│   ├── Window creation and management
-│   ├── Manager initialization
-│   └── Status menu setup
-│
-├── RTSPWallpaperController
-│   ├── Video playback management
-│   ├── Feed rotation logic
-│   ├── AVPlayer/AVPlayerLayer integration
-│   └── Dual-mode operation (standalone/integrated)
-│
-├── RTSPDashboardManager
-│   ├── Multi-dashboard management
-│   ├── Dashboard persistence (NSCoding)
-│   ├── Auto-cycling support
-│   └── Camera assignment
-│
-├── RTSPCameraTypeManager
-│   ├── RTSP camera management
-│   ├── Google Home camera management
-│   ├── Type-specific configuration
-│   └── Connection testing
-│
-├── RTSPCameraDiagnostics
-│   ├── Comprehensive health checks
-│   ├── Stream analysis (resolution, framerate, bitrate)
-│   ├── Network diagnostics (latency, packet loss)
-│   ├── Automatic monitoring
-│   └── Report generation
-│
-├── RTSPMultiViewGrid
-│   ├── Grid layout management
-│   ├── Camera cell rendering
-│   ├── Synchronized playback
-│   └── Status indicator display
-│
-├── RTSPGoogleHomeAdapter
-│   ├── OAuth 2.0 authentication
-│   ├── Smart Device Management API
-│   ├── Camera discovery
-│   └── Stream URL generation
-│
-├── RTSPConfigurationManager
-│   ├── Persistent storage
-│   ├── Feed metadata management
-│   └── Settings management
-│
-├── RTSPPreferencesController
-│   ├── Preferences window UI
-│   ├── Camera management interface
-│   └── Settings configuration
-│
-├── RTSPStatusMenuController
-│   ├── Menu bar integration
-│   ├── Dashboard switching
-│   └── Quick actions
-│
-└── Additional Components
-    ├── RTSPRecorder (snapshots/recording)
-    ├── RTSPOSDView (on-screen display)
-    ├── RTSPGlobalShortcuts (keyboard shortcuts)
-    ├── RTSPMotionDetector (motion detection)
-    ├── RTSPNetworkMonitor (network monitoring)
-    └── More...
-```
-
-### Code Structure
-
-```
-RTSP Rotator/
-├── RTSP Rotator/
-│   ├── AppDelegate.h/m              # Application delegate
-│   ├── main.m                       # Application entry point
-│   ├── Info.plist                   # Application metadata
-│   │
-│   ├── Core Controllers
-│   ├── RTSP_RotatorView.m          # RTSPWallpaperController implementation
-│   ├── RTSPWallpaperController.h   # Main video controller
-│   │
-│   ├── Multi-Dashboard System
-│   ├── RTSPDashboardManager.h/m    # Dashboard management
-│   ├── RTSPMultiViewGrid.h/m       # Grid view display
-│   │
-│   ├── Camera Management
-│   ├── RTSPCameraTypeManager.h/m   # Camera type manager
-│   ├── RTSPCameraDiagnostics.h/m   # Health monitoring
-│   ├── RTSPGoogleHomeAdapter.h/m   # Google Home integration
-│   │
-│   ├── UI Components
-│   ├── RTSPPreferencesController.h/m
-│   ├── RTSPStatusMenuController.h/m
-│   ├── RTSPOSDView.h/m
-│   │
-│   └── ... (40+ additional components)
-│
-├── Documentation/
-│   ├── README.md                    # This file
-│   ├── REFACTORING_SUMMARY.md      # App refactoring details
-│   ├── MULTI_DASHBOARD_GUIDE.md    # Multi-dashboard usage
-│   ├── API.md                       # API documentation
-│   ├── FEATURES_V2.md              # Feature list
-│   └── ... (additional docs)
-│
-└── RTSP Rotator.xcodeproj/         # Xcode project
-```
+---
 
 ## Troubleshooting
 
 ### Common Issues
 
-**Problem**: Application won't launch
-- **Solution**: Check Console.app for error messages
-- **Solution**: Verify Info.plist is properly configured
-- **Solution**: Ensure code signing is set up correctly
+**Application won't launch:**
+- Check Console.app for error messages
+- Verify Info.plist configuration
+- Ensure code signing is correct
 
-**Problem**: Feeds won't play
-- **Solution**: Check RTSP URL format and network connectivity
-- **Solution**: Verify camera/server is accessible
-- **Solution**: Check firewall settings for port 554
-- **Solution**: Run diagnostics to identify specific issues
+**Feeds won't play:**
+- Verify RTSP URL format
+- Check network connectivity to camera
+- Verify firewall allows port 554
+- Run diagnostics to identify issues
+- Test URL in VLC to confirm it works
 
-**Problem**: Google Home cameras fail to connect
-- **Solution**: Verify OAuth credentials are valid
-- **Solution**: Check Smart Device Management API is enabled
-- **Solution**: Ensure camera permissions are granted
-- **Solution**: Try refreshing the stream URL
+**Object detection not working:**
+- Verify CoreML model is installed (check Preferences → Object Detection)
+- Ensure macOS 12.0+ for best compatibility
+- Check camera resolution is supported (480p-4K)
+- Monitor CPU usage in Activity Monitor
+- Try reducing number of cameras with detection enabled
 
-**Problem**: High CPU/memory usage with many cameras
-- **Solution**: Use dashboard auto-cycling instead of viewing all cameras
-- **Solution**: Reduce camera resolution at source
-- **Solution**: Limit active cameras to 12 or fewer
-- **Solution**: Use 720p instead of 1080p for grid views
+**High CPU usage with detection:**
+- Reduce detection frame rate (Preferences → Object Detection → Frame Rate)
+- Enable detection on fewer cameras simultaneously
+- Use lower camera resolutions (720p recommended)
+- On Intel Macs, limit to 2-4 cameras with detection
+- Apple Silicon can handle more cameras (up to 12)
 
-**Problem**: Status indicators not updating
-- **Solution**: Enable automatic health monitoring
-- **Solution**: Manually run diagnostics
-- **Solution**: Check that cameras are enabled
+**False positive detections:**
+- Increase confidence threshold (Preferences → Detection → Confidence)
+- Use detection zones to limit monitored areas
+- Adjust alert cooldown to reduce notification spam
+- Review model settings
+
+**Google Home cameras fail:**
+- Verify OAuth credentials
+- Check Smart Device Management API is enabled
+- Ensure camera permissions granted
+- Try refreshing stream URL
 
 ### Performance Optimization
 
+**For Object Detection:**
+- **Apple Silicon Macs**: Can handle 6-12 cameras with detection at 30-60 FPS
+- **Intel Macs**: Limit to 2-4 cameras with detection at 15-30 FPS
+- **Frame Rate**: Lower to 15 FPS if CPU usage too high
+- **Resolution**: Use 720p for best balance of quality and performance
+- **Detection Zones**: Significantly reduces CPU usage by processing less area
+
 **For 36+ Cameras:**
 1. Create 3+ dashboards with 12 cameras each
-2. Enable dashboard auto-cycling
+2. Enable dashboard auto-cycling (30-60 second intervals)
 3. Use 720p streams for grid layouts
 4. Use gigabit Ethernet connection
-5. Monitor system resources
+5. Enable object detection on critical cameras only
+6. Monitor Activity Monitor for resource usage
 
 **Network Requirements:**
-- Bandwidth: ~2-8 Mbps per camera
-- 12 cameras @ 720p ≈ 50-80 Mbps
+- Single camera: 2-8 Mbps
+- 12 cameras @ 720p: 50-80 Mbps total
 - Wired connection strongly recommended
+
+---
+
+## REST API
+
+RTSP Rotator includes a built-in REST API for home automation integration with object detection support.
+
+**Endpoints:**
+- `GET /feeds` - List all cameras
+- `GET /current` - Get current camera index
+- `POST /switch/{index}` - Switch to specific camera
+- `POST /next` - Switch to next camera
+- `POST /previous` - Switch to previous camera
+- `POST /snapshot` - Capture current frame
+- `POST /recording/start` - Start recording
+- `POST /recording/stop` - Stop recording
+- `GET /recording/status` - Get recording status
+- `POST /interval` - Set rotation interval
+- `GET /detections` - Get recent detections (NEW)
+- `GET /detections/{camera}` - Get detections for specific camera (NEW)
+- `POST /detection/enable` - Enable detection on camera (NEW)
+- `POST /detection/disable` - Disable detection on camera (NEW)
+
+**Example:**
+```bash
+# Get all feeds
+curl http://localhost:8080/feeds
+
+# Switch to camera 2
+curl -X POST http://localhost:8080/switch/2
+
+# Get recent detections
+curl http://localhost:8080/detections
+
+# Enable detection on camera 0
+curl -X POST http://localhost:8080/detection/enable -d '{"camera": 0}'
+```
+
+---
+
+## Architecture
+
+### Application Components
+
+```
+RTSP Rotator/
+├── AppDelegate                  # Application lifecycle, manager initialization
+├── RTSPWallpaperController     # Video playback, feed rotation, AVPlayer integration
+├── RTSPDashboardManager        # Multi-dashboard management, persistence, auto-cycling
+├── RTSPCameraTypeManager       # RTSP & Google Home camera management
+├── RTSPCameraDiagnostics       # Health checks, stream analysis, monitoring
+├── RTSPMultiViewGrid           # Grid layout, synchronized playback
+├── RTSPGoogleHomeAdapter       # OAuth 2.0, SDM API, camera discovery
+├── RTSPConfigurationManager    # Persistent storage, settings
+├── RTSPPreferencesController   # Preferences UI
+├── RTSPStatusMenuController    # Menu bar integration
+├── RTSPAPIServer               # REST API server
+├── RTSPObjectDetector          # MLX/CoreML object detection (NEW)
+├── RTSPDetectionZone           # Detection zone management (NEW)
+├── RTSPAlertManager            # Smart alerts and notifications (NEW)
+├── RTSPRecorder                # Snapshots and recording
+├── RTSPOSDView                 # On-screen display
+├── RTSPGlobalShortcuts         # Keyboard shortcuts
+├── RTSPMotionDetector          # Motion detection
+└── RTSPNetworkMonitor          # Network monitoring
+```
+
+### Technology Stack
+- **Language**: Objective-C
+- **UI Framework**: AppKit
+- **Media Framework**: AVFoundation (AVPlayer, AVPlayerLayer)
+- **AI Framework**: Vision, CoreML (object detection)
+- **Storage**: NSUserDefaults, NSCoding
+- **Networking**: NSURLSession
+- **API**: GCDWebServer for REST endpoints
+
+---
 
 ## Development
 
 ### Building from Source
 
 ```bash
-cd "/Users/kochj/Desktop/xcode/RTSP Rotator"
-xcodebuild -project "RTSP Rotator.xcodeproj" -scheme "RTSP Rotator" build
+cd "/Volumes/Data/xcode/RTSP Rotator"
+xcodebuild clean build -project "RTSP Rotator.xcodeproj" -scheme "RTSP Rotator" -configuration Release
 ```
 
 ### Running Tests
@@ -497,94 +631,106 @@ xcodebuild -project "RTSP Rotator.xcodeproj" -scheme "RTSP Rotator" build
 xcodebuild test -scheme "RTSP Rotator" -destination "platform=macOS"
 ```
 
-### Adding New Features
+### Adding Features
 
-The application uses a modular architecture. To add features:
+**Enable Object Detection on New Camera:**
+```objective-c
+// In RTSPObjectDetector
+- (void)enableDetectionForCamera:(RTSPCamera *)camera {
+    // Load CoreML model
+    // Configure detection pipeline
+    // Start processing frames
+}
+```
 
-1. **New Camera Type**: Extend RTSPCameraTypeManager
-2. **New Layout**: Add to RTSPDashboardLayout enum
-3. **New Diagnostic**: Extend RTSPCameraDiagnostics
-4. **New UI**: Add view controller and integrate with AppDelegate
-
-## Security Considerations
-
-- Credentials stored in NSUserDefaults (consider Keychain for production)
-- OAuth tokens managed securely by Google APIs
-- RTSP streams support authentication
-- Local network access only (no external routing by default)
-- Regular updates recommended for security patches
-
-## License
-
-Copyright © 2025 Jordan Koch
-
-## Contributing
-
-This is a personal project. For issues or suggestions, please contact the author.
-
-## Version History
-
-### Version 2.0.0 (Current - Oct 2025)
-- **Major Refactoring**: Now a standard macOS application (.app)
-- Added multi-dashboard system (unlimited dashboards)
-- Added Google Home/Nest camera support
-- Added comprehensive diagnostics system
-- Added real-time health monitoring
-- Added visual status indicators
-- Added grid layouts (up to 12 cameras simultaneously)
-- Added camera type management
-- Refactored for better architecture and maintainability
-- Zero compilation warnings, clean build
-
-### Version 1.1.0
-- Added comprehensive documentation
-- Implemented external configuration file support
-- Added error handling and validation
-- Improved logging throughout
-- Thread-safe operations
-
-### Version 1.0.0
-- Initial release
-- Basic RTSP feed rotation
-- Desktop-level window display
-
-## Credits
-
-- **AVFoundation**: Apple's native media framework
-- **Google Smart Device Management API**: For Google Home integration
-- **Author**: Jordan Koch
-
-## Support
-
-For questions or support:
-- Review documentation in `/Documentation`
-- Check logs in Console.app
-- Run camera diagnostics
-- Verify RTSP streams work in other players (VLC, etc.)
-
-## Roadmap
-
-Completed features (formerly on roadmap):
-- ✅ Standard macOS application
-- ✅ Multi-dashboard support
-- ✅ Google Home integration
-- ✅ Comprehensive diagnostics
-- ✅ Health monitoring
-- ✅ Status indicators
-- ✅ Grid layouts
-- ✅ Camera type management
-
-Future enhancements:
-- [ ] Touch Bar support
-- [ ] Picture-in-Picture mode improvements
-- [ ] Advanced motion detection
-- [ ] Cloud storage integration
-- [ ] Mobile app for remote monitoring
-- [ ] Machine learning-based alerts
-- [ ] Multi-user support with roles
-- [ ] Advanced PTZ control
+**Custom Detection Zone:**
+```objective-c
+// In RTSPDetectionZone
+RTSPDetectionZone *zone = [[RTSPDetectionZone alloc] init];
+zone.name = @"Front Door";
+zone.points = @[/* polygon points */];
+zone.enabled = YES;
+[camera addDetectionZone:zone];
+```
 
 ---
 
-**Last Updated:** January 22, 2026
+## Version History
+
+### v2.4.0 (January 2026) - Current
+- **CSV Camera Import**: Bulk import with validation and error reporting
+- **OSD Toggle**: On-screen display control for camera names and status
+- **Enhanced Documentation**: Complete feature guides with examples
+
+### v2.3.0 (December 2025)
+- **MLX Object Detection**: Real-time AI detection of 80+ object classes
+- **Smart Alerts**: Configurable per-object alerts with cooldown
+- **Detection Zones**: Monitor specific areas only
+- **Detection Analytics**: Event logging and CSV export
+- **Dashboard Designer**: Visual dashboard management interface
+- **Dashboard Auto-Cycling**: Automatic rotation through dashboards
+
+### v2.2.0 (October 2025)
+- **UniFi Protect Integration**: Automatic camera discovery
+- **Configuration Export/Import**: Cross-platform config management
+
+### v2.1.0 (September 2025)
+- **15 Major Features**: Bookmarks, transitions, motion detection, API
+- **Picture-in-Picture**: Floating monitor window
+- **Thumbnail Grid**: Live preview of all cameras
+- **PTZ Control**: Pan/tilt/zoom support
+- **REST API Server**: Home automation integration
+
+### v2.0.0 (August 2025)
+- **Major Refactoring**: Standard macOS application
+- **Multi-Dashboard System**: Unlimited dashboards
+- **Google Home Support**: Native Nest camera integration
+
+### v1.0.0 (Initial Release)
+- Basic RTSP feed rotation
+- Desktop-level window display
+
+---
+
+## License
+
+MIT License
+
+Copyright © 2026 Jordan Koch
+
+---
+
+## Credits
+
+- **Author**: Jordan Koch
+- **AVFoundation**: Apple's native media framework
+- **Vision & CoreML**: Apple's AI frameworks for object detection
+- **Google Smart Device Management API**: For Google Home/Nest integration
+- **YOLOv8**: Object detection model architecture
+
+---
+
+## Support & Contributing
+
+**GitHub**: https://github.com/kochj23/RTSPRotator
+
+**Documentation:**
+- **[MLX_OBJECT_DETECTION.md](MLX_OBJECT_DETECTION.md)** - Complete object detection guide
+- **[MLX_INTEGRATION_GUIDE.md](MLX_INTEGRATION_GUIDE.md)** - Developer integration guide
+- **[MULTI_DASHBOARD_GUIDE.md](MULTI_DASHBOARD_GUIDE.md)** - Dashboard setup guide
+- **[CONFIGURATION_EXPORT.md](CONFIGURATION_EXPORT.md)** - Config management guide
+- **[API.md](API.md)** - REST API documentation
+
+**For Issues:**
+- Review documentation
+- Check logs in Console.app
+- Run camera diagnostics
+- Verify RTSP streams work in VLC
+
+This is a personal project by Jordan Koch.
+
+---
+
+**Last Updated:** January 27, 2026
+**Version:** 2.4.0 (build 240)
 **Status:** ✅ Production Ready
