@@ -668,9 +668,106 @@
 
     if ([panel runModal] == NSModalResponseOK) {
         NSURL *fileURL = panel.URL;
-        // TODO: Implement CSV parsing and camera import
         NSLog(@"[Menu] Selected file: %@", fileURL.path);
+
+        // Parse CSV file
+        NSError *error = nil;
+        NSString *csvContent = [NSString stringWithContentsOfURL:fileURL encoding:NSUTF8StringEncoding error:&error];
+
+        if (error) {
+            NSLog(@"[Menu] Error reading CSV file: %@", error.localizedDescription);
+            NSAlert *alert = [[NSAlert alloc] init];
+            alert.messageText = @"Import Failed";
+            alert.informativeText = [NSString stringWithFormat:@"Could not read file: %@", error.localizedDescription];
+            alert.alertStyle = NSAlertStyleWarning;
+            [alert runModal];
+            return;
+        }
+
+        // Parse CSV: Expected format is "name,url,type" or just "name,url"
+        NSArray *lines = [csvContent componentsSeparatedByString:@"\n"];
+        NSInteger lineNumber = 0;
+        NSInteger importedCount = 0;
+
+        for (NSString *line in lines) {
+            lineNumber++;
+            NSString *trimmedLine = [line stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+
+            // Skip empty lines and comment lines
+            if (trimmedLine.length == 0 || [trimmedLine hasPrefix:@"#"]) {
+                continue;
+            }
+
+            // Skip header line if present
+            if (lineNumber == 1 && ([trimmedLine.lowercaseString containsString:@"name"] ||
+                                    [trimmedLine.lowercaseString containsString:@"url"])) {
+                continue;
+            }
+
+            // Parse CSV line (handle quoted fields)
+            NSArray *fields = [self parseCSVLine:trimmedLine];
+            if (fields.count < 2) {
+                NSLog(@"[Menu] Skipping invalid line %ld: %@", (long)lineNumber, trimmedLine);
+                continue;
+            }
+
+            NSString *name = fields[0];
+            NSString *url = fields[1];
+
+            // Validate URL
+            if (![url hasPrefix:@"rtsp://"] && ![url hasPrefix:@"http://"] && ![url hasPrefix:@"https://"]) {
+                NSLog(@"[Menu] Skipping invalid URL at line %ld: %@", (long)lineNumber, url);
+                continue;
+            }
+
+            // Create bookmark and add to manager
+            RTSPBookmark *bookmark = [[RTSPBookmark alloc] init];
+            bookmark.name = name;
+            bookmark.feedURL = [NSURL URLWithString:url];
+            bookmark.hotkey = 0;
+            bookmark.bookmarkID = [[NSUUID UUID] UUIDString];
+
+            RTSPBookmarkManager *bookmarkManager = [RTSPBookmarkManager sharedManager];
+            [bookmarkManager addBookmark:bookmark];
+
+            importedCount++;
+            NSLog(@"[Menu] Imported camera: %@ -> %@", name, url);
+        }
+
+        // Show success message
+        NSAlert *alert = [[NSAlert alloc] init];
+        alert.messageText = @"Import Complete";
+        alert.informativeText = [NSString stringWithFormat:@"Successfully imported %ld camera(s) from CSV file.", (long)importedCount];
+        alert.alertStyle = NSAlertStyleInformational;
+        [alert runModal];
+
+        NSLog(@"[Menu] ✅ CSV import complete: %ld cameras imported", (long)importedCount);
     }
+}
+
+// Helper: Parse CSV line handling quoted fields
+- (NSArray<NSString *> *)parseCSVLine:(NSString *)line {
+    NSMutableArray *fields = [NSMutableArray array];
+    NSMutableString *currentField = [NSMutableString string];
+    BOOL insideQuotes = NO;
+
+    for (NSInteger i = 0; i < line.length; i++) {
+        unichar c = [line characterAtIndex:i];
+
+        if (c == '"') {
+            insideQuotes = !insideQuotes;
+        } else if (c == ',' && !insideQuotes) {
+            [fields addObject:[currentField stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+            [currentField setString:@""];
+        } else {
+            [currentField appendFormat:@"%C", c];
+        }
+    }
+
+    // Add last field
+    [fields addObject:[currentField stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+
+    return [fields copy];
 }
 
 // Settings menu handlers
@@ -789,8 +886,31 @@
 }
 
 - (void)handleToggleOSD:(NSNotification *)notification {
-    // TODO: Implement OSD toggle
-    NSLog(@"[Menu] Toggle OSD requested (not yet implemented)");
+    NSLog(@"[Menu] Toggle OSD requested");
+
+    // Toggle OSD preference
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    BOOL currentState = [defaults boolForKey:@"RTSPShowOSD"];
+    BOOL newState = !currentState;
+    [defaults setBool:newState forKey:@"RTSPShowOSD"];
+    [defaults synchronize];
+
+    // Update wallpaper controller if it supports OSD
+    if ([self.wallpaperController respondsToSelector:@selector(setShowOSD:)]) {
+        [self.wallpaperController performSelector:@selector(setShowOSD:) withObject:@(newState)];
+    }
+
+    NSLog(@"[Menu] OSD %@", newState ? @"enabled" : @"disabled");
+
+    // Show notification to user
+    NSString *title = newState ? @"OSD Enabled" : @"OSD Disabled";
+    NSString *message = newState ? @"Camera name and status will be displayed" : @"On-screen display hidden";
+
+    NSUserNotification *userNotification = [[NSUserNotification alloc] init];
+    userNotification.title = title;
+    userNotification.informativeText = message;
+    userNotification.soundName = nil;
+    [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:userNotification];
 }
 
 // UniFi Protect handlers
