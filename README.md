@@ -1,14 +1,13 @@
-# RTSP Rotator v2.3.0
+# RTSP Rotator v2.4.0
 
 A powerful macOS application for displaying RTSP camera feeds with **AI-powered object detection**. Perfect for home security, business monitoring, and smart automation.
 
-**✅ Latest Update (December 2025) - v2.3.0:**
-- **🧠 MLX OBJECT DETECTION** - Real-time AI detection of people, vehicles, animals, packages!
+**✅ Latest Update (January 2026) - v2.4.0:**
+- **🆕 CSV Camera Import** - Bulk import cameras from CSV files for rapid deployment!
+- **🆕 OSD Toggle** - On-screen display control for camera names and status
+- **🧠 MLX Object Detection** - Real-time AI detection of people, vehicles, animals, packages
 - **🎯 Smart Alerts** - Zone-based alerts with cooldown periods
-- **📊 Visual Overlays** - Animated bounding boxes and labels
 - **🔒 100% On-Device** - Complete privacy, no cloud processing
-- **⚡ Apple Silicon Optimized** - 30-60 FPS on M1/M2/M3
-- **📈 Statistics & Export** - CSV export and detailed analytics
 
 **Previous Features:**
 - **UniFi Protect Integration** - Automatic camera discovery and bulk import
@@ -16,6 +15,38 @@ A powerful macOS application for displaying RTSP camera feeds with **AI-powered 
 - **Multi-Dashboard System** - Organize up to 36+ cameras
 - **Google Home Integration** - Native Google Home/Nest support
 - **REST API** - Remote control for home automation
+
+## What's New in v2.4.0
+
+### 🆕 CSV Camera Import
+**Bulk camera import for rapid deployment!**
+
+- Import multiple cameras from CSV format: `name,url,type`
+- Automatic URL validation for RTSP, HTTP, and HTTPS protocols
+- Header row detection and automatic skipping
+- Comment line support (# prefix)
+- Quoted field handling for complex names
+- Error reporting with line numbers for invalid entries
+- Access via: File → Import Cameras from CSV
+- Creates bookmarks for all successfully imported cameras
+
+**Example CSV Format:**
+```csv
+name,url
+Living Room,rtsp://192.168.1.100:554/stream
+Front Door,rtsp://admin:pass@192.168.1.101/main
+"Garage (Main)",rtsp://192.168.1.102:554/stream1
+```
+
+### 🆕 On-Screen Display (OSD) Control
+**Toggle camera information overlay!**
+
+- Show/hide camera names on video feeds
+- Display timestamp and status indicators
+- Persistent state via UserDefaults
+- Toggle via: View → Toggle OSD
+- Visual notification on state change
+- Per-application OSD preferences
 
 ## 🧠 AI Object Detection (v2.3.0)
 
