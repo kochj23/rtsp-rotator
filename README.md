@@ -4,6 +4,8 @@
 
 Perfect for home security, business monitoring, smart automation, and video wall applications with enterprise-grade features including real-time machine learning detection.
 
+![RTSP Rotator](Screenshots/main-window.png)
+
 ---
 
 ## What is RTSP Rotator?
