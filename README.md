@@ -736,3 +736,17 @@ This is a personal project by Jordan Koch.
 **Last Updated:** January 27, 2026
 **Version:** 2.4.0 (build 240)
 **Status:** ✅ Production Ready
+
+---
+
+## More Apps by Jordan Koch
+
+| App | Description |
+|-----|-------------|
+| [StreamRotator](https://github.com/kochj23/StreamRotator) | Video stream rotation and display management |
+| [NMAPScanner](https://github.com/kochj23/NMAPScanner) | Network security scanner with AI threat detection |
+| [URL-Analysis](https://github.com/kochj23/URL-Analysis) | Network traffic analysis and URL monitoring |
+| [Bastion](https://github.com/kochj23/Bastion) | Authorized security testing and penetration toolkit |
+| [HomekitControl](https://github.com/kochj23/HomekitControl) | HomeKit device management and automation |
+
+> **[View all projects](https://github.com/kochj23?tab=repositories)**
