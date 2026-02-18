@@ -1,5 +1,7 @@
 # RTSP Rotator v2.4.0
 
+![Build](https://github.com/kochj23/rtsp-rotator/actions/workflows/build.yml/badge.svg)
+
 **A professional macOS application for RTSP camera feeds with AI-powered object detection**
 
 Perfect for home security, business monitoring, smart automation, and video wall applications with enterprise-grade features including real-time machine learning detection.
