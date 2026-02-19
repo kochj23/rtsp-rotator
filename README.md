@@ -1,12 +1,8 @@
-# RTSP Rotator v2.4.0
-
-![Build](https://github.com/kochj23/rtsp-rotator/actions/workflows/build.yml/badge.svg)
+# RTSP Rotator v2.5.0
 
 **A professional macOS application for RTSP camera feeds with AI-powered object detection**
 
 Perfect for home security, business monitoring, smart automation, and video wall applications with enterprise-grade features including real-time machine learning detection.
-
-![RTSP Rotator](Screenshots/main-window.png)
 
 ---
 
@@ -24,6 +20,7 @@ RTSP Rotator is a professional macOS application that displays and automatically
 
 **What Sets RTSP Rotator Apart:**
 - **MLX Object Detection**: On-device AI detection using Apple's MLX framework
+- **macOS Widget**: Monitor cameras from your desktop with WidgetKit widget (v2.5.0+)
 - **100% Privacy**: All AI processing happens locally on your Mac
 - **80+ Object Classes**: Detect people, vehicles, animals, packages, and more
 - **Zone-Based Alerts**: Monitor specific areas with configurable alert rules
@@ -150,9 +147,43 @@ cd "/Volumes/Data/xcode/RTSP Rotator"
 
 ---
 
+## What's New in v2.5.0 (February 2026)
+
+### macOS Widget (WidgetKit)
+**Monitor your cameras directly from your desktop:**
+
+The RTSP Rotator Widget provides at-a-glance camera monitoring without opening the full app:
+
+**Widget Sizes:**
+- **Small**: Current camera name, health status, and detection count
+- **Medium**: Camera status plus total stats (healthy cameras, detection count)
+- **Large**: Full camera list with individual health status and detection counts
+
+**Features:**
+- Current camera name and health status
+- AI detection alert counts per camera
+- Camera health indicators (healthy/degraded/offline)
+- Total detection statistics
+- App running status indicator
+- Tap to open app
+
+**Setup:**
+1. Build and run RTSP Rotator v2.5.0+
+2. Right-click desktop > Edit Widgets
+3. Search for "RTSP Rotator"
+4. Add widget to desktop
+
+**App Group Data Sharing:**
+- Uses App Group: `group.com.jkoch.rtsprotator`
+- Real-time sync between app and widget
+- Automatic widget refresh every 5 minutes
+- Instant updates on detection events
+
+---
+
 ## What's New in v2.4.0 (January 2026)
 
-### 🆕 CSV Camera Import
+### CSV Camera Import
 **Bulk camera import for rapid deployment:**
 
 ```csv
@@ -661,7 +692,15 @@ zone.enabled = YES;
 
 ## Version History
 
-### v2.4.0 (January 2026) - Current
+### v2.5.0 (February 2026) - Current
+- **macOS Widget**: WidgetKit widget for desktop camera monitoring
+  - Small, Medium, and Large widget sizes
+  - Camera health status and detection counts
+  - Real-time sync via App Group
+- **App Group Integration**: Data sharing between app and widget
+- **Widget Bridge**: Objective-C to Swift bridge for widget updates
+
+### v2.4.0 (January 2026)
 - **CSV Camera Import**: Bulk import with validation and error reporting
 - **OSD Toggle**: On-screen display control for camera names and status
 - **Enhanced Documentation**: Complete feature guides with examples
@@ -735,24 +774,6 @@ This is a personal project by Jordan Koch.
 
 ---
 
-**Last Updated:** January 27, 2026
-**Version:** 2.4.0 (build 240)
-**Status:** ✅ Production Ready
-
----
-
-## More Apps by Jordan Koch
-
-| App | Description |
-|-----|-------------|
-| [StreamRotator](https://github.com/kochj23/StreamRotator) | Video stream rotation and display management |
-| [NMAPScanner](https://github.com/kochj23/NMAPScanner) | Network security scanner with AI threat detection |
-| [URL-Analysis](https://github.com/kochj23/URL-Analysis) | Network traffic analysis and URL monitoring |
-| [Bastion](https://github.com/kochj23/Bastion) | Authorized security testing and penetration toolkit |
-| [HomekitControl](https://github.com/kochj23/HomekitControl) | HomeKit device management and automation |
-
-> **[View all projects](https://github.com/kochj23?tab=repositories)**
-
----
-
-> **Disclaimer:** This is a personal project created on my own time. It is not affiliated with, endorsed by, or representative of my employer.
+**Last Updated:** February 4, 2026
+**Version:** 2.5.0 (build 250)
+**Status:** Production Ready
