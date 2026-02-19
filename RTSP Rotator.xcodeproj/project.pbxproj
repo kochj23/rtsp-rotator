@@ -6,17 +6,64 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXFileReference section */
-		A9520043B2E6497AABDA5395 /* RTSPGlassmorphicBackgroundView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RTSPGlassmorphicBackgroundView.h; sourceTree = "<group>"; };
-		309A9FA9D638445E9065BEAF /* RTSPGlassmorphicBackgroundView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RTSPGlassmorphicBackgroundView.m; sourceTree = "<group>"; };
+/* Begin PBXBuildFile section */
+		3D811CBEA4000D472B792B4A /* AIBackendManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D96CC4EA4C2FB12DB1577657 /* AIBackendManager.swift */; };
+		7B253F02D77B07DCD1289920 /* AIBackendManager+Generation.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED4AC48D617A18C84FD5D0EC /* AIBackendManager+Generation.swift */; };
+		A4B7F476EFDE47C0991EF19C /* AIBackendStatusMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB7C802D83D9C9775943B07 /* AIBackendStatusMenu.swift */; };
+		B7CF8A817C5CD08EE1EC54D9 /* AIBackendManager+Enhanced.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA9CAA9A01C31B7DEDAA0E5 /* AIBackendManager+Enhanced.swift */; };
+		WIDGET001B2E99881600C69380 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = WIDGET001F2E99881600C69380 /* WidgetKit.framework */; };
+		WIDGET002B2E99881600C69380 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = WIDGET002F2E99881600C69380 /* SwiftUI.framework */; };
+		WIDGET003B2E99881600C69380 /* RTSP Rotator WidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = WIDGET000F2E99881600C69380 /* RTSP Rotator WidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		WIDGET004P2E99881600C69380 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D09EA6EB2E99881600C69380 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = WIDGET000T2E99881600C69380;
+			remoteInfo = "RTSP Rotator WidgetExtension";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		WIDGET005C2E99881600C69380 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				WIDGET003B2E99881600C69380 /* RTSP Rotator WidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		2FB7C802D83D9C9775943B07 /* AIBackendStatusMenu.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AIBackendStatusMenu.swift; path = "RTSP Rotator/AIBackendStatusMenu.swift"; sourceTree = "<group>"; };
+		AFA9CAA9A01C31B7DEDAA0E5 /* AIBackendManager+Enhanced.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "AIBackendManager+Enhanced.swift"; path = "RTSP Rotator/AIBackendManager+Enhanced.swift"; sourceTree = "<group>"; };
 		D09EA6F42E99881600C69380 /* RTSP Rotator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RTSP Rotator.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D96CC4EA4C2FB12DB1577657 /* AIBackendManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AIBackendManager.swift; path = "RTSP Rotator/AIBackendManager.swift"; sourceTree = "<group>"; };
+		ED4AC48D617A18C84FD5D0EC /* AIBackendManager+Generation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "AIBackendManager+Generation.swift"; path = "RTSP Rotator/AIBackendManager+Generation.swift"; sourceTree = "<group>"; };
+		WIDGET000F2E99881600C69380 /* RTSP Rotator WidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "RTSP Rotator WidgetExtension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		WIDGET001F2E99881600C69380 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		WIDGET002F2E99881600C69380 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		D09EA6F62E99881600C69380 /* RTSP Rotator */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = "RTSP Rotator";
+			sourceTree = "<group>";
+		};
+		WIDGET006G2E99881600C69380 /* RTSP Rotator Widget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
+			path = "RTSP Rotator Widget";
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -26,8 +73,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DE5D4125B4784243BAFD257A /* RTSPGlassmorphicBackgroundView.m in Sources */,
-);
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		WIDGET007F2E99881600C69380 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				WIDGET002B2E99881600C69380 /* SwiftUI.framework in Frameworks */,
+				WIDGET001B2E99881600C69380 /* WidgetKit.framework in Frameworks */,
+			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
@@ -37,7 +92,10 @@
 			isa = PBXGroup;
 			children = (
 				D09EA6F62E99881600C69380 /* RTSP Rotator */,
+				WIDGET006G2E99881600C69380 /* RTSP Rotator Widget */,
+				WIDGET008G2E99881600C69380 /* Frameworks */,
 				D09EA6F52E99881600C69380 /* Products */,
+				E1E35E2EDB4C415708E71595 /* AIBackend */,
 			);
 			sourceTree = "<group>";
 		};
@@ -45,8 +103,29 @@
 			isa = PBXGroup;
 			children = (
 				D09EA6F42E99881600C69380 /* RTSP Rotator.app */,
+				WIDGET000F2E99881600C69380 /* RTSP Rotator WidgetExtension.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		E1E35E2EDB4C415708E71595 /* AIBackend */ = {
+			isa = PBXGroup;
+			children = (
+				D96CC4EA4C2FB12DB1577657 /* AIBackendManager.swift */,
+				ED4AC48D617A18C84FD5D0EC /* AIBackendManager+Generation.swift */,
+				AFA9CAA9A01C31B7DEDAA0E5 /* AIBackendManager+Enhanced.swift */,
+				2FB7C802D83D9C9775943B07 /* AIBackendStatusMenu.swift */,
+			);
+			name = AIBackend;
+			sourceTree = "<group>";
+		};
+		WIDGET008G2E99881600C69380 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				WIDGET001F2E99881600C69380 /* WidgetKit.framework */,
+				WIDGET002F2E99881600C69380 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -70,20 +149,40 @@
 				D09EA6F02E99881600C69380 /* Sources */,
 				D09EA6F12E99881600C69380 /* Frameworks */,
 				D09EA6F22E99881600C69380 /* Resources */,
+				WIDGET005C2E99881600C69380 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				WIDGET004D2E99881600C69380 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				D09EA6F62E99881600C69380 /* RTSP Rotator */,
+			);
+			name = "RTSP Rotator";
+			productName = "RTSP Rotator";
+			productReference = D09EA6F42E99881600C69380 /* RTSP Rotator.app */;
+			productType = "com.apple.product-type.application";
+		};
+		WIDGET000T2E99881600C69380 /* RTSP Rotator WidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = WIDGET009C2E99881600C69380 /* Build configuration list for PBXNativeTarget "RTSP Rotator WidgetExtension" */;
+			buildPhases = (
+				WIDGET010S2E99881600C69380 /* Sources */,
+				WIDGET007F2E99881600C69380 /* Frameworks */,
+				WIDGET011R2E99881600C69380 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				D09EA6F62E99881600C69380 /* RTSP Rotator */,
+				WIDGET006G2E99881600C69380 /* RTSP Rotator Widget */,
 			);
-			name = "RTSP Rotator";
-			packageProductDependencies = (
-			);
-			productName = "RTSP Rotator";
-			productReference = D09EA6F42E99881600C69380 /* RTSP Rotator.app */;
-			productType = "com.apple.product-type.application";
+			name = "RTSP Rotator WidgetExtension";
+			productName = "RTSP Rotator WidgetExtension";
+			productReference = WIDGET000F2E99881600C69380 /* RTSP Rotator WidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -98,6 +197,9 @@
 				LastUpgradeCheck = 2600;
 				TargetAttributes = {
 					D09EA6F32E99881600C69380 = {
+						CreatedOnToolsVersion = 26.0.1;
+					};
+					WIDGET000T2E99881600C69380 = {
 						CreatedOnToolsVersion = 26.0.1;
 					};
 				};
@@ -117,12 +219,20 @@
 			projectRoot = "";
 			targets = (
 				D09EA6F32E99881600C69380 /* RTSP Rotator */,
+				WIDGET000T2E99881600C69380 /* RTSP Rotator WidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		D09EA6F22E99881600C69380 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		WIDGET011R2E99881600C69380 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -136,10 +246,29 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D811CBEA4000D472B792B4A /* AIBackendManager.swift in Sources */,
+				7B253F02D77B07DCD1289920 /* AIBackendManager+Generation.swift in Sources */,
+				B7CF8A817C5CD08EE1EC54D9 /* AIBackendManager+Enhanced.swift in Sources */,
+				A4B7F476EFDE47C0991EF19C /* AIBackendStatusMenu.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		WIDGET010S2E99881600C69380 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		WIDGET004D2E99881600C69380 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = WIDGET000T2E99881600C69380 /* RTSP Rotator WidgetExtension */;
+			targetProxy = WIDGET004P2E99881600C69380 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		D09EA6FB2E99881600C69380 /* Debug */ = {
@@ -262,11 +391,12 @@
 		D09EA6FE2E99881600C69380 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				AUTOMATION_APPLE_EVENTS = NO;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 250;
 				DEVELOPMENT_TEAM = QRRCB8HB3W;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
@@ -277,13 +407,13 @@
 				ENABLE_RESOURCE_ACCESS_PHOTO_LIBRARY = NO;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "RTSP Rotator/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Site Rotator";
+				INFOPLIST_KEY_CFBundleDisplayName = "RTSP Rotator";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright 2026 Jordan Koch. All rights reserved.";
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				INSTALL_PATH = "$(HOME)/Applications";
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "DisneyGPT.RTSP-Rotator";
+				MARKETING_VERSION = 2.5.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.jkoch.RTSP-Rotator";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
 				RUNTIME_EXCEPTION_ALLOW_JIT = NO;
@@ -293,6 +423,7 @@
 				RUNTIME_EXCEPTION_DISABLE_LIBRARY_VALIDATION = NO;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -300,11 +431,12 @@
 		D09EA6FF2E99881600C69380 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				AUTOMATION_APPLE_EVENTS = NO;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 250;
 				DEVELOPMENT_TEAM = QRRCB8HB3W;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
@@ -315,13 +447,13 @@
 				ENABLE_RESOURCE_ACCESS_PHOTO_LIBRARY = NO;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "RTSP Rotator/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Site Rotator";
+				INFOPLIST_KEY_CFBundleDisplayName = "RTSP Rotator";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright 2026 Jordan Koch. All rights reserved.";
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				INSTALL_PATH = "$(HOME)/Applications";
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "DisneyGPT.RTSP-Rotator";
+				MARKETING_VERSION = 2.5.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.jkoch.RTSP-Rotator";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
 				RUNTIME_EXCEPTION_ALLOW_JIT = NO;
@@ -331,7 +463,64 @@
 				RUNTIME_EXCEPTION_DISABLE_LIBRARY_VALIDATION = NO;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
 				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		WIDGET012D2E99881600C69380 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = "RTSP Rotator Widget/RTSP_Rotator_Widget.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 250;
+				DEVELOPMENT_TEAM = QRRCB8HB3W;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "RTSP Rotator Widget/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "RTSP Rotator Widget";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright 2026 Jordan Koch. All rights reserved.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 2.5.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.jkoch.RTSP-Rotator.Widget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		WIDGET013D2E99881600C69380 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = "RTSP Rotator Widget/RTSP_Rotator_Widget.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 250;
+				DEVELOPMENT_TEAM = QRRCB8HB3W;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "RTSP Rotator Widget/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "RTSP Rotator Widget";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright 2026 Jordan Koch. All rights reserved.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 2.5.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.jkoch.RTSP-Rotator.Widget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -352,6 +541,15 @@
 			buildConfigurations = (
 				D09EA6FE2E99881600C69380 /* Debug */,
 				D09EA6FF2E99881600C69380 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		WIDGET009C2E99881600C69380 /* Build configuration list for PBXNativeTarget "RTSP Rotator WidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				WIDGET012D2E99881600C69380 /* Debug */,
+				WIDGET013D2E99881600C69380 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
