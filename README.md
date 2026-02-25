@@ -244,9 +244,11 @@ cd "/Volumes/Data/xcode/RTSP Rotator"
 - **RTSP Authentication**: Username/password support for camera access
 - **OAuth 2.0**: Secure Google Home authentication
 - **Local Network**: No external routing by default
-- **Credential Storage**: Stored in NSUserDefaults (Keychain recommended for production)
+- **Keychain Credential Storage**: All API keys stored in macOS Keychain (migrated from UserDefaults in v2.5.1)
+- **App Transport Security**: Strict ATS policy enforced -- no arbitrary HTTP loads permitted
 - **HTTPS Support**: rtsps:// for encrypted RTSP streams
 - **Token Management**: Google OAuth tokens managed securely
+- **Auto-Migration**: Existing plaintext API keys automatically migrated to Keychain on launch
 
 ### Privacy
 - **No Telemetry**: No data sent to external services
