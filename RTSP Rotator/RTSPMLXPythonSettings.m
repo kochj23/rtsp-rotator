@@ -252,7 +252,7 @@ static NSString * const kRTSPAutoCheckKey = @"RTSPAutoCheckMLX";
         @"/Library/Frameworks/Python.framework/Versions/Current/bin/python3",
         @"/opt/anaconda3/bin/python",
         @"/opt/miniconda3/bin/python",
-        @"/Users/kochj/.pyenv/shims/python",
+        [NSHomeDirectory() stringByAppendingPathComponent:@".pyenv/shims/python"],
         @"/usr/local/anaconda3/bin/python"
     ];
 

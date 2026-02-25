@@ -32,7 +32,7 @@ echo "  - Clearing Swift caches..."
 rm -rf ~/Library/Caches/org.swift.swiftpm 2>/dev/null || true
 
 # Remove old CocoaPods artifacts if they exist
-cd "/Users/kochj/Desktop/xcode/RTSP Rotator"
+cd "$(cd "$(dirname "$0")" && pwd)"
 if [ -d "RTSP Rotator.xcworkspace" ]; then
     echo "  - Removing old CocoaPods workspace..."
     rm -rf "RTSP Rotator.xcworkspace"

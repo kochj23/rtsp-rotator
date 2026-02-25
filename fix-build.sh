@@ -10,7 +10,7 @@ echo "========================================="
 echo
 
 # Navigate to project directory
-cd "/Users/kochj/Desktop/xcode/RTSP Rotator"
+cd "$(cd "$(dirname "$0")" && pwd)"
 
 # Check if CocoaPods is installed
 if ! command -v pod &> /dev/null; then
