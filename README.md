@@ -1,6 +1,6 @@
 # RTSP Rotator v2.5.0
 
-**A professional macOS application for RTSP camera feeds with AI-powered object detection**
+**A professional macOS application for RTSP (Real Time Streaming Protocol) camera feeds with AI-powered object detection**
 
 Perfect for home security, business monitoring, smart automation, and video wall applications with enterprise-grade features including real-time machine learning detection.
 
@@ -14,17 +14,17 @@ RTSP Rotator is a professional macOS application that displays and automatically
 - **Home Security**: Monitor all cameras with AI-powered detection of people, vehicles, packages
 - **Business Surveillance**: Display feeds across multiple dashboards with zone-based alerting
 - **Video Walls**: Grid layouts supporting up to 12 simultaneous cameras with object detection
-- **NOC/SOC Displays**: Auto-cycling dashboards for 36+ cameras
+- **NOC (Network Operations Center) / SOC (Security Operations Center) Displays**: Auto-cycling dashboards for 36+ cameras
 - **Smart Home Integration**: REST API for home automation with detection triggers
 - **Intelligent Monitoring**: Real-time object detection without cloud processing
 
 **What Sets RTSP Rotator Apart:**
-- **MLX Object Detection**: On-device AI detection using Apple's MLX framework
+- **MLX (Machine Learning eXtensions) Object Detection**: On-device AI detection using Apple's MLX framework
 - **macOS Widget**: Monitor cameras from your desktop with WidgetKit widget (v2.5.0+)
 - **100% Privacy**: All AI processing happens locally on your Mac
 - **80+ Object Classes**: Detect people, vehicles, animals, packages, and more
 - **Zone-Based Alerts**: Monitor specific areas with configurable alert rules
-- **Real-time Performance**: 30-60 FPS on Apple Silicon, 15-30 FPS on Intel
+- **Real-time Performance**: 30-60 FPS (Frames Per Second) on Apple Silicon, 15-30 FPS on Intel
 
 ---
 
@@ -131,7 +131,7 @@ cd "/Volumes/Data/xcode/RTSP Rotator"
 
 ### Advanced Features
 - **REST API Server**: HTTP API for home automation integration
-- **PTZ Control**: Full pan/tilt/zoom control for compatible cameras
+- **PTZ (Pan/Tilt/Zoom) Control**: Full pan/tilt/zoom control for compatible cameras
 - **Motion Detection**: AI-powered motion detection with confidence scoring
 - **Smart Alerts**: Vision framework object detection (people, vehicles, animals)
 - **Audio Monitoring**: Real-time audio level meters with alerts
@@ -260,7 +260,7 @@ cd "/Volumes/Data/xcode/RTSP Rotator"
 ### Best Practices
 - Use authentication on all RTSP cameras
 - Change default camera passwords
-- Use VLANs to isolate camera network
+- Use VLANs (Virtual Local Area Networks) to isolate camera network
 - Enable rtsps:// for encrypted streams when available
 - Regularly update firmware on cameras
 - Consider Keychain for credential storage in production
@@ -304,7 +304,7 @@ cd "/Volumes/Data/xcode/RTSP Rotator"
 
 ### Option 1: Pre-built Binary (Recommended)
 
-1. **Download DMG:**
+1. **Download DMG (Disk Image):**
    ```bash
    # From binaries folder
    open "/Volumes/Data/xcode/binaries/20260127-RTSPRotator-v2.4.0/RTSPRotator-v2.4.0-build240.dmg"
