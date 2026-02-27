@@ -4,7 +4,7 @@
 
 ### Build Command Used
 ```bash
-cd "/Users/kochj/Desktop/xcode/RTSP Rotator"
+cd "~/Desktop/xcode/RTSP Rotator"
 xcodebuild -project "RTSP Rotator.xcodeproj" -scheme "RTSP Rotator" -configuration Debug clean build
 ```
 
@@ -14,13 +14,13 @@ xcodebuild -project "RTSP Rotator.xcodeproj" -scheme "RTSP Rotator" -configurati
 
 ### Error Messages
 ```
-/Users/kochj/Desktop/xcode/RTSP Rotator/RTSP Rotator/RTSPRecorder.h:10:9:
+~/Desktop/xcode/RTSP Rotator/RTSP Rotator/RTSPRecorder.h:10:9:
 error: 'VLCKit/VLCKit.h' file not found
 
-/Users/kochj/Desktop/xcode/RTSP Rotator/RTSP Rotator/RTSPPreferencesController+Extended.m:10:9:
+~/Desktop/xcode/RTSP Rotator/RTSP Rotator/RTSPPreferencesController+Extended.m:10:9:
 error: 'VLCKit/VLCKit.h' file not found
 
-/Users/kochj/Desktop/xcode/RTSP Rotator/RTSP Rotator/RTSP_RotatorView.m:9:9:
+~/Desktop/xcode/RTSP Rotator/RTSP Rotator/RTSP_RotatorView.m:9:9:
 error: 'VLCKit/VLCKit.h' file not found
 ```
 
@@ -32,7 +32,7 @@ The VLCKit framework has not been installed or linked to the project. This is a 
 #### Option 1: Install VLCKit via CocoaPods (Recommended)
 
 ```bash
-cd "/Users/kochj/Desktop/xcode/RTSP Rotator"
+cd "~/Desktop/xcode/RTSP Rotator"
 
 # Create Podfile
 cat > Podfile << 'EOF'
@@ -218,7 +218,7 @@ xcodebuild -project "RTSP Rotator.xcodeproj" \
 ### 2. Check for Specific File Errors
 ```bash
 # Compile individual files to isolate issues
-cd "/Users/kochj/Desktop/xcode/RTSP Rotator/RTSP Rotator"
+cd "~/Desktop/xcode/RTSP Rotator/RTSP Rotator"
 
 # Test RTSPFeedMetadata (no VLC dependency)
 clang -c RTSPFeedMetadata.m -o /tmp/RTSPFeedMetadata.o \
@@ -307,7 +307,7 @@ set -e
 echo "=== RTSP Rotator Build Fix Script ==="
 echo
 
-cd "/Users/kochj/Desktop/xcode/RTSP Rotator"
+cd "~/Desktop/xcode/RTSP Rotator"
 
 # Check if CocoaPods is installed
 if ! command -v pod &> /dev/null; then
@@ -358,7 +358,7 @@ If you want to test the build without VLCKit temporarily:
 ### Create VLCKit Stub
 
 ```bash
-cd "/Users/kochj/Desktop/xcode/RTSP Rotator"
+cd "~/Desktop/xcode/RTSP Rotator"
 mkdir -p VLCKit.framework/Headers
 
 # Create minimal VLCKit.h stub

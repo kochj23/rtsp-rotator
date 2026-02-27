@@ -12,7 +12,7 @@
 
 ### **WRONG URLs (What Was Happening):**
 ```
-rtsps://192.168.1.22:7441/CAMERA_TOKEN_1?enableSrtp
+rtsps://10.0.0.22:7441/CAMERA_TOKEN_1?enableSrtp
         ↑
     Camera IP - Port 7441 CLOSED! ❌
 
@@ -23,7 +23,7 @@ Result: Connection refused
 
 ### **CORRECT URLs (What It Should Be):**
 ```
-rtsps://192.168.1.9:7441/CAMERA_TOKEN_1?enableSrtp
+rtsps://10.0.0.1:7441/CAMERA_TOKEN_1?enableSrtp
         ↑
     Controller IP - Port 7441 OPEN! ✅
 
@@ -57,18 +57,18 @@ rtspURL = [NSString stringWithFormat:@"rtsps://%@:7441/%@?enableSrtp",
 
 ### **UniFi Protect Architecture:**
 ```
-Camera (192.168.1.22)
+Camera (10.0.0.22)
   - Port 554: CLOSED ❌
   - Port 7441: CLOSED ❌
   - No direct RTSP access!
 
-Controller (192.168.1.9)
+Controller (10.0.0.1)
   - Port 443: HTTPS API ✅
   - Port 7441: RTSPS Proxy ✅
   - Proxies all camera streams!
 ```
 
-**All cameras MUST stream through controller at 192.168.1.9:7441!**
+**All cameras MUST stream through controller at 10.0.0.1:7441!**
 
 ---
 
@@ -84,11 +84,11 @@ Controller (192.168.1.9)
 
 **Status Window Will Show:**
 ```
-[UniFi] Generated SECURE RTSPS URL: rtsps://192.168.1.9:7441/CAMERA_TOKEN_1
-[UniFi] Generated SECURE RTSPS URL: rtsps://192.168.1.9:7441/CAMERA_TOKEN_2
-[UniFi] Generated SECURE RTSPS URL: rtsps://192.168.1.9:7441/CAMERA_TOKEN_3
+[UniFi] Generated SECURE RTSPS URL: rtsps://10.0.0.1:7441/CAMERA_TOKEN_1
+[UniFi] Generated SECURE RTSPS URL: rtsps://10.0.0.1:7441/CAMERA_TOKEN_2
+[UniFi] Generated SECURE RTSPS URL: rtsps://10.0.0.1:7441/CAMERA_TOKEN_3
                                            ↑
-                              ALL use 192.168.1.9 (controller)!
+                              ALL use 10.0.0.1 (controller)!
 ```
 
 ### **Step 3: FFmpeg Proxy Connects**
@@ -96,7 +96,7 @@ Controller (192.168.1.9)
 ```
 [INFO] RTSPS URL detected - starting FFmpeg proxy
 [FFmpegProxy] Starting proxy for Interior - Laundry
-[FFmpegProxy]   Source: rtsps://192.168.1.9:7441/CAMERA_TOKEN_1?enableSrtp
+[FFmpegProxy]   Source: rtsps://10.0.0.1:7441/CAMERA_TOKEN_1?enableSrtp
 [FFmpegProxy]   Local:  rtsp://localhost:18554
 [FFmpegProxy] ✓ FFmpeg process started
 [FFmpegProxy] ✓ FFmpeg still running - RTSP server ready
@@ -110,11 +110,11 @@ Controller (192.168.1.9)
 
 | Camera | Wrong URL (Before) | Correct URL (Now) |
 |--------|-------------------|-------------------|
-| Laundry | `rtsps://192.168.1.22:7441/alias` ❌ | `rtsps://192.168.1.9:7441/alias` ✅ |
-| Living Room | `rtsps://192.168.1.83:7441/alias` ❌ | `rtsps://192.168.1.9:7441/alias` ✅ |
-| Office | `rtsps://192.168.1.148:7441/alias` ❌ | `rtsps://192.168.1.9:7441/alias` ✅ |
+| Laundry | `rtsps://10.0.0.22:7441/alias` ❌ | `rtsps://10.0.0.1:7441/alias` ✅ |
+| Living Room | `rtsps://10.0.0.83:7441/alias` ❌ | `rtsps://10.0.0.1:7441/alias` ✅ |
+| Office | `rtsps://10.0.0.148:7441/alias` ❌ | `rtsps://10.0.0.1:7441/alias` ✅ |
 
-**All cameras now use controller IP (192.168.1.9)!**
+**All cameras now use controller IP (10.0.0.1)!**
 
 ---
 
@@ -124,7 +124,7 @@ Controller (192.168.1.9)
 ```bash
 # This should work now:
 timeout 10 ffmpeg -rtsp_transport tcp \
-  -i "rtsps://192.168.1.9:7441/CAMERA_TOKEN_1?enableSrtp" \
+  -i "rtsps://10.0.0.1:7441/CAMERA_TOKEN_1?enableSrtp" \
   -t 2 -f null -
 
 # Should show:
@@ -156,7 +156,7 @@ timeout 10 ffmpeg -rtsp_transport tcp \
 **Menu → UniFi Protect → Import All Cameras**
 
 **What Will Happen:**
-1. ✅ URLs generated: `rtsps://192.168.1.9:7441/alias` (CORRECT!)
+1. ✅ URLs generated: `rtsps://10.0.0.1:7441/alias` (CORRECT!)
 2. ✅ FFmpeg connects to controller
 3. ✅ Controller streams camera video
 4. ✅ FFmpeg proxies to localhost

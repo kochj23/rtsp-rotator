@@ -401,7 +401,7 @@
 
 - (void)testFeedCategoryOrganization {
     // Given - Feeds with different categories
-    RTSPFeedMetadata *unifiCamera = [[RTSPFeedMetadata alloc] initWithURL:@"rtsps://192.168.1.9:7441/camera1"];
+    RTSPFeedMetadata *unifiCamera = [[RTSPFeedMetadata alloc] initWithURL:@"rtsps://10.0.0.1:7441/camera1"];
     unifiCamera.category = @"UniFi Protect";
     unifiCamera.displayName = @"Front Door";
 

@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
  * RTSPFFmpegProxy *proxy = [RTSPFFmpegProxy sharedProxy];
  *
  * // Convert RTSPS URL to local RTSP
- * NSURL *rtspsURL = [NSURL URLWithString:@"rtsps://192.168.1.9:7441/alias"];
+ * NSURL *rtspsURL = [NSURL URLWithString:@"rtsps://10.0.0.1:7441/alias"];
  * NSURL *localURL = [proxy startProxyForURL:rtspsURL cameraName:@"Front Door"];
  *
  * // Use local URL with AVPlayer

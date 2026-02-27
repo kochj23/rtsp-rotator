@@ -3,7 +3,7 @@
 
 **Date**: October 30, 2025
 **Discovery**: UniFi cameras don't expose RTSP directly
-**Requirement**: MUST use controller proxy (192.168.1.9:7441)
+**Requirement**: MUST use controller proxy (10.0.0.1:7441)
 **Problem**: Controller uses self-signed certificate
 **Solution**: MUST use VLCKit or alternative method
 
@@ -14,15 +14,15 @@
 ### **Test Results:**
 ```bash
 # Test direct camera RTSP (port 554):
-nc -zv 192.168.1.22 554
+nc -zv 10.0.0.22 554
 Result: Connection REFUSED ❌
 
 # Test direct camera RTSPS (port 7441):
-nc -zv 192.168.1.22 7441
+nc -zv 10.0.0.22 7441
 Result: Connection REFUSED ❌
 
 # Test controller proxy (port 7441):
-nc -zv 192.168.1.9 7441
+nc -zv 10.0.0.1 7441
 Result: [Testing...]
 ```
 
@@ -34,11 +34,11 @@ Result: [Testing...]
 
 ### **UniFi Protect Architecture:**
 ```
-Camera Hardware (192.168.1.22)
+Camera Hardware (10.0.0.22)
   ↓
   Does NOT expose RTSP directly
   ↓
-UniFi Protect Controller (192.168.1.9:7441)
+UniFi Protect Controller (10.0.0.1:7441)
   ↓
   Proxies RTSP streams through HTTPS
   ↓
@@ -86,7 +86,7 @@ VLCKit is the standard solution for this exact problem.
 ### **Installation (via CocoaPods):**
 
 ```bash
-cd "/Users/kochj/Desktop/xcode/RTSP Rotator"
+cd "~/Desktop/xcode/RTSP Rotator"
 
 # Create Podfile
 cat > Podfile << 'EOF'

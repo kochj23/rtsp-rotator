@@ -12,7 +12,7 @@
 
 ### **Test 1: Camera URL** ✅ WORKS
 ```bash
-ffmpeg -i "rtsps://192.168.1.9:7441/CAMERA_TOKEN_3?enableSrtp"
+ffmpeg -i "rtsps://10.0.0.1:7441/CAMERA_TOKEN_3?enableSrtp"
 
 Result: ✅ SUCCESS
 Video: h264 1920x1080 @ 30fps
@@ -46,7 +46,7 @@ Result: ✅ SUCCESS!
 
 ### **New Architecture:**
 ```
-RTSPS Camera (192.168.1.9:7441)
+RTSPS Camera (10.0.0.1:7441)
   ↓
 FFmpeg Process (reads RTSPS, handles cert)
   ↓
@@ -117,7 +117,7 @@ proxy.localURL = file:///tmp/rtsp_hls_18554/stream.m3u8
 
 ### **What Will Happen:**
 ```
-1. Cameras imported with RTSPS URLs (192.168.1.9:7441)
+1. Cameras imported with RTSPS URLs (10.0.0.1:7441)
 2. Playback starts
 3. FFmpeg detects RTSPS → starts HLS conversion
 4. HLS files created: /tmp/rtsp_hls_18554/stream.m3u8

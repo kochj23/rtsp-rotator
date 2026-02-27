@@ -17,7 +17,7 @@ Since FFmpeg ALREADY plays your cameras perfectly, let's use it as a local proxy
 ```
 RTSPS Camera → FFmpeg (accepts self-signed cert) → Local RTSP → AVFoundation
 
-Your cameras: rtsps://192.168.1.9:7441/alias
+Your cameras: rtsps://10.0.0.1:7441/alias
 FFmpeg converts to: rtsp://localhost:8554/camera1
 AVFoundation plays: rtsp://localhost:8554/camera1 ✅
 ```

@@ -399,7 +399,7 @@ ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES
 
 ### Fix Deployment Target:
 ```bash
-cd "/Users/kochj/Desktop/xcode/RTSP Rotator"
+cd "~/Desktop/xcode/RTSP Rotator"
 # Use PlistBuddy or sed to update project.pbxproj
 sed -i '' 's/MACOSX_DEPLOYMENT_TARGET = 26.0/MACOSX_DEPLOYMENT_TARGET = 11.0/g' "RTSP Rotator.xcodeproj/project.pbxproj"
 sed -i '' 's/CreatedOnToolsVersion = 26.0.1/CreatedOnToolsVersion = 16.0.1/g' "RTSP Rotator.xcodeproj/project.pbxproj"

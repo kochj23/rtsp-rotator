@@ -77,14 +77,14 @@ Build Succeeded
 
 ### Check for VLCKit references:
 ```bash
-cd "/Users/kochj/Desktop/xcode/RTSP Rotator"
+cd "~/Desktop/xcode/RTSP Rotator"
 find RTSP\ Rotator -name "*.m" -o -name "*.h" | xargs grep -i "vlckit"
 ```
 **Expected:** No output (no references found)
 
 ### Build from command line:
 ```bash
-cd "/Users/kochj/Desktop/xcode/RTSP Rotator"
+cd "~/Desktop/xcode/RTSP Rotator"
 xcodebuild -project "RTSP Rotator.xcodeproj" -scheme "RTSP Rotator" build
 ```
 **Expected:** `** BUILD SUCCEEDED **`

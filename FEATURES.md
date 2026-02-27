@@ -73,7 +73,7 @@ All settings are automatically saved and restored:
 - Retry attempts
 
 **Storage:** NSUserDefaults (user preferences domain)
-**Location:** `~/Library/Preferences/com.kochj23.app.plist`
+**Location:** `~/Library/Preferences/com.jkoch.RTSP-Rotator.plist`
 
 ---
 
@@ -428,11 +428,11 @@ Result: Three cameras loaded and rotated
 **Solutions:**
 1. Check file permissions:
    ```bash
-   ls -l ~/Library/Preferences/com.kochj23.app.plist
+   ls -l ~/Library/Preferences/com.jkoch.RTSP-Rotator.plist
    ```
 2. Reset preferences:
    ```bash
-   defaults delete com.kochj23.app
+   defaults delete com.jkoch.RTSP-Rotator
    ```
 3. Check Console.app for errors
 
@@ -455,7 +455,7 @@ Result: Three cameras loaded and rotated
 1. Check that feeds were saved (click Save button)
 2. Verify feeds in NSUserDefaults:
    ```bash
-   defaults read com.kochj23.app RTSPManualFeeds
+   defaults read com.jkoch.RTSP-Rotator RTSPManualFeeds
    ```
 3. Reset and re-add feeds
 

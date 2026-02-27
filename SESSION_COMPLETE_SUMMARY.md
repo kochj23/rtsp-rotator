@@ -48,7 +48,7 @@
 
 ### **Comprehensive Tests Performed:**
 ```
-✅ Camera URLs: Valid (192.168.1.9:7441)
+✅ Camera URLs: Valid (10.0.0.1:7441)
 ✅ FFmpeg Playback: Works (tested 100+ seconds)
 ✅ HLS Output: Perfect (segments created)
 ✅ Network Access: Resolved via helper script

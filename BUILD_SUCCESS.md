@@ -196,7 +196,7 @@ AVFoundation's RTSP support may differ from VLC's:
 To verify the build succeeded:
 
 ```bash
-cd "/Users/kochj/Desktop/xcode/RTSP Rotator"
+cd "~/Desktop/xcode/RTSP Rotator"
 xcodebuild -project "RTSP Rotator.xcodeproj" -scheme "RTSP Rotator" build
 ```
 
@@ -207,7 +207,7 @@ Expected output:
 
 To run the application:
 ```bash
-open "/Users/kochj/Library/Developer/Xcode/DerivedData/RTSP_Rotator-*/Build/Products/Debug/RTSP Rotator.saver"
+open "~/Library/Developer/Xcode/DerivedData/RTSP_Rotator-*/Build/Products/Debug/RTSP Rotator.saver"
 ```
 
 ---
@@ -254,7 +254,7 @@ Build status: ✅ SUCCEEDED (0 errors, 0 warnings)
 
 If you encounter any issues:
 
-1. Check the build log: `/Users/kochj/Desktop/xcode/RTSP Rotator/build.log`
+1. Check the build log: `~/Desktop/xcode/RTSP Rotator/build.log`
 2. Review implementation notes above
 3. Consult Apple's AVFoundation documentation
 4. Test with simple RTSP streams first before complex setups

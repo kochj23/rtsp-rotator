@@ -21,7 +21,7 @@ AVPlayer + RTSPS + Self-Signed Certificate = ❌ DOESN'T WORK
 - Error -1002: "Unsupported URL"
 
 **Your Setup:**
-- UniFi Protect Controller: 192.168.1.9
+- UniFi Protect Controller: 10.0.0.1
 - RTSPS Port: 7441
 - Certificate: Self-signed ✅ (secure but not trusted by system)
 - Result: AVPlayer refuses to connect ❌
@@ -63,7 +63,7 @@ AVPlayer + RTSPS + Self-Signed Certificate = ❌ DOESN'T WORK
 **How:**
 Connect directly to camera RTSP port instead of controller proxy:
 ```
-Instead of: rtsps://192.168.1.9:7441/camera123
+Instead of: rtsps://10.0.0.1:7441/camera123
 Use:        rtsp://192.168.1.50:554/camera123
 ```
 
@@ -152,7 +152,7 @@ UniFi cameras have their own IP addresses. Check in UniFi Protect:
 
 Instead of controller proxy:
 ```
-❌ rtsps://192.168.1.9:7441/CAMERA_TOKEN_4?enableSrtp
+❌ rtsps://10.0.0.1:7441/CAMERA_TOKEN_4?enableSrtp
 ✅ rtsp://192.168.1.50:554/s0
 ```
 

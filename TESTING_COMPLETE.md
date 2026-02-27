@@ -11,7 +11,7 @@
 
 ### **✅ Test 1: Camera URL Validity**
 ```bash
-Command: ffmpeg -i "rtsps://192.168.1.9:7441/CAMERA_TOKEN_3?enableSrtp"
+Command: ffmpeg -i "rtsps://10.0.0.1:7441/CAMERA_TOKEN_3?enableSrtp"
 Result: ✅ SUCCESS
 Video: h264 1920x1080 @ 30fps
 Audio: AAC 16kHz + Opus 48kHz
@@ -87,7 +87,7 @@ RTSPS → FFmpeg → HLS files → AVPlayer
 ```bash
 /opt/homebrew/bin/ffmpeg \
   -rtsp_transport tcp \
-  -i "rtsps://192.168.1.9:7441/CAMERA_TOKEN_3?enableSrtp" \
+  -i "rtsps://10.0.0.1:7441/CAMERA_TOKEN_3?enableSrtp" \
   -c copy \
   -f hls \
   -hls_time 2 \
@@ -139,7 +139,7 @@ Result: Should work on modern Mac!
 ## ✅ **WHAT WAS FIXED**
 
 ### **All Issues Resolved:**
-1. ✅ URLs now use controller IP (192.168.1.9)
+1. ✅ URLs now use controller IP (10.0.0.1)
 2. ✅ FFmpeg can play RTSPS (tested)
 3. ✅ FFmpeg RTSP output abandoned (doesn't work)
 4. ✅ FFmpeg HLS output implemented (works perfectly!)
@@ -171,7 +171,7 @@ Result: Should work on modern Mac!
 [17:35:00] Importing 21 cameras...
 [17:35:01] ✓ Import complete
 
-[17:35:05] Playing feed 1/21: rtsps://192.168.1.9:7441/CAMERA_TOKEN_1
+[17:35:05] Playing feed 1/21: rtsps://10.0.0.1:7441/CAMERA_TOKEN_1
 [17:35:05] RTSPS URL detected - starting FFmpeg proxy
 [FFmpegProxy] Creating HLS directory: /tmp/rtsp_hls_18554
 [FFmpegProxy] FFmpeg command: ... -f hls /tmp/rtsp_hls_18554/stream.m3u8
@@ -213,7 +213,7 @@ Result: Should work on modern Mac!
 
 ```bash
 # Check FFmpeg processes
-ps aux | grep ffmpeg | grep "192.168.1.9:7441"
+ps aux | grep ffmpeg | grep "10.0.0.1:7441"
 
 # Check HLS directories
 ls -la /tmp/rtsp_hls_*

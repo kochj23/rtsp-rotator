@@ -66,7 +66,7 @@ Warnings: 0
 
 **Application Location:**
 ```
-/Users/kochj/Library/Developer/Xcode/DerivedData/RTSP_Rotator-*/Build/Products/Debug/RTSP Rotator.saver
+~/Library/Developer/Xcode/DerivedData/RTSP_Rotator-*/Build/Products/Debug/RTSP Rotator.saver
 ```
 
 ### AVFoundation Conversion
@@ -389,14 +389,14 @@ To run the application:
 
 1. **From Xcode:**
    ```bash
-   cd "/Users/kochj/Desktop/xcode/RTSP Rotator"
+   cd "~/Desktop/xcode/RTSP Rotator"
    open "RTSP Rotator.xcodeproj"
    # Then: Product > Run (⌘R)
    ```
 
 2. **From Terminal:**
    ```bash
-   open "/Users/kochj/Library/Developer/Xcode/DerivedData/RTSP_Rotator-dagucchzodmaidgejvzfwdyxfvuw/Build/Products/Debug/RTSP Rotator.saver"
+   open "~/Library/Developer/Xcode/DerivedData/RTSP_Rotator-dagucchzodmaidgejvzfwdyxfvuw/Build/Products/Debug/RTSP Rotator.saver"
    ```
 
 3. **Configure feeds** via Preferences menu or configuration file

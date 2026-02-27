@@ -178,7 +178,7 @@
     // Simulate a real UniFi Protect setup workflow
 
     // Step 1: User enters credentials
-    NSString *host = @"192.168.1.9";
+    NSString *host = @"10.0.0.1";
     NSString *username = @"testuser@example.com";
     NSString *password = @"TestPassword123!";
 
@@ -378,7 +378,7 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 
     // Given - Old version had passwords in NSUserDefaults
-    [defaults setObject:@"192.168.1.9" forKey:@"UniFi_ControllerHost"];
+    [defaults setObject:@"10.0.0.1" forKey:@"UniFi_ControllerHost"];
     [defaults setObject:@"admin@example.com" forKey:@"UniFi_Username"];
     [defaults setObject:@"OldInsecurePassword" forKey:@"UniFi_Password"]; // OLD INSECURE WAY
     [defaults synchronize];
@@ -389,7 +389,7 @@
                                                 service:RTSPKeychainServiceUniFiProtect];
 
     // Then - Host and username should still be in NSUserDefaults
-    XCTAssertEqualObjects([defaults stringForKey:@"UniFi_ControllerHost"], @"192.168.1.9");
+    XCTAssertEqualObjects([defaults stringForKey:@"UniFi_ControllerHost"], @"10.0.0.1");
     XCTAssertEqualObjects([defaults stringForKey:@"UniFi_Username"], @"admin@example.com");
 
     // Password should be removed from NSUserDefaults

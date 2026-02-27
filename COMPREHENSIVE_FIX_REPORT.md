@@ -235,7 +235,7 @@ $ codesign -dvvv "RTSP Rotator.app"
 ### Before (INSECURE):
 ```bash
 # Passwords were in plain text
-$ defaults read com.kochj23.app UniFi_Password
+$ defaults read com.jkoch.RTSP-Rotator UniFi_Password
 "MyPassword123"  # ❌ READABLE BY ANY PROCESS
 ```
 
@@ -243,7 +243,7 @@ $ defaults read com.kochj23.app UniFi_Password
 ```bash
 # Passwords encrypted in Keychain
 $ security find-generic-password -s "com.rtsp-rotator.unifi-protect"
-keychain: "/Users/kochj/Library/Keychains/login.keychain-db"
+keychain: "~/Library/Keychains/login.keychain-db"
 class: "genp"
 attributes:
     "acct"<blob>="UniFi_Password"
@@ -251,7 +251,7 @@ attributes:
 password: <encrypted>  # ✅ PROTECTED
 
 # NSUserDefaults cleaned
-$ defaults read com.kochj23.app UniFi_Password
+$ defaults read com.jkoch.RTSP-Rotator UniFi_Password
 (null)  # ✅ NO LONGER IN PLAIN TEXT
 ```
 
@@ -446,7 +446,7 @@ Documentation: 4 comprehensive guides
 ✅ Code signing valid
 ✅ Deployment target: 11.0
 ✅ App version: 2.2.0 (220)
-✅ Bundle ID: com.kochj23.app
+✅ Bundle ID: com.jkoch.RTSP-Rotator
 ```
 
 ### Security Verification:
@@ -630,7 +630,7 @@ Runtime Warnings:     Unknown → 0 (with tests)
 
 #### Option 2: Command Line 🖥️
 ```bash
-cd "/Users/kochj/Desktop/xcode/RTSP Rotator"
+cd "~/Desktop/xcode/RTSP Rotator"
 
 xcodebuild test \
     -project "RTSP Rotator.xcodeproj" \

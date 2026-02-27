@@ -142,7 +142,9 @@ docs/_build/
 
 # Backup files
 *.backup
+*.backup.*
 *.bak
+*.bak*
 *.orig
 
 # Log files

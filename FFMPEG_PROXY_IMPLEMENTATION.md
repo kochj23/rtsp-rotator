@@ -79,7 +79,7 @@
 ```bash
 /opt/homebrew/bin/ffmpeg \
   -rtsp_transport tcp \
-  -i "rtsps://192.168.1.9:7441/CAMERA_TOKEN_1?enableSrtp" \
+  -i "rtsps://10.0.0.1:7441/CAMERA_TOKEN_1?enableSrtp" \
   -c copy \
   -f rtsp \
   -rtsp_transport tcp \
@@ -116,7 +116,7 @@ if ([feedURL.scheme isEqualToString:@"rtsps"]) {
 
 ### **FFmpeg Connectivity Test:**
 ```bash
-$ ffmpeg -i "rtsps://192.168.1.9:7441/CAMERA_TOKEN_1"
+$ ffmpeg -i "rtsps://10.0.0.1:7441/CAMERA_TOKEN_1"
 
 Result: ✅ SUCCESS
 Stream: Video h264 1920x1080 @ 30fps
