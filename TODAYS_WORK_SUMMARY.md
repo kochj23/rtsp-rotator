@@ -29,7 +29,7 @@
 ### **Phase 2: RTSPS & UniFi Investigation** (IDENTIFIED ✅)
 
 9. ✅ **RTSPS Investigation**: Discovered AVFoundation limitation
-10. ✅ **URL Generation**: Fixed to use controller IP (192.168.1.9)
+10. ✅ **URL Generation**: Fixed to use controller IP (10.0.0.1)
 11. ✅ **MFA Authentication**: Fixed cookie persistence
 12. ✅ **Auto-Discovery**: Cameras discovered automatically after auth
 13. ✅ **Enhanced Logging**: Comprehensive status window messages
@@ -120,7 +120,7 @@
 
 ### **What We Know:**
 ```
-✅ Camera URLs work: rtsps://192.168.1.9:7441/CAMERA_TOKEN_3?enableSrtp
+✅ Camera URLs work: rtsps://10.0.0.1:7441/CAMERA_TOKEN_3?enableSrtp
 ✅ FFmpeg plays them: Tested extensively, works perfect
 ✅ HLS output works: Tested 70+ seconds, segments created
 ✅ AVPlayer supports HLS: Native Apple feature
@@ -143,7 +143,7 @@
 ### **Option 1: VLC Player App** (Temporary)
 ```bash
 # Your cameras work in VLC
-open -a VLC "rtsps://192.168.1.9:7441/CAMERA_TOKEN_3?enableSrtp"
+open -a VLC "rtsps://10.0.0.1:7441/CAMERA_TOKEN_3?enableSrtp"
 
 # All 21 cameras verified working
 ```
@@ -210,7 +210,7 @@ open -a VLC "rtsps://192.168.1.9:7441/CAMERA_TOKEN_3?enableSrtp"
 
 1. **Try VLC Player** (immediate workaround):
    ```bash
-   open -a VLC "rtsps://192.168.1.9:7441/CAMERA_TOKEN_3?enableSrtp"
+   open -a VLC "rtsps://10.0.0.1:7441/CAMERA_TOKEN_3?enableSrtp"
    ```
 
 2. **Install VLCKit** (proper solution - 30 min):

@@ -573,7 +573,7 @@ static NSString * const kRetryAttemptsKey = @"RTSPRetryAttempts";
     [contentView addSubview:unifiHostLabel];
 
     self.unifiHostField = [self createTextField:@"" frame:NSMakeRect(leftMargin + 170, yPos, 200, 22)];
-    self.unifiHostField.placeholderString = @"192.168.1.9";
+    self.unifiHostField.placeholderString = @"10.0.0.1";
     [contentView addSubview:self.unifiHostField];
     yPos -= 25;
 

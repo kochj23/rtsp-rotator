@@ -169,7 +169,7 @@ FFmpeg/GnuTLS: Lenient, works with self-signed
 ## 📝 Files Modified
 
 ### Final Fix
-**File**: `/Users/kochj/Desktop/xcode/RTSP Rotator/RTSP Rotator/RTSPFFmpegProxy.m`
+**File**: `~/Desktop/xcode/RTSP Rotator/RTSP Rotator/RTSPFFmpegProxy.m`
 **Lines**: 129-133
 **Change**: `file://` → `http://127.0.0.1:8080/`
 

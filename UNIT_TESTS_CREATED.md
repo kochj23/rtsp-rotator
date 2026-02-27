@@ -303,7 +303,7 @@ Coverage Areas:
 
 ### Option 2: Command Line
 ```bash
-cd "/Users/kochj/Desktop/xcode/RTSP Rotator"
+cd "~/Desktop/xcode/RTSP Rotator"
 
 # Run all tests
 xcodebuild test \

@@ -30,7 +30,7 @@ This guide walks you through installing and configuring RTSP Rotator on your mac
 
 ```bash
 # Navigate to project directory
-cd "/Users/kochj/Desktop/xcode/RTSP Rotator"
+cd "~/Desktop/xcode/RTSP Rotator"
 
 # Open in Xcode
 open "RTSP Rotator.xcodeproj"
@@ -96,7 +96,7 @@ On first launch:
 ### Option 1: Build in Xcode (Recommended)
 
 ```bash
-cd "/Users/kochj/Desktop/xcode/RTSP Rotator"
+cd "~/Desktop/xcode/RTSP Rotator"
 open "RTSP Rotator.xcodeproj"
 ```
 
@@ -108,7 +108,7 @@ Then in Xcode:
 ### Option 2: Build from Command Line
 
 ```bash
-cd "/Users/kochj/Desktop/xcode/RTSP Rotator"
+cd "~/Desktop/xcode/RTSP Rotator"
 
 # Debug build
 xcodebuild -project "RTSP Rotator.xcodeproj" \
@@ -131,7 +131,7 @@ Built application location:
 
 Or for Release build:
 ```
-/Users/kochj/Desktop/xcode/RTSP Rotator/build/RTSP Rotator.app
+~/Desktop/xcode/RTSP Rotator/build/RTSP Rotator.app
 ```
 
 ### Running the Built Application
@@ -556,10 +556,10 @@ Preferences are stored in NSUserDefaults:
 
 ```bash
 # Export preferences
-defaults export DisneyGPT.RTSP-Rotator ~/rtsp-rotator-backup.plist
+defaults export com.jkoch.RTSP-Rotator ~/rtsp-rotator-backup.plist
 
 # Import preferences (on another Mac or after reinstall)
-defaults import DisneyGPT.RTSP-Rotator ~/rtsp-rotator-backup.plist
+defaults import com.jkoch.RTSP-Rotator ~/rtsp-rotator-backup.plist
 ```
 
 ## Uninstallation
@@ -574,14 +574,14 @@ killall "RTSP Rotator"
 rm -rf "/Applications/RTSP Rotator.app"
 
 # Remove preferences
-defaults delete DisneyGPT.RTSP-Rotator
+defaults delete com.jkoch.RTSP-Rotator
 
 # Remove launch agent (if configured)
 launchctl unload ~/Library/LaunchAgents/com.rtsp.rotator.plist
 rm ~/Library/LaunchAgents/com.rtsp.rotator.plist
 
 # Remove cached data (if any)
-rm -rf ~/Library/Caches/DisneyGPT.RTSP-Rotator
+rm -rf ~/Library/Caches/com.jkoch.RTSP-Rotator
 rm -rf ~/Library/Application\ Support/RTSP\ Rotator
 ```
 

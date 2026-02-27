@@ -3,7 +3,7 @@
 
 **Date**: October 30, 2025
 **Root Cause**: macOS Local Network Privacy restriction
-**Error**: "No route to host" when accessing 192.168.1.9
+**Error**: "No route to host" when accessing 10.0.0.1
 **Solution**: Grant local network permission
 
 ---
@@ -11,7 +11,7 @@
 ## 🚨 **THE ACTUAL PROBLEM**
 
 ```
-FFmpeg Error: "No route to host" to 192.168.1.9:7441
+FFmpeg Error: "No route to host" to 10.0.0.1:7441
 From Terminal: ✅ FFmpeg works
 From App: ❌ Blocked by macOS
 
@@ -48,7 +48,7 @@ The app should automatically request permission when it tries to access local ne
 
 OR run this command:
 ```bash
-sudo tccutil reset Network DisneyGPT.RTSP-Rotator
+sudo tccutil reset Network com.jkoch.RTSP-Rotator
 ```
 
 ---

@@ -28,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
  * loader.allowSelfSignedCertificates = YES;
  *
  * // Convert rtsps:// URL to custom scheme
- * NSURL *originalURL = [NSURL URLWithString:@"rtsps://192.168.1.9:7441/stream"];
+ * NSURL *originalURL = [NSURL URLWithString:@"rtsps://10.0.0.1:7441/stream"];
  * NSURL *customURL = [loader customURLForRTSPSURL:originalURL];
  *
  * // Create asset with resource loader

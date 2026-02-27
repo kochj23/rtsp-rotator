@@ -804,10 +804,10 @@ NSArray *feedEvents = [logger eventsForFeedURL:feedURL];
 NSArray *results = [logger searchEventsWithQuery:@"motion"];
 
 // Export to CSV
-[logger exportToCSV:@"/Users/kochj/Desktop/events.csv"];
+[logger exportToCSV:@"~/Desktop/events.csv"];
 
 // Export to PDF
-[logger exportToPDF:@"/Users/kochj/Desktop/events.pdf"];
+[logger exportToPDF:@"~/Desktop/events.pdf"];
 ```
 
 #### Event Structure

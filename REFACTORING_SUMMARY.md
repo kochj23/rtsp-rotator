@@ -48,7 +48,7 @@ Successfully refactored RTSP Rotator from a screensaver bundle (.saver) to a sta
 #### Project Settings
 - Changed product type from `com.apple.product-type.bundle.screen-saver` to `com.apple.product-type.application`
 - Changed wrapper extension from `.saver` to `.app`
-- Bundle identifier remains: `DisneyGPT.RTSP-Rotator`
+- Bundle identifier remains: `com.jkoch.RTSP-Rotator`
 
 ### 3. Architecture Changes
 
@@ -103,7 +103,7 @@ All existing functionality remains intact:
 
 ### 6. Build Output
 
-**Location**: `/Users/kochj/Library/Developer/Xcode/DerivedData/RTSP_Rotator-dagucchzodmaidgejvzfwdyxfvuw/Build/Products/Debug/RTSP Rotator.app`
+**Location**: `~/Library/Developer/Xcode/DerivedData/RTSP_Rotator-dagucchzodmaidgejvzfwdyxfvuw/Build/Products/Debug/RTSP Rotator.app`
 
 **Product Structure**:
 ```
@@ -127,7 +127,7 @@ RTSP Rotator.app/
 
 2. **From Terminal**:
    ```bash
-   cd "/Users/kochj/Desktop/xcode/RTSP Rotator"
+   cd "~/Desktop/xcode/RTSP Rotator"
    xcodebuild -project "RTSP Rotator.xcodeproj" -scheme "RTSP Rotator" build
    ```
 

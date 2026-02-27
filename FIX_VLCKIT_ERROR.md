@@ -31,7 +31,7 @@ Then reopen Xcode and build.
 This bypasses Xcode's GUI caching:
 
 ```bash
-cd "/Users/kochj/Desktop/xcode/RTSP Rotator"
+cd "~/Desktop/xcode/RTSP Rotator"
 
 # Clean everything
 xcodebuild -project "RTSP Rotator.xcodeproj" -scheme "RTSP Rotator" clean
@@ -48,7 +48,7 @@ xcodebuild -project "RTSP Rotator.xcodeproj" -scheme "RTSP Rotator" build
 Run this to confirm all VLCKit code has been removed:
 
 ```bash
-cd "/Users/kochj/Desktop/xcode/RTSP Rotator"
+cd "~/Desktop/xcode/RTSP Rotator"
 find . -name "*.m" -o -name "*.h" | xargs grep -i "vlckit" | grep -v ".git"
 ```
 
@@ -59,7 +59,7 @@ find . -name "*.m" -o -name "*.h" | xargs grep -i "vlckit" | grep -v ".git"
 ### Check if you have an old workspace file:
 
 ```bash
-cd "/Users/kochj/Desktop/xcode/RTSP Rotator"
+cd "~/Desktop/xcode/RTSP Rotator"
 ls -la *.xcworkspace 2>/dev/null
 ```
 
@@ -82,7 +82,7 @@ open "RTSP Rotator.xcodeproj"
 
 ### Verify the build succeeds:
 ```bash
-cd "/Users/kochj/Desktop/xcode/RTSP Rotator"
+cd "~/Desktop/xcode/RTSP Rotator"
 xcodebuild -project "RTSP Rotator.xcodeproj" -scheme "RTSP Rotator" clean build 2>&1 | tail -20
 ```
 
@@ -93,7 +93,7 @@ You should see:
 
 ### Verify no VLCKit in compiled files:
 ```bash
-cd "/Users/kochj/Desktop/xcode/RTSP Rotator"
+cd "~/Desktop/xcode/RTSP Rotator"
 find ~/Library/Developer/Xcode/DerivedData/RTSP_Rotator-*/Build -name "*.o" 2>/dev/null | xargs nm 2>/dev/null | grep -i vlc || echo "✅ No VLCKit references in compiled code"
 ```
 
@@ -126,7 +126,7 @@ The file path and line number will tell you exactly which file still has the imp
 ### Manual verification of all source files:
 
 ```bash
-cd "/Users/kochj/Desktop/xcode/RTSP Rotator/RTSP Rotator"
+cd "~/Desktop/xcode/RTSP Rotator/RTSP Rotator"
 for file in *.m *.h; do
     echo "Checking $file..."
     grep -n "VLCKit\|VLCMedia\|VLC" "$file" 2>/dev/null || echo "  ✅ Clean"

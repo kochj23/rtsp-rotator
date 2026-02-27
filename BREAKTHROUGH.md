@@ -76,7 +76,7 @@ Need to serve HLS files via HTTP (not file://).
 FFmpeg: ✅ Running (3 cameras)
 HLS Files: ✅ Created (100+ segments)
 Streaming: ✅ 1920x1080 @ 30fps
-Network: ✅ Connected to 192.168.1.9
+Network: ✅ Connected to 10.0.0.1
 Error: ⚠️ AVPlayer format issue (file:// vs http://)
 
 95% COMPLETE!

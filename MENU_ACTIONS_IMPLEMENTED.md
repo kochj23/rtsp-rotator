@@ -360,12 +360,12 @@ While all core functionality is implemented, these enhancements could be added:
 
 ## Files Modified
 
-- `/Users/kochj/Desktop/xcode/RTSP Rotator/RTSP Rotator/AppDelegate.m`
+- `~/Desktop/xcode/RTSP Rotator/RTSP Rotator/AppDelegate.m`
   - Added `setupMenuNotificationObservers` method
   - Added 10+ menu action handler methods
   - Enhanced with proper file panels and callbacks
 
-- `/Users/kochj/Desktop/xcode/RTSP Rotator/RTSP Rotator/RTSPMenuBarController.m`
+- `~/Desktop/xcode/RTSP Rotator/RTSP Rotator/RTSPMenuBarController.m`
   - All menu items created with target-action
   - All actions post appropriate notifications
   - Helper methods ensure consistency

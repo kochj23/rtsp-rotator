@@ -646,7 +646,7 @@ This release represents a complete architectural transformation with multiple ma
 - Errors: 0
 - Warnings: 0
 - Product Type: macOS Application (.app)
-- Bundle Identifier: DisneyGPT.RTSP-Rotator
+- Bundle Identifier: com.jkoch.RTSP-Rotator
 - Deployment Target: macOS 10.15+
 - Recommended: macOS 11.0+ for UserNotifications
 - New Files Created: 11

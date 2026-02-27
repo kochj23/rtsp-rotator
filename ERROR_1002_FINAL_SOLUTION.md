@@ -12,7 +12,7 @@
 ### **I Just Proved Your Cameras Work:**
 
 ```bash
-$ ffmpeg -i "rtsps://192.168.1.9:7441/CAMERA_TOKEN_1"
+$ ffmpeg -i "rtsps://10.0.0.1:7441/CAMERA_TOKEN_1"
 
 Result: ✅ SUCCESS!
 Stream #0:2: Video: h264, 1920x1080, 30 fps
@@ -81,7 +81,7 @@ Solution: Use VLCKit instead of AVFoundation
 Create local transcoding proxy:
 ```bash
 # FFmpeg converts RTSPS → local RTSP
-ffmpeg -i "rtsps://192.168.1.9:7441/alias" \
+ffmpeg -i "rtsps://10.0.0.1:7441/alias" \
   -c copy -f rtsp rtsp://localhost:8554/camera1
 ```
 
@@ -98,7 +98,7 @@ Use VLC player to watch cameras while deciding:
 brew install --cask vlc
 
 # Open camera
-open -a VLC "rtsps://192.168.1.9:7441/CAMERA_TOKEN_1"
+open -a VLC "rtsps://10.0.0.1:7441/CAMERA_TOKEN_1"
 ```
 
 **Proves cameras work, but not integrated in your app**
@@ -134,9 +134,9 @@ I'll modify your app to use VLCMediaPlayer instead of AVPlayer for RTSPS URLs.
 ```
 Cameras: 20 UniFi Protect cameras
 Protocol: RTSPS only (through controller)
-Controller: 192.168.1.9:7441
+Controller: 10.0.0.1:7441
 Certificate: Self-signed (valid but not system-trusted)
-URLs: rtsps://192.168.1.9:7441/[alias]
+URLs: rtsps://10.0.0.1:7441/[alias]
 Status: ✅ Streams are valid!
 Issue: AVFoundation won't play them
 Solution: VLCKit!
@@ -158,7 +158,7 @@ Then add to Xcode and tell me!
 
 ```bash
 sudo gem install cocoapods
-cd "/Users/kochj/Desktop/xcode/RTSP Rotator"
+cd "~/Desktop/xcode/RTSP Rotator"
 pod install
 ```
 

@@ -49,28 +49,28 @@ Line 838: self.controllerHost  // ✅ Correct in source
 ```
 [UniFi] Checking RTSP protocol preference: UniFi_UseSecureRTSP = 1
 [UniFi] Will generate RTSPS URLs (port 7441)
-[UniFi] Generated SECURE RTSPS URL (FFmpeg proxy): rtsps://192.168.1.9:7441/CAMERA_TOKEN_1
+[UniFi] Generated SECURE RTSPS URL (FFmpeg proxy): rtsps://10.0.0.1:7441/CAMERA_TOKEN_1
                                                                     ↑
                                                         CONTROLLER IP! ✅
 
 === IMPORTED CAMERAS ===
 ✓ Interior - Laundry
-  URL: rtsps://192.168.1.9:7441/CAMERA_TOKEN_1?enableSrtp  ← CORRECT!
+  URL: rtsps://10.0.0.1:7441/CAMERA_TOKEN_1?enableSrtp  ← CORRECT!
 ✓ Interior - Living Room
-  URL: rtsps://192.168.1.9:7441/CAMERA_TOKEN_2?enableSrtp  ← CORRECT!
+  URL: rtsps://10.0.0.1:7441/CAMERA_TOKEN_2?enableSrtp  ← CORRECT!
 ```
 
-**All URLs will use 192.168.1.9 (controller) now!**
+**All URLs will use 10.0.0.1 (controller) now!**
 
 ---
 
 ## 🚀 **THEN PLAYBACK WILL WORK**
 
 ```
-[INFO] Playing feed 1/21: rtsps://192.168.1.9:7441/CAMERA_TOKEN_1
+[INFO] Playing feed 1/21: rtsps://10.0.0.1:7441/CAMERA_TOKEN_1
 [INFO] RTSPS URL detected - starting FFmpeg proxy
 [FFmpegProxy] Starting proxy for Interior - Laundry
-[FFmpegProxy] Source: rtsps://192.168.1.9:7441/CAMERA_TOKEN_1
+[FFmpegProxy] Source: rtsps://10.0.0.1:7441/CAMERA_TOKEN_1
 [FFmpegProxy] Local: rtsp://localhost:18554
 [FFmpegProxy] ✓ FFmpeg process started (PID: xxxxx)
 [FFmpegProxy] Waiting for RTSP server to initialize (3 seconds)...
@@ -100,8 +100,8 @@ Line 838: self.controllerHost  // ✅ Correct in source
 **Menu → UniFi Protect → Import All Cameras**
 
 **This time URLs will be:**
-- ✅ `rtsps://192.168.1.9:7441/...` (CONTROLLER)
-- ❌ NOT `rtsps://192.168.1.22:7441/...` (camera)
+- ✅ `rtsps://10.0.0.1:7441/...` (CONTROLLER)
+- ❌ NOT `rtsps://10.0.0.22:7441/...` (camera)
 
 **FFmpeg will connect to controller!**
 **Videos will play!** 🎉

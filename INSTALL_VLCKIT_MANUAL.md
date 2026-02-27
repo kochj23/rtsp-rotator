@@ -42,7 +42,7 @@ tar -xf VLCKit-*.tar.xz
 
 ### **Step 3: Add to Project**
 
-1. Open `/Users/kochj/Desktop/xcode/RTSP Rotator/RTSP Rotator.xcodeproj` in Xcode
+1. Open `~/Desktop/xcode/RTSP Rotator/RTSP Rotator.xcodeproj` in Xcode
 2. Select project in navigator
 3. Select "RTSP Rotator" target
 4. Go to "General" tab
@@ -69,7 +69,7 @@ If you're comfortable with Terminal:
 sudo gem install cocoapods
 
 # Navigate to project
-cd "/Users/kochj/Desktop/xcode/RTSP Rotator"
+cd "~/Desktop/xcode/RTSP Rotator"
 
 # Install VLCKit
 pod install
@@ -115,7 +115,7 @@ If you can't install VLCKit right now:
 2. Test your cameras in VLC:
 ```
 File → Open Network Stream
-URL: rtsps://192.168.1.9:7441/CAMERA_TOKEN_1
+URL: rtsps://10.0.0.1:7441/CAMERA_TOKEN_1
 (Should play perfectly)
 ```
 

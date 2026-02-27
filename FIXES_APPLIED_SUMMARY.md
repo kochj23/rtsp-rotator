@@ -319,8 +319,8 @@ Time: ~45 seconds (clean build)
 
 **Before**:
 ```bash
-# Plain text in ~/Library/Preferences/DisneyGPT.RTSP-Rotator.plist
-$ defaults read DisneyGPT.RTSP-Rotator UniFi_Password
+# Plain text in ~/Library/Preferences/com.jkoch.RTSP-Rotator.plist
+$ defaults read com.jkoch.RTSP-Rotator UniFi_Password
 "MySecretPassword123"  # ❌ VISIBLE TO ANY PROCESS
 ```
 

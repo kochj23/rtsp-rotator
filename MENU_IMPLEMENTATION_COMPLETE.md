@@ -446,14 +446,14 @@ Built-in documentation:
 
 ## 📝 Files Modified
 
-### `/Users/kochj/Desktop/xcode/RTSP Rotator/RTSP Rotator/AppDelegate.m`
+### `~/Desktop/xcode/RTSP Rotator/RTSP Rotator/AppDelegate.m`
 - Added `setupMenuNotificationObservers` method (50+ observers)
 - Implemented 40+ handler methods
 - Added comprehensive dialogs and user feedback
 - **Lines Added**: ~600 lines
 - **Status**: Complete implementation
 
-### `/Users/kochj/Desktop/xcode/RTSP Rotator/RTSP Rotator/RTSPMenuBarController.m`
+### `~/Desktop/xcode/RTSP Rotator/RTSP Rotator/RTSPMenuBarController.m`
 - Fixed all menu item targets
 - Added helper methods for consistency
 - All notification posting complete

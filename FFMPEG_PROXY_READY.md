@@ -29,12 +29,12 @@ RTSPFFmpegProxy Manager
 ### **The Flow:**
 ```
 1. Camera imported with RTSPS URL:
-   rtsps://192.168.1.9:7441/CAMERA_TOKEN_1?enableSrtp
+   rtsps://10.0.0.1:7441/CAMERA_TOKEN_1?enableSrtp
 
 2. App detects "rtsps://" scheme
 
 3. FFmpeg proxy starts automatically:
-   ffmpeg -i "rtsps://192.168.1.9:7441/alias" \
+   ffmpeg -i "rtsps://10.0.0.1:7441/alias" \
           -c copy \
           -f rtsp rtsp://localhost:18554
 
@@ -66,7 +66,7 @@ Step 1: Discovering cameras...
 Step 2: Generating RTSP URLs...
 Protocol: RTSPS (port 7441) with FFmpeg proxy
 
-[UniFi] Generated SECURE RTSPS URL: rtsps://192.168.1.9:7441/***
+[UniFi] Generated SECURE RTSPS URL: rtsps://10.0.0.1:7441/***
 
 Step 3: Importing cameras...
 ✓ Successfully imported 20 camera(s)
@@ -76,10 +76,10 @@ Step 3: Importing cameras...
 
 **Console Shows:**
 ```
-[INFO] Playing feed 1/20: rtsps://192.168.1.9:7441/alias
+[INFO] Playing feed 1/20: rtsps://10.0.0.1:7441/alias
 [INFO] RTSPS URL detected - starting FFmpeg proxy
 [FFmpegProxy] Starting proxy for Camera 1
-[FFmpegProxy]   Source: rtsps://192.168.1.9:7441/alias
+[FFmpegProxy]   Source: rtsps://10.0.0.1:7441/alias
 [FFmpegProxy]   Local:  rtsp://localhost:18554
 [FFmpegProxy] ✓ Proxy started for Camera 1 (port 18554)
 [INFO] Using FFmpeg proxy: rtsps://... → rtsp://localhost:18554
@@ -116,7 +116,7 @@ Step 3: Importing cameras...
 ```bash
 ffmpeg \
   -rtsp_transport tcp \
-  -i "rtsps://192.168.1.9:7441/CAMERA_TOKEN_1?enableSrtp" \
+  -i "rtsps://10.0.0.1:7441/CAMERA_TOKEN_1?enableSrtp" \
   -c copy \
   -f rtsp \
   -rtsp_transport tcp \
@@ -185,7 +185,7 @@ Protocol: RTSPS (port 7441) with FFmpeg proxy
 ### **In Console:**
 ```
 [FFmpegProxy] Starting proxy for Interior - Laundry
-[FFmpegProxy]   Source: rtsps://192.168.1.9:7441/CAMERA_TOKEN_1?enableSrtp
+[FFmpegProxy]   Source: rtsps://10.0.0.1:7441/CAMERA_TOKEN_1?enableSrtp
 [FFmpegProxy]   Local:  rtsp://localhost:18554
 [FFmpegProxy] ✓ Proxy started (port 18554)
 [INFO] Using FFmpeg proxy

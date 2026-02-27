@@ -61,7 +61,7 @@ RTSP Rotator/
 The project now builds without any external dependencies!
 
 ```bash
-cd "/Users/kochj/Desktop/xcode/RTSP Rotator"
+cd "~/Desktop/xcode/RTSP Rotator"
 
 # Open project
 open "RTSP Rotator.xcodeproj"
@@ -100,7 +100,7 @@ You need to add all the new source files to the Xcode project:
 ### Via Command Line:
 
 ```bash
-cd "/Users/kochj/Desktop/xcode/RTSP Rotator"
+cd "~/Desktop/xcode/RTSP Rotator"
 
 # Verify all source files exist
 ls -l "RTSP Rotator/"*.{h,m}
@@ -168,7 +168,7 @@ Set minimum macOS version:
 **Solution 1 - Search Paths:**
 ```bash
 # Check if VLCKit is in project directory
-ls -l "/Users/kochj/Desktop/xcode/RTSP Rotator/VLCKit.framework"
+ls -l "~/Desktop/xcode/RTSP Rotator/VLCKit.framework"
 
 # In Xcode Build Settings:
 # Framework Search Paths: $(PROJECT_DIR)
@@ -216,7 +216,7 @@ static NSString * const kRemoteURLKey = @"RTSPRemoteConfigurationURL";
 ### Clean Build:
 
 ```bash
-cd "/Users/kochj/Desktop/xcode/RTSP Rotator"
+cd "~/Desktop/xcode/RTSP Rotator"
 
 # Clean
 xcodebuild clean -project "RTSP Rotator.xcodeproj" -scheme "RTSP Rotator"
@@ -300,7 +300,7 @@ Verify method signatures match between .h and .m files
 ### Launch from Terminal:
 
 ```bash
-cd "/Users/kochj/Desktop/xcode/RTSP Rotator"
+cd "~/Desktop/xcode/RTSP Rotator"
 
 # Find built app
 find ~/Library/Developer/Xcode/DerivedData -name "RTSP Rotator.app" -type d
@@ -382,7 +382,7 @@ ls -la "RTSP Rotator.app/Contents/Frameworks/"
 codesign -dvvv "RTSP Rotator.app"
 
 # Reset NSUserDefaults (if corrupted)
-defaults delete DisneyGPT.RTSP-Rotator
+defaults delete com.jkoch.RTSP-Rotator
 ```
 
 ### Preferences Won't Open
@@ -395,7 +395,7 @@ defaults delete DisneyGPT.RTSP-Rotator
 **Solution**:
 ```bash
 # Enable debug logging
-defaults write DisneyGPT.RTSP-Rotator DebugLogging -bool YES
+defaults write com.jkoch.RTSP-Rotator DebugLogging -bool YES
 
 # Check logs
 log show --predicate 'process == "RTSP Rotator"' --last 5m
