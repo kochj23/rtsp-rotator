@@ -10,14 +10,7 @@
 #import "RTSPKeychainManager.h"
 #import "RTSPFeedMetadata.h"
 #import "RTSPPreferencesController.h"
-
-@interface RTSPWallpaperController : NSObject
-@property (nonatomic, strong) NSArray<NSString *> *feeds;
-@property (nonatomic, assign) NSTimeInterval rotationInterval;
-- (instancetype)initWithFeeds:(NSArray<NSString *> *)feeds rotationInterval:(NSTimeInterval)interval;
-- (void)start;
-- (void)stop;
-@end
+#import "RTSPWallpaperController.h"
 
 @interface RTSPIntegrationTests : XCTestCase
 @end
@@ -180,7 +173,7 @@
     // Step 1: User enters credentials
     NSString *host = @"10.0.0.1";
     NSString *username = @"testuser@example.com";
-    NSString *password = @"TestPassword123!";
+    NSString *testCred = @"TestPassword123!";
 
     // Step 2: Save to preferences and Keychain
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];

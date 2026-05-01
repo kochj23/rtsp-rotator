@@ -6,29 +6,8 @@
 //
 
 #import <XCTest/XCTest.h>
-
-// Import the classes we want to test
-// Note: These interfaces are duplicated here for testing purposes
-// In a production app, these would be in separate header files
-
-@interface RTSPWallpaperWindow : NSWindow
-@end
-
-@interface RTSPWallpaperController : NSObject
-@property (nonatomic, strong) NSArray<NSString *> *feeds;
-@property (nonatomic, assign) NSUInteger currentIndex;
-@property (nonatomic, assign) BOOL isMuted;
-@property (nonatomic, assign) NSTimeInterval rotationInterval;
-- (instancetype)initWithFeeds:(NSArray<NSString *> *)feeds rotationInterval:(NSTimeInterval)interval;
-- (void)start;
-- (void)stop;
-- (void)toggleMute;
-@end
-
-// Test-only interface for accessing private methods
-@interface RTSPWallpaperController (Testing)
-- (void)nextFeed;
-@end
+#import "RTSP_RotatorView.h"
+#import "RTSPWallpaperController.h"
 
 @interface RTSP_RotatorTests : XCTestCase
 @end

@@ -1,8 +1,72 @@
-# RTSP Rotator v2.5.0
+# RTSP Rotator v2.5.1
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Platform: macOS](https://img.shields.io/badge/Platform-macOS%2011.0%2B-blue.svg)](https://developer.apple.com/macos/)
+[![Language: Objective-C](https://img.shields.io/badge/Language-Objective--C-orange.svg)](https://developer.apple.com/documentation/objectivec)
+[![Tests: 7 Suites](https://img.shields.io/badge/Tests-7%20Suites-green.svg)](#testing)
 
 **A professional macOS application for RTSP (Real Time Streaming Protocol) camera feeds with AI-powered object detection**
 
 Perfect for home security, business monitoring, smart automation, and video wall applications with enterprise-grade features including real-time machine learning detection.
+
+---
+
+## Architecture
+
+```mermaid
+graph TB
+    subgraph "Application Layer"
+        AD[AppDelegate] --> WC[RTSPWallpaperController]
+        AD --> MBC[RTSPMenuBarController]
+        AD --> SMC[RTSPStatusMenuController]
+        AD --> PC[RTSPPreferencesController]
+    end
+
+    subgraph "Camera Management"
+        CM[RTSPCameraTypeManager] --> UFP[RTSPUniFiProtectAdapter]
+        CM --> BM[RTSPBookmarkManager]
+        CM --> FM[RTSPFeedMetadata]
+    end
+
+    subgraph "Playback & Display"
+        WC --> |AVPlayer| STREAM[RTSP Stream]
+        WC --> TC[RTSPTransitionController]
+        WC --> FSC[RTSPFullScreenController]
+        WC --> MVG[RTSPMultiViewGrid]
+        WC --> PIP[RTSPPiPController]
+        WC --> OSD[RTSPOSDView]
+    end
+
+    subgraph "Dashboard System"
+        DM[RTSPDashboardManager] --> |Manages| DB1[Dashboard 1..N]
+        DB1 --> |Contains| CAM[Camera Configs]
+    end
+
+    subgraph "AI Detection"
+        OD[RTSPObjectDetector] --> MLX[RTSPMLXProcessor]
+        OD --> SA[RTSPSmartAlerts]
+        OD --> DOV[RTSPDetectionOverlayView]
+        OD --> MD[RTSPMotionDetector]
+    end
+
+    subgraph "Security"
+        KM[RTSPKeychainManager] --> |macOS Keychain| SEC[Secure Storage]
+        KM --> |Migration| UD[NSUserDefaults Cleanup]
+    end
+
+    subgraph "Integration"
+        API[RTSPAPIServer] --> |REST| EXT[External Systems]
+        EL[RTSPEventLogger] --> |CSV/PDF| EXPORT[Export]
+        CS[RTSPCloudStorage] --> |Upload| CLOUD[iCloud/S3]
+        CE[RTSPConfigurationExporter] --> |JSON| CONFIG[Config Files]
+    end
+
+    AD --> CM
+    AD --> DM
+    AD --> OD
+    WC --> KM
+    UFP --> KM
+```
 
 ---
 
@@ -147,7 +211,21 @@ cd "/Volumes/Data/xcode/RTSP Rotator"
 
 ---
 
-## What's New in v2.5.0 (February 2026)
+## What's New in v2.5.1 (May 2026)
+
+### QE Pipeline & Test Suite
+- **7 XCTest suites** with comprehensive coverage across unit, functional, security, and integration tests
+- **RTSP URL Security Tests**: Credential stripping, Keychain-only storage, safe logging validation
+- **CSV Import Tests**: Full CSV parsing with quoted fields, comments, header detection, URL validation
+- **Keychain Manager Tests**: Store/retrieve/delete/migrate lifecycle, Unicode, thread safety
+- **Configuration Tests**: Feed metadata, archiving/unarchiving, settings persistence
+- **Integration Tests**: End-to-end credential flow, multi-service isolation, backwards compatibility
+- **Memory Management Tests**: Deallocation verification, retain cycle detection, concurrent access
+- **Core Tests**: Feed rotation, URL parsing, window management, configuration loading
+- **Fixed duplicate Swift file warnings** in Xcode project (PBXFileSystemSynchronizedRootGroup cleanup)
+- **Version bump** to 2.5.1 (build 251)
+
+### What's New in v2.5.0 (February 2026)
 
 ### macOS Widget (WidgetKit)
 **Monitor your cameras directly from your desktop:**
@@ -694,7 +772,14 @@ zone.enabled = YES;
 
 ## Version History
 
-### v2.5.0 (February 2026) - Current
+### v2.5.1 (May 2026) - Current
+- **QE Pipeline**: 7 XCTest suites covering security, functional, integration, and memory tests
+- **Security Tests**: RTSP URL credential handling, Keychain enforcement, plaintext prevention
+- **CSV Import Tests**: Full CSV parsing validation with edge cases
+- **Build Fixes**: Removed duplicate Swift file warnings, added proper test target
+- **Version**: 2.5.1 (build 251)
+
+### v2.5.0 (February 2026)
 - **macOS Widget**: WidgetKit widget for desktop camera monitoring
   - Small, Medium, and Large widget sizes
   - Camera health status and detection counts
@@ -737,6 +822,40 @@ zone.enabled = YES;
 
 ---
 
+## Testing
+
+### Test Suites (7 Total)
+
+| Suite | Tests | Coverage Area |
+|-------|-------|--------------|
+| `RTSP_RotatorTests` | 14 | Core rotation, URL parsing, feed loading, window management |
+| `RTSPKeychainManagerTests` | 20 | Password store/retrieve/delete, migration, isolation, Unicode |
+| `RTSPConfigurationTests` | 18 | Feed metadata, archiving, settings, OSD, recording config |
+| `RTSPIntegrationTests` | 10 | End-to-end credential flows, multi-service isolation |
+| `RTSPMemoryManagementTests` | 12 | Deallocation, retain cycles, observer cleanup, concurrency |
+| `RTSPURLSecurityTests` | 14 | Credential stripping, Keychain enforcement, URL validation |
+| `RTSPCSVImportTests` | 16 | CSV parsing, quoted fields, URL validation, stream cycling |
+
+### Running Tests
+
+```bash
+# Build and run all tests
+xcodebuild test -scheme "RTSP Rotator" -destination "platform=macOS"
+
+# Run specific test suite
+xcodebuild test -scheme "RTSP Rotator" -destination "platform=macOS" \
+  -only-testing:"RTSP RotatorTests/RTSPURLSecurityTests"
+```
+
+### Security Test Coverage
+- RTSP URL credential parsing and stripping for safe logging
+- Keychain-only password storage enforcement
+- NSUserDefaults migration verification (no plaintext passwords remain)
+- CSV import credential handling
+- URL scheme validation (rtsp/rtsps only for stream URLs)
+
+---
+
 ## License
 
 MIT License
@@ -776,6 +895,6 @@ This is a personal project by Jordan Koch.
 
 ---
 
-**Last Updated:** February 4, 2026
-**Version:** 2.5.0 (build 250)
+**Last Updated:** May 1, 2026
+**Version:** 2.5.1 (build 251)
 **Status:** Production Ready
