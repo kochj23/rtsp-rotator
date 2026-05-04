@@ -46,6 +46,7 @@
 
 // Security
 #import "RTSPKeychainManager.h"
+#import "RTSPFFmpegProxy.h"
 
 @interface AppDelegate () <RTSPBookmarkManagerDelegate, RTSPAPIServerDelegate, RTSPFailoverManagerDelegate>
 @property (nonatomic, strong) RTSPWallpaperController *wallpaperController;
@@ -75,6 +76,9 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     NSLog(@"[AppDelegate] Application starting...");
+
+    // Clean up stale HLS temp directories from previous runs (older than 1 hour)
+    [self cleanupStaleHLSTempDirectories];
 
     // Show status window on startup
     RTSPStatusWindow *statusWindow = [RTSPStatusWindow sharedWindow];
@@ -251,6 +255,10 @@
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
     NSLog(@"[AppDelegate] Application terminating...");
+
+    // Stop all FFmpeg proxies and clean up their HLS temp directories
+    [[RTSPFFmpegProxy sharedProxy] stopAllProxies];
+    [self cleanupAllHLSTempDirectories];
 
     // Cleanup
     [self.wallpaperController stop];
@@ -1914,6 +1922,57 @@
     alert.alertStyle = NSAlertStyleInformational;
     [alert addButtonWithTitle:@"OK"];
     [alert runModal];
+}
+
+#pragma mark - HLS Temp Directory Cleanup
+
+/// Remove ALL /tmp/rtsp_hls_* directories (used on app termination).
+- (void)cleanupAllHLSTempDirectories {
+    NSFileManager *fm = [NSFileManager defaultManager];
+    NSError *error = nil;
+    NSArray *contents = [fm contentsOfDirectoryAtPath:NSTemporaryDirectory() error:&error];
+    if (error) {
+        NSLog(@"[Cleanup] Error listing temp directory: %@", error.localizedDescription);
+        return;
+    }
+
+    for (NSString *item in contents) {
+        if ([item hasPrefix:@"rtsp_hls_"]) {
+            NSString *fullPath = [NSTemporaryDirectory() stringByAppendingPathComponent:item];
+            NSError *removeError = nil;
+            [fm removeItemAtPath:fullPath error:&removeError];
+            if (removeError) {
+                NSLog(@"[Cleanup] Failed to remove %@: %@", fullPath, removeError.localizedDescription);
+            } else {
+                NSLog(@"[Cleanup] Removed HLS temp directory: %@", fullPath);
+            }
+        }
+    }
+}
+
+/// Remove stale /tmp/rtsp_hls_* directories older than 1 hour (used on startup).
+- (void)cleanupStaleHLSTempDirectories {
+    NSFileManager *fm = [NSFileManager defaultManager];
+    NSError *error = nil;
+    NSArray *contents = [fm contentsOfDirectoryAtPath:NSTemporaryDirectory() error:&error];
+    if (error) return;
+
+    NSDate *cutoff = [NSDate dateWithTimeIntervalSinceNow:-3600]; // 1 hour ago
+
+    for (NSString *item in contents) {
+        if ([item hasPrefix:@"rtsp_hls_"]) {
+            NSString *fullPath = [NSTemporaryDirectory() stringByAppendingPathComponent:item];
+            NSDictionary *attrs = [fm attributesOfItemAtPath:fullPath error:nil];
+            NSDate *modDate = attrs[NSFileModificationDate];
+            if (modDate && [modDate compare:cutoff] == NSOrderedAscending) {
+                NSError *removeError = nil;
+                [fm removeItemAtPath:fullPath error:&removeError];
+                if (!removeError) {
+                    NSLog(@"[Cleanup] Removed stale HLS temp directory: %@", fullPath);
+                }
+            }
+        }
+    }
 }
 
 @end
