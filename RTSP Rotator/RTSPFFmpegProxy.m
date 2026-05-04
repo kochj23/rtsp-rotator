@@ -133,15 +133,33 @@
         NSString *httpURL = [NSString stringWithFormat:@"http://127.0.0.1:8080/%@/stream.m3u8", hlsDirName];
         proxy.localURL = [NSURL URLWithString:httpURL];
 
+        // Extract credentials from URL and pass via environment variables
+        // instead of exposing them in the process argument list.
+        NSURLComponents *components = [NSURLComponents componentsWithURL:rtspsURL resolvingAgainstBaseURL:NO];
+        NSString *rtspUser = components.user ?: @"";
+        NSString *rtspPass = components.percentEncodedPassword ?: @"";
+
+        // Build a sanitized URL (without userinfo) for the argument list
+        components.user = nil;
+        components.password = nil;
+        NSString *sanitizedURLString = components.URL ? components.URL.absoluteString : rtspsURL.absoluteString;
+
         // Create FFmpeg task using helper script (bypasses NSTask network restrictions)
         NSTask *task = [[NSTask alloc] init];
         task.launchPath = @"/bin/bash";
         task.arguments = @[
             @"/tmp/ffmpeg_camera_proxy.sh",
-            rtspsURL.absoluteString,
+            sanitizedURLString,
             hlsDir,
             ffmpegLogFile
         ];
+
+        // Pass credentials through environment variables so they don't appear
+        // in the process argument list visible via `ps`.
+        NSMutableDictionary *env = [[[NSProcessInfo processInfo] environment] mutableCopy];
+        env[@"RTSP_USER"] = rtspUser;
+        env[@"RTSP_PASSWORD"] = rtspPass;
+        task.environment = env;
 
         // Capture output to both log file AND console
         NSPipe *outputPipe = [NSPipe pipe];

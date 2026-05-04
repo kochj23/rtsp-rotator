@@ -8,11 +8,13 @@
 #import "RTSPUniFiProtectAdapter.h"
 #import "RTSPPreferencesController.h"
 #import "RTSPCameraDiagnostics.h"
+#import "RTSPKeychainManager.h"
 #import "RTSPStatusWindow.h"
 #import <sys/socket.h>
 #import <netinet/in.h>
 #import <arpa/inet.h>
 #import <CoreFoundation/CoreFoundation.h>
+#import <CommonCrypto/CommonDigest.h>
 
 #pragma mark - UniFi Camera Implementation
 
@@ -1018,11 +1020,15 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
 
     // Allow self-signed certificates if verifySSL is disabled
     if (!self.verifySSL && [challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust]) {
-        NSLog(@"[UniFi] ✓ Accepting self-signed certificate for %@", challenge.protectionSpace.host);
-        NSURLCredential *credential = [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
+        SecTrustRef serverTrust = challenge.protectionSpace.serverTrust;
+        if (serverTrust) {
+            [self verifyCertificateFingerprint:serverTrust forHost:challenge.protectionSpace.host];
+        }
+        NSLog(@"[UniFi] Accepting self-signed certificate for %@", challenge.protectionSpace.host);
+        NSURLCredential *credential = [NSURLCredential credentialForTrust:serverTrust];
         completionHandler(NSURLSessionAuthChallengeUseCredential, credential);
     } else {
-        NSLog(@"[UniFi] ✗ Using default SSL handling");
+        NSLog(@"[UniFi] Using default SSL handling");
         completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
     }
 }
@@ -1036,12 +1042,67 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
 
     // Allow self-signed certificates if verifySSL is disabled
     if (!self.verifySSL && [challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust]) {
-        NSLog(@"[UniFi] ✓ Accepting self-signed certificate (task-level)");
-        NSURLCredential *credential = [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
+        SecTrustRef serverTrust = challenge.protectionSpace.serverTrust;
+        if (serverTrust) {
+            [self verifyCertificateFingerprint:serverTrust forHost:challenge.protectionSpace.host];
+        }
+        NSLog(@"[UniFi] Accepting self-signed certificate (task-level)");
+        NSURLCredential *credential = [NSURLCredential credentialForTrust:serverTrust];
         completionHandler(NSURLSessionAuthChallengeUseCredential, credential);
     } else {
         completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
     }
+}
+
+#pragma mark - Certificate Fingerprint Caching
+
+/// Compute SHA-256 fingerprint of the leaf certificate. On first connection,
+/// store it in Keychain. On subsequent connections, compare and warn if changed.
+- (void)verifyCertificateFingerprint:(SecTrustRef)serverTrust forHost:(NSString *)host {
+    SecCertificateRef cert = SecTrustGetCertificateAtIndex(serverTrust, 0);
+    if (!cert) return;
+
+    CFDataRef certData = SecCertificateCopyData(cert);
+    if (!certData) return;
+
+    // Compute SHA-256 fingerprint
+    NSData *derData = (__bridge_transfer NSData *)certData;
+    uint8_t digest[CC_SHA256_DIGEST_LENGTH];
+    CC_SHA256(derData.bytes, (CC_LONG)derData.length, digest);
+    NSMutableString *fingerprint = [NSMutableString stringWithCapacity:CC_SHA256_DIGEST_LENGTH * 2];
+    for (int i = 0; i < CC_SHA256_DIGEST_LENGTH; i++) {
+        [fingerprint appendFormat:@"%02x", digest[i]];
+    }
+
+    NSString *keychainAccount = [NSString stringWithFormat:@"CertFingerprint_%@", host];
+    NSString *storedFingerprint = [RTSPKeychainManager passwordForAccount:keychainAccount
+                                                                  service:RTSPKeychainServiceRTSPCamera];
+
+    if (!storedFingerprint) {
+        // First connection: cache the fingerprint
+        [RTSPKeychainManager setPassword:fingerprint
+                              forAccount:keychainAccount
+                                 service:RTSPKeychainServiceRTSPCamera];
+        NSLog(@"[CertPin] Cached certificate fingerprint for %@: %@", host, fingerprint);
+    } else if (![storedFingerprint isEqualToString:fingerprint]) {
+        // Fingerprint changed - warn about potential MITM
+        NSLog(@"[CertPin] WARNING: Certificate fingerprint CHANGED for %@!", host);
+        NSLog(@"[CertPin]   Stored:  %@", storedFingerprint);
+        NSLog(@"[CertPin]   Current: %@", fingerprint);
+
+        // Update the stored fingerprint but alert the user
+        [RTSPKeychainManager setPassword:fingerprint
+                              forAccount:keychainAccount
+                                 service:RTSPKeychainServiceRTSPCamera];
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            RTSPStatusWindow *statusWindow = [RTSPStatusWindow sharedWindow];
+            [statusWindow appendLog:[NSString stringWithFormat:
+                @"WARNING: SSL certificate changed for %@! Possible MITM attack or cert rotation.", host]
+                              level:@"WARNING"];
+        });
+    }
+    // else: fingerprint matches, all good
 }
 
 @end
