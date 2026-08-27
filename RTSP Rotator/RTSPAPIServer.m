@@ -33,7 +33,7 @@
     if (self) {
         _enabled = NO;
         _port = 8080;
-        _requireAPIKey = NO;
+        _requireAPIKey = YES;
         _isRunning = NO;
         _serverQueue = dispatch_queue_create("com.rtsp.apiserver", DISPATCH_QUEUE_SERIAL);
     }
@@ -48,6 +48,12 @@
 
     if (!self.enabled) {
         NSLog(@"[API] Server is disabled");
+        return NO;
+    }
+
+    // Refuse to start without a non-empty API key. The control API must be authenticated.
+    if (self.apiKey.length == 0) {
+        NSLog(@"[API] Refusing to start: a non-empty API key is required");
         return NO;
     }
 
@@ -70,7 +76,8 @@
     addr.sin_len = sizeof(addr);
     addr.sin_family = AF_INET;
     addr.sin_port = htons((uint16_t)self.port);
-    addr.sin_addr.s_addr = htonl(INADDR_ANY);
+    // Bind to loopback only. LAN exposure must be an explicit, deliberate opt-in.
+    addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
 
     NSData *address = [NSData dataWithBytes:&addr length:sizeof(addr)];
     CFSocketError error = CFSocketSetAddress(self.socket, (__bridge CFDataRef)address);

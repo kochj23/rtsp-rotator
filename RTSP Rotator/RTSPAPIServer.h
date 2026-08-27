@@ -45,7 +45,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// API key for authentication (optional)
 @property (nonatomic, strong, nullable) NSString *apiKey;
 
-/// Require API key (default: NO)
+/// Require API key (default: YES). The server also refuses to start without a non-empty apiKey.
 @property (nonatomic, assign) BOOL requireAPIKey;
 
 /// Server is running
