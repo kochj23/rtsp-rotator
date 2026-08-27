@@ -339,7 +339,7 @@
     RTSPAPIServer *apiServer = [RTSPAPIServer sharedServer];
     apiServer.delegate = self;
     apiServer.port = 8080;
-    apiServer.requireAPIKey = NO; // Can be enabled in preferences
+    apiServer.requireAPIKey = YES; // Control API requires an API key; server also binds loopback only
     NSLog(@"[Phase2] ✓ API Server configured (port: %ld)", (long)apiServer.port);
 
     // Failover Manager

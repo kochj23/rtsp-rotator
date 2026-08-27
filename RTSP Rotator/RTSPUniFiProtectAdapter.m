@@ -76,7 +76,18 @@
 @property (nonatomic, strong, nullable) NSString *authCookie;
 @property (nonatomic, strong, nullable) NSURLSession *session;
 @property (nonatomic, strong, nullable) NSArray<RTSPUniFiCamera *> *cachedCameras;
+
+/// Private, per-user 0700 directory used for the session cookie jar.
+- (nullable NSString *)privateSupportDirectory;
+/// Path to the session cookie jar inside the private directory (0600).
+- (nullable NSString *)cookieFilePath;
+/// TOFU certificate pin check. Returns YES on first-use or match, NO on mismatch.
+- (BOOL)verifyCertificateFingerprint:(SecTrustRef)serverTrust forHost:(NSString *)host;
 @end
+
+// Keychain account used for the UniFi Protect controller password. The migration
+// tests and RTSPKeychainServiceUniFiProtect service constant use this same account.
+NSString * const RTSPUniFiPasswordAccount = @"UniFi_Password";
 
 @implementation RTSPUniFiProtectAdapter
 
@@ -96,7 +107,7 @@
     if (self) {
         _controllerPort = 443;
         _useHTTPS = YES;
-        _verifySSL = NO; // Most UniFi controllers use self-signed certs
+        _verifySSL = YES; // Default to validating TLS; self-signed controllers are handled by TOFU certificate pinning
         _cachedCameras = @[];
 
         // Create URL session with custom configuration
@@ -135,9 +146,13 @@
     [defaults setInteger:self.controllerPort forKey:@"UniFi_ControllerPort"];
     if (self.username) [defaults setObject:self.username forKey:@"UniFi_Username"];
     if (self.password) {
-        // Store password in NSUserDefaults (consider Keychain for production)
-        [defaults setObject:self.password forKey:@"UniFi_Password"];
+        // Store password securely in the Keychain — never in NSUserDefaults.
+        [RTSPKeychainManager setPassword:self.password
+                              forAccount:RTSPUniFiPasswordAccount
+                                 service:RTSPKeychainServiceUniFiProtect];
     }
+    // Ensure no cleartext password lingers in NSUserDefaults.
+    [defaults removeObjectForKey:@"UniFi_Password"];
     [defaults setBool:self.useHTTPS forKey:@"UniFi_UseHTTPS"];
     [defaults setBool:self.verifySSL forKey:@"UniFi_VerifySSL"];
 
@@ -152,7 +167,13 @@
     NSInteger port = [defaults integerForKey:@"UniFi_ControllerPort"];
     self.controllerPort = port > 0 ? port : 443;
     self.username = [defaults stringForKey:@"UniFi_Username"];
-    self.password = [defaults stringForKey:@"UniFi_Password"];
+    // Migrate any legacy cleartext password out of NSUserDefaults into the Keychain,
+    // then always read the password from the Keychain.
+    [RTSPKeychainManager migratePasswordFromUserDefaults:@"UniFi_Password"
+                                               toAccount:RTSPUniFiPasswordAccount
+                                                 service:RTSPKeychainServiceUniFiProtect];
+    self.password = [RTSPKeychainManager passwordForAccount:RTSPUniFiPasswordAccount
+                                                    service:RTSPKeychainServiceUniFiProtect];
     self.useHTTPS = [defaults boolForKey:@"UniFi_UseHTTPS"];
     self.verifySSL = [defaults boolForKey:@"UniFi_VerifySSL"];
 
@@ -170,12 +191,54 @@
     [defaults removeObjectForKey:@"UniFi_Username"];
     [defaults synchronize];
 
+    [RTSPKeychainManager deletePasswordForAccount:RTSPUniFiPasswordAccount
+                                          service:RTSPKeychainServiceUniFiProtect];
+
     self.authToken = nil;
     self.authCookie = nil;
     self.username = nil;
     self.password = nil;
 
     NSLog(@"[UniFi] Credentials cleared");
+}
+
+#pragma mark - Private Storage
+
+- (nullable NSString *)privateSupportDirectory {
+    NSArray<NSString *> *dirs = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+    NSString *base = dirs.firstObject ?: NSTemporaryDirectory();
+    NSString *bundleID = [[NSBundle mainBundle] bundleIdentifier] ?: @"com.rtsp-rotator";
+    NSString *dir = [[base stringByAppendingPathComponent:bundleID] stringByAppendingPathComponent:@"unifi"];
+
+    NSFileManager *fm = [NSFileManager defaultManager];
+    NSError *error = nil;
+    [fm createDirectoryAtPath:dir
+  withIntermediateDirectories:YES
+                   attributes:@{NSFilePosixPermissions: @(0700)}
+                        error:&error];
+    // Lock down permissions even if the directory already existed.
+    [fm setAttributes:@{NSFilePosixPermissions: @(0700)} ofItemAtPath:dir error:nil];
+
+    BOOL isDir = NO;
+    if (![fm fileExistsAtPath:dir isDirectory:&isDir] || !isDir) {
+        NSLog(@"[UniFi] ERROR: Could not create private support directory: %@", error);
+        return nil;
+    }
+    return dir;
+}
+
+- (nullable NSString *)cookieFilePath {
+    NSString *dir = [self privateSupportDirectory];
+    if (!dir) return nil;
+
+    NSString *hostSafe = [self.controllerHost stringByReplacingOccurrencesOfString:@"." withString:@""];
+    hostSafe = [hostSafe stringByReplacingOccurrencesOfString:@":" withString:@""];
+    NSString *usernameSafe = [self.username stringByReplacingOccurrencesOfString:@"+" withString:@""];
+    usernameSafe = [usernameSafe stringByReplacingOccurrencesOfString:@"@" withString:@""];
+    usernameSafe = [usernameSafe stringByReplacingOccurrencesOfString:@"." withString:@""];
+
+    return [dir stringByAppendingPathComponent:
+            [NSString stringWithFormat:@"unifi_cookies_%@_%@.txt", hostSafe ?: @"", usernameSafe ?: @""]];
 }
 
 #pragma mark - Network Test
@@ -274,22 +337,25 @@
 
         NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
 
-        // Calculate cookie file path (same as discovery uses)
-        NSString *hostSafe = [self.controllerHost stringByReplacingOccurrencesOfString:@"." withString:@""];
-        hostSafe = [hostSafe stringByReplacingOccurrencesOfString:@":" withString:@""];
-        NSString *usernameSafe = [self.username stringByReplacingOccurrencesOfString:@"+" withString:@""];
-        usernameSafe = [usernameSafe stringByReplacingOccurrencesOfString:@"@" withString:@""];
-        usernameSafe = [usernameSafe stringByReplacingOccurrencesOfString:@"." withString:@""];
-        NSString *cookieFilePath = [NSString stringWithFormat:@"/tmp/unifi_cookies_%@_%@.txt", hostSafe, usernameSafe];
+        // Session cookie jar lives in a private, per-user 0700 directory (not /tmp).
+        NSString *cookieFilePath = [self cookieFilePath];
+        if (!cookieFilePath) {
+            NSError *dirError = [NSError errorWithDomain:@"RTSPUniFiProtectAdapter"
+                                                    code:1009
+                                                userInfo:@{NSLocalizedDescriptionKey: @"Could not create private cookie storage"}];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (completion) completion(NO, dirError);
+            });
+            return;
+        }
 
         NSLog(@"[UniFi] Will save session cookie to: %@", cookieFilePath);
 
         NSTask *task = [[NSTask alloc] init];
         task.launchPath = @"/usr/bin/curl";
         task.arguments = @[
-            @"-k",  // Allow self-signed certs
             @"-s",  // Silent
-            @"-c", cookieFilePath,  // SAVE COOKIES TO FILE (THIS WAS MISSING!)
+            @"-c", cookieFilePath,  // SAVE COOKIES TO FILE
             @"-X", @"POST",
             @"-H", @"Content-Type: application/json",
             @"-H", @"Accept: */*",
@@ -367,14 +433,12 @@
             }
 
             // Verify cookie file was actually created
-            NSString *hostSafe = [self.controllerHost stringByReplacingOccurrencesOfString:@"." withString:@""];
-            hostSafe = [hostSafe stringByReplacingOccurrencesOfString:@":" withString:@""];
-            NSString *usernameSafe = [self.username stringByReplacingOccurrencesOfString:@"+" withString:@""];
-            usernameSafe = [usernameSafe stringByReplacingOccurrencesOfString:@"@" withString:@""];
-            usernameSafe = [usernameSafe stringByReplacingOccurrencesOfString:@"." withString:@""];
-            NSString *cookieFilePath = [NSString stringWithFormat:@"/tmp/unifi_cookies_%@_%@.txt", hostSafe, usernameSafe];
+            NSString *cookieFilePath = [self cookieFilePath];
 
-            if ([[NSFileManager defaultManager] fileExistsAtPath:cookieFilePath]) {
+            if (cookieFilePath && [[NSFileManager defaultManager] fileExistsAtPath:cookieFilePath]) {
+                // Restrict the cookie jar to the current user (0600).
+                [[NSFileManager defaultManager] setAttributes:@{NSFilePosixPermissions: @(0600)}
+                                                 ofItemAtPath:cookieFilePath error:nil];
                 NSDictionary *attrs = [[NSFileManager defaultManager] attributesOfItemAtPath:cookieFilePath error:nil];
                 unsigned long long fileSize = [attrs fileSize];
                 NSLog(@"[UniFi] ✓ Session cookie file created: %@ (%llu bytes)", cookieFilePath, fileSize);
@@ -445,10 +509,16 @@
     request.HTTPMethod = @"POST";
     [self addAuthenticationToRequest:request];
 
+    NSString *cookieFilePath = [self cookieFilePath];
+
     NSURLSessionDataTask *task = [self.session dataTaskWithRequest:request
                                                   completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         self.authToken = nil;
         self.authCookie = nil;
+        // Remove the local session cookie jar on logout.
+        if (cookieFilePath) {
+            [[NSFileManager defaultManager] removeItemAtPath:cookieFilePath error:nil];
+        }
         NSLog(@"[UniFi] Logged out");
     }];
 
@@ -480,12 +550,16 @@
     [statusWindow appendLog:@"Initiating camera discovery..." level:@"INFO"];
 
     // Check for session cookie BEFORE attempting discovery
-    NSString *hostSafe = [self.controllerHost stringByReplacingOccurrencesOfString:@"." withString:@""];
-    hostSafe = [hostSafe stringByReplacingOccurrencesOfString:@":" withString:@""];
-    NSString *usernameSafe = [self.username stringByReplacingOccurrencesOfString:@"+" withString:@""];
-    usernameSafe = [usernameSafe stringByReplacingOccurrencesOfString:@"@" withString:@""];
-    usernameSafe = [usernameSafe stringByReplacingOccurrencesOfString:@"." withString:@""];
-    NSString *cookieFilePath = [NSString stringWithFormat:@"/tmp/unifi_cookies_%@_%@.txt", hostSafe, usernameSafe];
+    NSString *cookieFilePath = [self cookieFilePath];
+    if (!cookieFilePath) {
+        NSError *dirError = [NSError errorWithDomain:@"RTSPUniFiProtectAdapter"
+                                                code:1009
+                                            userInfo:@{NSLocalizedDescriptionKey: @"Could not access private cookie storage"}];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (completion) completion(nil, dirError);
+        });
+        return;
+    }
 
     NSLog(@"[UniFi] Checking for session cookie: %@", cookieFilePath);
     [statusWindow appendLog:[NSString stringWithFormat:@"Looking for session cookie: %@", cookieFilePath] level:@"INFO"];
@@ -519,27 +593,33 @@
         return;
     }
 
-    NSLog(@"[UniFi] Using curl helper to discover cameras (cookie-based auth)");
-    [statusWindow appendLog:@"Using curl helper for network bypass" level:@"INFO"];
+    NSLog(@"[UniFi] Using curl to discover cameras (cookie-based auth)");
+    [statusWindow appendLog:@"Using curl for camera discovery" level:@"INFO"];
 
     NSLog(@"[UniFi] Host: %@, Username: %@", self.controllerHost, self.username);
     [statusWindow appendLog:[NSString stringWithFormat:@"Host: %@, Username: %@", self.controllerHost, self.username] level:@"INFO"];
 
-    // Use curl helper script to bypass macOS network restrictions
+    // Discover cameras with a direct curl call using cookie-based auth. The password is
+    // NEVER passed on the command line (it would be visible via `ps`); authentication
+    // relies solely on the session cookie jar stored in the private directory.
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSString *helperPath = @"/tmp/unifi_helper.sh";
-        // Pass empty string for token parameter since we're using cookies now
-        NSArray *args = @[@"cameras", self.controllerHost, self.username, self.password, @""];
+        NSString *protocol = self.useHTTPS ? @"https" : @"http";
+        NSString *urlString = [NSString stringWithFormat:@"%@://%@:%ld/proxy/protect/api/cameras",
+                               protocol, self.controllerHost, (long)self.controllerPort];
 
-        NSLog(@"[UniFi] Executing: %@ %@", helperPath, [args componentsJoinedByString:@" "]);
-        [statusWindow appendLog:[NSString stringWithFormat:@"Executing: %@ cameras %@ %@", helperPath, self.controllerHost, self.username] level:@"INFO"];
+        NSLog(@"[UniFi] Executing curl: %@", urlString);
+        [statusWindow appendLog:[NSString stringWithFormat:@"Discovering cameras: %@", urlString] level:@"INFO"];
 
         NSTask *task = [[NSTask alloc] init];
-        task.launchPath = @"/bin/bash";
-        // Prepend the helper script path to arguments
-        NSMutableArray *bashArgs = [NSMutableArray arrayWithObject:helperPath];
-        [bashArgs addObjectsFromArray:args];
-        task.arguments = bashArgs;
+        task.launchPath = @"/usr/bin/curl";
+        task.arguments = @[
+            @"-s",
+            @"-b", cookieFilePath,   // cookie-based auth
+            @"-H", @"Accept: application/json",
+            @"-H", @"User-Agent: RTSP Rotator/2.2.0",
+            @"-w", @"\nHTTP_STATUS:%{http_code}",
+            urlString
+        ];
 
         NSPipe *outputPipe = [NSPipe pipe];
         task.standardOutput = outputPipe;
@@ -1018,15 +1098,17 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
           challenge.protectionSpace.host,
           self.verifySSL);
 
-    // Allow self-signed certificates if verifySSL is disabled
-    if (!self.verifySSL && [challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust]) {
+    if ([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust]) {
         SecTrustRef serverTrust = challenge.protectionSpace.serverTrust;
-        if (serverTrust) {
-            [self verifyCertificateFingerprint:serverTrust forHost:challenge.protectionSpace.host];
+        // TOFU certificate pinning: trust on first use, HARD FAIL on mismatch.
+        BOOL trusted = serverTrust && [self verifyCertificateFingerprint:serverTrust forHost:challenge.protectionSpace.host];
+        if (trusted) {
+            NSURLCredential *credential = [NSURLCredential credentialForTrust:serverTrust];
+            completionHandler(NSURLSessionAuthChallengeUseCredential, credential);
+        } else {
+            NSLog(@"[UniFi] REJECTING connection to %@ - certificate pin mismatch", challenge.protectionSpace.host);
+            completionHandler(NSURLSessionAuthChallengeCancelAuthenticationChallenge, nil);
         }
-        NSLog(@"[UniFi] Accepting self-signed certificate for %@", challenge.protectionSpace.host);
-        NSURLCredential *credential = [NSURLCredential credentialForTrust:serverTrust];
-        completionHandler(NSURLSessionAuthChallengeUseCredential, credential);
     } else {
         NSLog(@"[UniFi] Using default SSL handling");
         completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
@@ -1040,15 +1122,17 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
 
     NSLog(@"[UniFi] Task-level SSL Challenge: method=%@", challenge.protectionSpace.authenticationMethod);
 
-    // Allow self-signed certificates if verifySSL is disabled
-    if (!self.verifySSL && [challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust]) {
+    if ([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust]) {
         SecTrustRef serverTrust = challenge.protectionSpace.serverTrust;
-        if (serverTrust) {
-            [self verifyCertificateFingerprint:serverTrust forHost:challenge.protectionSpace.host];
+        // TOFU certificate pinning: trust on first use, HARD FAIL on mismatch.
+        BOOL trusted = serverTrust && [self verifyCertificateFingerprint:serverTrust forHost:challenge.protectionSpace.host];
+        if (trusted) {
+            NSURLCredential *credential = [NSURLCredential credentialForTrust:serverTrust];
+            completionHandler(NSURLSessionAuthChallengeUseCredential, credential);
+        } else {
+            NSLog(@"[UniFi] REJECTING connection (task-level) to %@ - certificate pin mismatch", challenge.protectionSpace.host);
+            completionHandler(NSURLSessionAuthChallengeCancelAuthenticationChallenge, nil);
         }
-        NSLog(@"[UniFi] Accepting self-signed certificate (task-level)");
-        NSURLCredential *credential = [NSURLCredential credentialForTrust:serverTrust];
-        completionHandler(NSURLSessionAuthChallengeUseCredential, credential);
     } else {
         completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
     }
@@ -1057,13 +1141,14 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
 #pragma mark - Certificate Fingerprint Caching
 
 /// Compute SHA-256 fingerprint of the leaf certificate. On first connection,
-/// store it in Keychain. On subsequent connections, compare and warn if changed.
-- (void)verifyCertificateFingerprint:(SecTrustRef)serverTrust forHost:(NSString *)host {
+/// store it in Keychain (trust on first use). On subsequent connections, compare and
+/// HARD FAIL (return NO) if the fingerprint changed — the caller cancels the connection.
+- (BOOL)verifyCertificateFingerprint:(SecTrustRef)serverTrust forHost:(NSString *)host {
     SecCertificateRef cert = SecTrustGetCertificateAtIndex(serverTrust, 0);
-    if (!cert) return;
+    if (!cert) return NO;
 
     CFDataRef certData = SecCertificateCopyData(cert);
-    if (!certData) return;
+    if (!certData) return NO;
 
     // Compute SHA-256 fingerprint
     NSData *derData = (__bridge_transfer NSData *)certData;
@@ -1079,30 +1164,31 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
                                                                   service:RTSPKeychainServiceRTSPCamera];
 
     if (!storedFingerprint) {
-        // First connection: cache the fingerprint
+        // First connection: pin the fingerprint (trust on first use)
         [RTSPKeychainManager setPassword:fingerprint
                               forAccount:keychainAccount
                                  service:RTSPKeychainServiceRTSPCamera];
-        NSLog(@"[CertPin] Cached certificate fingerprint for %@: %@", host, fingerprint);
-    } else if (![storedFingerprint isEqualToString:fingerprint]) {
-        // Fingerprint changed - warn about potential MITM
-        NSLog(@"[CertPin] WARNING: Certificate fingerprint CHANGED for %@!", host);
-        NSLog(@"[CertPin]   Stored:  %@", storedFingerprint);
-        NSLog(@"[CertPin]   Current: %@", fingerprint);
-
-        // Update the stored fingerprint but alert the user
-        [RTSPKeychainManager setPassword:fingerprint
-                              forAccount:keychainAccount
-                                 service:RTSPKeychainServiceRTSPCamera];
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-            RTSPStatusWindow *statusWindow = [RTSPStatusWindow sharedWindow];
-            [statusWindow appendLog:[NSString stringWithFormat:
-                @"WARNING: SSL certificate changed for %@! Possible MITM attack or cert rotation.", host]
-                              level:@"WARNING"];
-        });
+        NSLog(@"[CertPin] Pinned certificate fingerprint for %@: %@", host, fingerprint);
+        return YES;
     }
-    // else: fingerprint matches, all good
+
+    if ([storedFingerprint isEqualToString:fingerprint]) {
+        // Fingerprint matches the pin, all good.
+        return YES;
+    }
+
+    // Fingerprint changed - possible MITM. HARD FAIL and do NOT update the pin.
+    NSLog(@"[CertPin] WARNING: Certificate fingerprint CHANGED for %@ - REJECTING connection!", host);
+    NSLog(@"[CertPin]   Pinned:  %@", storedFingerprint);
+    NSLog(@"[CertPin]   Current: %@", fingerprint);
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        RTSPStatusWindow *statusWindow = [RTSPStatusWindow sharedWindow];
+        [statusWindow appendLog:[NSString stringWithFormat:
+            @"REJECTED: SSL certificate changed for %@! Possible MITM attack. Connection blocked.", host]
+                          level:@"ERROR"];
+    });
+    return NO;
 }
 
 @end
