@@ -50,7 +50,7 @@ static NSString * const kRTSPAutoCheckKey = @"RTSPAutoCheckMLX";
     return self;
 }
 
-- (void)checkMLXAvailability:(void (^)(RTSPPythonMLXStatus, NSError * _Nullable))completion {
+- (void)checkMLXAvailability:(nullable void (^)(RTSPPythonMLXStatus, NSError * _Nullable))completion {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         RTSPPythonMLXStatus newStatus = [self checkMLXAvailabilitySync];
 

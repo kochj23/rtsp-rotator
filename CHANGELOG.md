@@ -5,6 +5,35 @@ All notable changes to the RTSP Rotator project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.6.0] - 2026-11-11
+
+### Added
+- AI camera health summary in Camera Diagnostics (NovaAIKit): which cameras need attention and what to
+  check first, validated (plain text, numbers must come from the diagnostics) with a deterministic built-in
+  summary when AI is off, unreachable or rejected. Never sends camera IDs/URLs; credentials are redacted.
+- AI Settings window (NovaAISettingsView, app menu, Option-Command-Comma) and AI status indicator.
+
+### Changed
+- AI: migrated to NovaAIKit 1.0.0 (Auto failover across Ollama, MLX, TinyLLM, TinyChat, OpenWebUI, Nova Gateway,
+  OpenRouter, OpenAI; timeouts, retries, https-only, API credentials stored in the Keychain).
+- Minimum macOS raised from 11.0 to 12.0 (NovaAIKit floor; Xcode 27 cannot build 11.0).
+- Zero-warning Release build (Info.plist no longer copied as a resource, deprecated APIs replaced,
+  nullability fixed).
+- Wallpaper controller start/stop run synchronously on the main thread; dealloc no longer dispatches a block
+  that captures the deallocating controller (use-after-free crash).
+- When hosting unit tests the app skips its startup and never shows modal alerts.
+- Event log: tests write to a temporary folder (they used to overwrite the real events.dat); auto-save is
+  coalesced to at most once a second instead of re-archiving the whole log every 10 events.
+- Pre-existing test suite fixed so it builds and runs unattended (renamed test variables, Foundation URL
+  behaviour on macOS 14+, feed tests against manualFeedMetadata, uptime in percent).
+
+### Removed
+- The app's own AIBackendManager/AIBackendStatusMenu and the Google Cloud, Azure, AWS and IBM Watson backends.
+
+### Security
+- One-time migration of the legacy AI settings and of the legacy Keychain service com.jordankoch.RTSPRotator
+  into NovaAIKit; obsolete Google/Azure/AWS/IBM entries are deleted.
+
 ## [2.2.0] - 2025-10-29
 
 ### 🆕 UniFi Protect Integration
@@ -112,7 +141,7 @@ RTSPUniFiProtectAdapter *adapter = [RTSPUniFiProtectAdapter sharedAdapter];
 adapter.controllerHost = @"192.168.1.1";
 adapter.controllerPort = 443;
 adapter.username = @"admin";
-adapter.password = @"password";
+adapter.password = /* read from the Keychain */ nil;
 adapter.useHTTPS = YES;
 
 // Authenticate and discover cameras

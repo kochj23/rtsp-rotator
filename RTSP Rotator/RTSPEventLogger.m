@@ -49,7 +49,17 @@
 
 @interface RTSPEventLogger ()
 @property (nonatomic, strong) NSMutableArray<RTSPEvent *> *allEvents;
+@property (nonatomic, assign) BOOL savePending;
 @end
+
+/// Folder for events.dat. Under XCTest a temporary folder, so tests never overwrite the user's event log.
+static NSString *RTSPEventLoggerDirectory(void) {
+    if (NSProcessInfo.processInfo.environment[@"XCTestConfigurationFilePath"] != nil) {
+        return [NSTemporaryDirectory() stringByAppendingPathComponent:@"RTSPRotatorTests"];
+    }
+    NSString *appSupport = [NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) firstObject];
+    return [appSupport stringByAppendingPathComponent:@"RTSP Rotator"];
+}
 
 @implementation RTSPEventLogger
 
@@ -95,12 +105,30 @@
         [self.delegate eventLogger:self didLogEvent:event];
     }
 
-    // Auto-save periodically
-    if (self.allEvents.count % 10 == 0) {
-        [self saveEvents];
-    }
+    // Auto-save, coalesced: saving re-archives the whole log, so write at most once a second.
+    [self scheduleSave];
 
     NSLog(@"[Events] %@: %@", [RTSPEventLogger nameForEventType:event.type], event.title);
+}
+
+- (void)scheduleSave {
+    @synchronized (self) {
+        if (self.savePending) {
+            return;
+        }
+        self.savePending = YES;
+    }
+    __weak typeof(self) weakSelf = self;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        RTSPEventLogger *strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
+        @synchronized (strongSelf) {
+            strongSelf.savePending = NO;
+        }
+        [strongSelf saveEvents];
+    });
 }
 
 - (void)logEventType:(RTSPEventType)type title:(NSString *)title details:(NSString *)details feedURL:(NSURL *)feedURL {
@@ -232,8 +260,7 @@
 }
 
 - (BOOL)saveEvents {
-    NSString *appSupport = [NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) firstObject];
-    NSString *appFolder = [appSupport stringByAppendingPathComponent:@"RTSP Rotator"];
+    NSString *appFolder = RTSPEventLoggerDirectory();
 
     NSFileManager *fm = [NSFileManager defaultManager];
     if (![fm fileExistsAtPath:appFolder]) {
@@ -260,8 +287,7 @@
 }
 
 - (BOOL)loadEvents {
-    NSString *appSupport = [NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) firstObject];
-    NSString *eventsPath = [[appSupport stringByAppendingPathComponent:@"RTSP Rotator"] stringByAppendingPathComponent:@"events.dat"];
+    NSString *eventsPath = [RTSPEventLoggerDirectory() stringByAppendingPathComponent:@"events.dat"];
 
     if (![[NSFileManager defaultManager] fileExistsAtPath:eventsPath]) {
         NSLog(@"[Events] No saved events found");

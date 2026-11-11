@@ -6,6 +6,7 @@
 //
 
 #import "AppDelegate.h"
+#import <UserNotifications/UserNotifications.h>
 #import "RTSPWallpaperController.h"
 #import "RTSPStatusMenuController.h"
 #import "RTSPMenuBarController.h"
@@ -13,6 +14,7 @@
 #import "RTSPDashboardManager.h"
 #import "RTSPCameraTypeManager.h"
 #import "RTSPCameraDiagnostics.h"
+#import "RTSP_Rotator-Swift.h"
 #import "RTSPFeedMetadata.h"
 #import "RTSPGlassmorphicBackgroundView.h"
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
@@ -76,6 +78,12 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     NSLog(@"[AppDelegate] Application starting...");
+
+    // Hosting unit tests: don't open windows, start players or show alerts (a modal alert would block the run).
+    if (NSProcessInfo.processInfo.environment[@"XCTestConfigurationFilePath"] != nil) {
+        NSLog(@"[AppDelegate] Running as XCTest host; skipping startup");
+        return;
+    }
 
     // Clean up stale HLS temp directories from previous runs (older than 1 hour)
     [self cleanupStaleHLSTempDirectories];
@@ -609,11 +617,7 @@
     panel.canChooseFiles = YES;
     panel.canChooseDirectories = NO;
     panel.allowsMultipleSelection = NO;
-    if (@available(macOS 11.0, *)) {
-        panel.allowedContentTypes = @[[UTType typeWithIdentifier:@"public.json"]];
-    } else {
-        panel.allowedFileTypes = @[@"json"];
-    }
+    panel.allowedContentTypes = @[[UTType typeWithIdentifier:@"public.json"]];
     panel.title = @"Import Configuration";
 
     if ([panel runModal] == NSModalResponseOK) {
@@ -636,11 +640,7 @@
     NSLog(@"[Menu] Export Configuration requested");
 
     NSSavePanel *panel = [NSSavePanel savePanel];
-    if (@available(macOS 11.0, *)) {
-        panel.allowedContentTypes = @[[UTType typeWithIdentifier:@"public.json"]];
-    } else {
-        panel.allowedFileTypes = @[@"json"];
-    }
+    panel.allowedContentTypes = @[[UTType typeWithIdentifier:@"public.json"]];
     panel.nameFieldStringValue = @"rtsp-rotator-config.json";
     panel.title = @"Export Configuration";
 
@@ -664,14 +664,10 @@
     panel.canChooseFiles = YES;
     panel.canChooseDirectories = NO;
     panel.allowsMultipleSelection = NO;
-    if (@available(macOS 11.0, *)) {
-        panel.allowedContentTypes = @[
+    panel.allowedContentTypes = @[
             [UTType typeWithFilenameExtension:@"csv"],
             [UTType typeWithIdentifier:@"public.plain-text"]
         ];
-    } else {
-        panel.allowedFileTypes = @[@"csv", @"txt"];
-    }
     panel.title = @"Import Cameras from CSV";
 
     if ([panel runModal] == NSModalResponseOK) {
@@ -904,8 +900,8 @@
     [defaults synchronize];
 
     // Update wallpaper controller if it supports OSD
-    if ([self.wallpaperController respondsToSelector:@selector(setShowOSD:)]) {
-        [self.wallpaperController performSelector:@selector(setShowOSD:) withObject:@(newState)];
+    if ([self.wallpaperController respondsToSelector:NSSelectorFromString(@"setShowOSD:")]) {
+        [self.wallpaperController setValue:@(newState) forKey:@"showOSD"];
     }
 
     NSLog(@"[Menu] OSD %@", newState ? @"enabled" : @"disabled");
@@ -914,11 +910,13 @@
     NSString *title = newState ? @"OSD Enabled" : @"OSD Disabled";
     NSString *message = newState ? @"Camera name and status will be displayed" : @"On-screen display hidden";
 
-    NSUserNotification *userNotification = [[NSUserNotification alloc] init];
-    userNotification.title = title;
-    userNotification.informativeText = message;
-    userNotification.soundName = nil;
-    [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:userNotification];
+    UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+    content.title = title;
+    content.body = message;
+    UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:@"rtsp-osd-toggle"
+                                                                          content:content
+                                                                          trigger:nil];
+    [[UNUserNotificationCenter currentNotificationCenter] addNotificationRequest:request withCompletionHandler:nil];
 }
 
 // UniFi Protect handlers
@@ -1487,12 +1485,23 @@
         [info appendFormat:@"%@: %@\n", report.cameraName, status];
     }
 
+    NSMutableArray<NSDictionary *> *reportDicts = [NSMutableArray arrayWithCapacity:reports.count];
+    for (RTSPCameraDiagnosticReport *report in reports) {
+        [reportDicts addObject:[report toDictionary]];
+    }
+
     NSAlert *alert = [[NSAlert alloc] init];
     alert.messageText = @"Camera Diagnostics";
     alert.informativeText = info.length > 0 ? info : @"No diagnostic data available";
     alert.alertStyle = NSAlertStyleInformational;
+    // AI camera health summary (NovaAIKit) with a built-in fallback, its source and the AI status.
+    alert.accessoryView = [RTSPAIBridge diagnosticsSummaryViewWithReports:reportDicts
+                                                             totalCameras:(NSInteger)self.wallpaperController.feeds.count];
     [alert addButtonWithTitle:@"OK"];
-    [alert runModal];
+    [alert addButtonWithTitle:@"AI Settings…"];
+    if ([alert runModal] == NSAlertSecondButtonReturn) {
+        [RTSPAIBridge showSettingsWindow];
+    }
 }
 
 - (void)handleAddCameraPreset:(NSNotification *)notification {

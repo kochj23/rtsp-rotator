@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, assign) CGRect normalizedRect;  // 0.0-1.0 coordinates
 @property (nonatomic, assign) BOOL enabled;
-@property (nonatomic, copy) NSArray<NSString *> *enabledClasses; // nil = all classes
+@property (nonatomic, copy, nullable) NSArray<NSString *> *enabledClasses; // nil = all classes
 
 - (instancetype)initWithName:(NSString *)name rect:(CGRect)rect;
 - (BOOL)containsDetection:(RTSPDetection *)detection;

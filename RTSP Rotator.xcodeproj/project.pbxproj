@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FD34C07E6987BBD2A3BDC5A7 /* NovaAIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E5540D4C5DD5568AE7C1822B /* NovaAIKit */; };
 		ICON000012E99881600C69380 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ICON000022E99881600C69380 /* Assets.xcassets */; };
 		WIDGET001B2E99881600C69380 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = WIDGET001F2E99881600C69380 /* WidgetKit.framework */; };
 		WIDGET002B2E99881600C69380 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = WIDGET002F2E99881600C69380 /* SwiftUI.framework */; };
@@ -14,19 +15,19 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		WIDGET004P2E99881600C69380 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D09EA6EB2E99881600C69380 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = WIDGET000T2E99881600C69380;
-			remoteInfo = "RTSP Rotator WidgetExtension";
-		};
 		TEST0001P2E99881600C69380 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D09EA6EB2E99881600C69380 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = D09EA6F32E99881600C69380;
 			remoteInfo = "RTSP Rotator";
+		};
+		WIDGET004P2E99881600C69380 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D09EA6EB2E99881600C69380 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = WIDGET000T2E99881600C69380;
+			remoteInfo = "RTSP Rotator WidgetExtension";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -45,27 +46,38 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		ICON000022E99881600C69380 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D09EA6F42E99881600C69380 /* RTSP Rotator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RTSP Rotator.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		ICON000022E99881600C69380 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		TEST0001F2E99881600C69380 /* RTSP RotatorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "RTSP RotatorTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		WIDGET000F2E99881600C69380 /* RTSP Rotator WidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "RTSP Rotator WidgetExtension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		WIDGET001F2E99881600C69380 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		WIDGET002F2E99881600C69380 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
-		TEST0001F2E99881600C69380 /* RTSP RotatorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "RTSP RotatorTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		1A0156B457EA4B6BED30F8F0 /* Exceptions for "RTSP Rotator" folder in "RTSP Rotator" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = D09EA6F32E99881600C69380 /* RTSP Rotator */;
+		};
+		EA1BE1819ABC0BEA1829DC17 /* Exceptions for "RTSP Rotator Widget" folder in "RTSP Rotator WidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = WIDGET000T2E99881600C69380 /* RTSP Rotator WidgetExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		D09EA6F62E99881600C69380 /* RTSP Rotator */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
+				1A0156B457EA4B6BED30F8F0 /* Exceptions for "RTSP Rotator" folder in "RTSP Rotator" target */,
 			);
 			path = "RTSP Rotator";
-			sourceTree = "<group>";
-		};
-		WIDGET006G2E99881600C69380 /* RTSP Rotator Widget */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
-			path = "RTSP Rotator Widget";
 			sourceTree = "<group>";
 		};
 		TEST0002G2E99881600C69380 /* Tests */ = {
@@ -75,10 +87,26 @@
 			path = Tests;
 			sourceTree = "<group>";
 		};
+		WIDGET006G2E99881600C69380 /* RTSP Rotator Widget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				EA1BE1819ABC0BEA1829DC17 /* Exceptions for "RTSP Rotator Widget" folder in "RTSP Rotator WidgetExtension" target */,
+			);
+			path = "RTSP Rotator Widget";
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		D09EA6F12E99881600C69380 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FD34C07E6987BBD2A3BDC5A7 /* NovaAIKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		TEST0003F2E99881600C69380 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -91,13 +119,6 @@
 			files = (
 				WIDGET002B2E99881600C69380 /* SwiftUI.framework in Frameworks */,
 				WIDGET001B2E99881600C69380 /* WidgetKit.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		TEST0003F2E99881600C69380 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -167,29 +188,12 @@
 				D09EA6F62E99881600C69380 /* RTSP Rotator */,
 			);
 			name = "RTSP Rotator";
+			packageProductDependencies = (
+				E5540D4C5DD5568AE7C1822B /* NovaAIKit */,
+			);
 			productName = "RTSP Rotator";
 			productReference = D09EA6F42E99881600C69380 /* RTSP Rotator.app */;
 			productType = "com.apple.product-type.application";
-		};
-		WIDGET000T2E99881600C69380 /* RTSP Rotator WidgetExtension */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = WIDGET009C2E99881600C69380 /* Build configuration list for PBXNativeTarget "RTSP Rotator WidgetExtension" */;
-			buildPhases = (
-				WIDGET010S2E99881600C69380 /* Sources */,
-				WIDGET007F2E99881600C69380 /* Frameworks */,
-				WIDGET011R2E99881600C69380 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				WIDGET006G2E99881600C69380 /* RTSP Rotator Widget */,
-			);
-			name = "RTSP Rotator WidgetExtension";
-			productName = "RTSP Rotator WidgetExtension";
-			productReference = WIDGET000F2E99881600C69380 /* RTSP Rotator WidgetExtension.appex */;
-			productType = "com.apple.product-type.app-extension";
 		};
 		TEST0001T2E99881600C69380 /* RTSP RotatorTests */ = {
 			isa = PBXNativeTarget;
@@ -212,6 +216,26 @@
 			productReference = TEST0001F2E99881600C69380 /* RTSP RotatorTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		WIDGET000T2E99881600C69380 /* RTSP Rotator WidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = WIDGET009C2E99881600C69380 /* Build configuration list for PBXNativeTarget "RTSP Rotator WidgetExtension" */;
+			buildPhases = (
+				WIDGET010S2E99881600C69380 /* Sources */,
+				WIDGET007F2E99881600C69380 /* Frameworks */,
+				WIDGET011R2E99881600C69380 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				WIDGET006G2E99881600C69380 /* RTSP Rotator Widget */,
+			);
+			name = "RTSP Rotator WidgetExtension";
+			productName = "RTSP Rotator WidgetExtension";
+			productReference = WIDGET000F2E99881600C69380 /* RTSP Rotator WidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -227,12 +251,12 @@
 					D09EA6F32E99881600C69380 = {
 						CreatedOnToolsVersion = 26.0.1;
 					};
-					WIDGET000T2E99881600C69380 = {
-						CreatedOnToolsVersion = 26.0.1;
-					};
 					TEST0001T2E99881600C69380 = {
 						CreatedOnToolsVersion = 26.0.1;
 						TestTargetID = D09EA6F32E99881600C69380;
+					};
+					WIDGET000T2E99881600C69380 = {
+						CreatedOnToolsVersion = 26.0.1;
 					};
 				};
 			};
@@ -245,6 +269,9 @@
 			);
 			mainGroup = D09EA6EA2E99881600C69380;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				EA82C737B8B84E170D4C6328 /* XCRemoteSwiftPackageReference "NovaAIKit" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D09EA6F52E99881600C69380 /* Products */;
 			projectDirPath = "";
@@ -266,14 +293,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		WIDGET011R2E99881600C69380 /* Resources */ = {
+		TEST0005R2E99881600C69380 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		TEST0005R2E99881600C69380 /* Resources */ = {
+		WIDGET011R2E99881600C69380 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -290,14 +317,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		WIDGET010S2E99881600C69380 /* Sources */ = {
+		TEST0004S2E99881600C69380 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		TEST0004S2E99881600C69380 /* Sources */ = {
+		WIDGET010S2E99881600C69380 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -307,15 +334,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		WIDGET004D2E99881600C69380 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = WIDGET000T2E99881600C69380 /* RTSP Rotator WidgetExtension */;
-			targetProxy = WIDGET004P2E99881600C69380 /* PBXContainerItemProxy */;
-		};
 		TEST0001D2E99881600C69380 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = D09EA6F32E99881600C69380 /* RTSP Rotator */;
 			targetProxy = TEST0001P2E99881600C69380 /* PBXContainerItemProxy */;
+		};
+		WIDGET004D2E99881600C69380 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = WIDGET000T2E99881600C69380 /* RTSP Rotator WidgetExtension */;
+			targetProxy = WIDGET004P2E99881600C69380 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -374,7 +401,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -430,7 +457,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -446,7 +473,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 251;
+				CURRENT_PROJECT_VERSION = 260;
 				DEVELOPMENT_TEAM = QRRCB8HB3W;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
@@ -462,7 +489,7 @@
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright 2026 Jordan Koch. All rights reserved.";
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				INSTALL_PATH = "$(HOME)/Applications";
-				MARKETING_VERSION = 2.5.1;
+				MARKETING_VERSION = 2.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jkoch.RTSP-Rotator";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
@@ -487,7 +514,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 251;
+				CURRENT_PROJECT_VERSION = 260;
 				DEVELOPMENT_TEAM = QRRCB8HB3W;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
@@ -503,7 +530,7 @@
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright 2026 Jordan Koch. All rights reserved.";
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				INSTALL_PATH = "$(HOME)/Applications";
-				MARKETING_VERSION = 2.5.1;
+				MARKETING_VERSION = 2.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jkoch.RTSP-Rotator";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
@@ -519,6 +546,40 @@
 			};
 			name = Release;
 		};
+		TEST0010D2E99881600C69380 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 260;
+				DEVELOPMENT_TEAM = QRRCB8HB3W;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 2.6.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.jkoch.RTSP-RotatorTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RTSP Rotator.app/Contents/MacOS/RTSP Rotator";
+			};
+			name = Debug;
+		};
+		TEST0011D2E99881600C69380 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 260;
+				DEVELOPMENT_TEAM = QRRCB8HB3W;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 2.6.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.jkoch.RTSP-RotatorTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RTSP Rotator.app/Contents/MacOS/RTSP Rotator";
+			};
+			name = Release;
+		};
 		WIDGET012D2E99881600C69380 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -526,7 +587,7 @@
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = "RTSP Rotator Widget/RTSP_Rotator_Widget.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 251;
+				CURRENT_PROJECT_VERSION = 260;
 				DEVELOPMENT_TEAM = QRRCB8HB3W;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "RTSP Rotator Widget/Info.plist";
@@ -538,7 +599,7 @@
 					"@executable_path/../../../../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 2.5.1;
+				MARKETING_VERSION = 2.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jkoch.RTSP-Rotator.Widget";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -554,7 +615,7 @@
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = "RTSP Rotator Widget/RTSP_Rotator_Widget.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 251;
+				CURRENT_PROJECT_VERSION = 260;
 				DEVELOPMENT_TEAM = QRRCB8HB3W;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "RTSP Rotator Widget/Info.plist";
@@ -566,46 +627,12 @@
 					"@executable_path/../../../../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 2.5.1;
+				MARKETING_VERSION = 2.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jkoch.RTSP-Rotator.Widget";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-			};
-			name = Release;
-		};
-		TEST0010D2E99881600C69380 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 251;
-				DEVELOPMENT_TEAM = QRRCB8HB3W;
-				GENERATE_INFOPLIST_FILE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 2.5.1;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.jkoch.RTSP-RotatorTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RTSP Rotator.app/Contents/MacOS/RTSP Rotator";
-			};
-			name = Debug;
-		};
-		TEST0011D2E99881600C69380 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 251;
-				DEVELOPMENT_TEAM = QRRCB8HB3W;
-				GENERATE_INFOPLIST_FILE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 2.5.1;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.jkoch.RTSP-RotatorTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RTSP Rotator.app/Contents/MacOS/RTSP Rotator";
 			};
 			name = Release;
 		};
@@ -630,15 +657,6 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		WIDGET009C2E99881600C69380 /* Build configuration list for PBXNativeTarget "RTSP Rotator WidgetExtension" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				WIDGET012D2E99881600C69380 /* Debug */,
-				WIDGET013D2E99881600C69380 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		TEST0009C2E99881600C69380 /* Build configuration list for PBXNativeTarget "RTSP RotatorTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -648,7 +666,35 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		WIDGET009C2E99881600C69380 /* Build configuration list for PBXNativeTarget "RTSP Rotator WidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				WIDGET012D2E99881600C69380 /* Debug */,
+				WIDGET013D2E99881600C69380 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		EA82C737B8B84E170D4C6328 /* XCRemoteSwiftPackageReference "NovaAIKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kochj23/NovaAIKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E5540D4C5DD5568AE7C1822B /* NovaAIKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EA82C737B8B84E170D4C6328 /* XCRemoteSwiftPackageReference "NovaAIKit" */;
+			productName = NovaAIKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D09EA6EB2E99881600C69380 /* Project object */;
 }

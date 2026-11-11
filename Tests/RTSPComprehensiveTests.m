@@ -829,15 +829,18 @@
     NSURL *url = [NSURL URLWithString:malicious];
     // NSURL should fail to parse or not contain injected content
     if (url) {
-        XCTAssertNotNil(url.host);
-        // The path should not contain the injected command
-        XCTAssertFalse([url.path containsString:@"/etc/passwd"]);
+        // macOS 14+ parses leniently and percent-encodes the newline: the host stays evil.com and no raw
+        // CR/LF survives into the URL, so nothing can be injected into a request line.
+        XCTAssertEqualObjects(url.host, @"evil.com");
+        XCTAssertFalse([url.absoluteString containsString:@"\n"]);
+        XCTAssertFalse([url.absoluteString containsString:@"\r"]);
     }
 }
 
 - (void)testEmptyURLStringReturnsNil {
+    // macOS 14+ may return an empty URL instead of nil; either way it is not a usable feed.
     NSURL *url = [NSURL URLWithString:@""];
-    XCTAssertNil(url);
+    XCTAssertTrue(url == nil || (url.absoluteString.length == 0 && url.host == nil));
 }
 
 - (void)testNonRTSPSchemeDetectable {

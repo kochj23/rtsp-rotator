@@ -12,6 +12,7 @@
 #import "RTSPCameraTypeManager.h"
 #import "RTSPPreferencesController.h"
 #import "RTSPCameraDiagnostics.h"
+#import "RTSP_Rotator-Swift.h"
 #import "RTSPConfigurationExporter.h"
 
 @implementation RTSPMenuBarController
@@ -95,6 +96,14 @@
                                                 keyEquivalent:@","];
     prefsItem.target = self;
     [appMenu addItem:prefsItem];
+
+    // AI settings (NovaAIKit)
+    NSMenuItem *aiSettingsItem = [[NSMenuItem alloc] initWithTitle:@"AI Settings..."
+                                                            action:@selector(showAISettings:)
+                                                     keyEquivalent:@","];
+    aiSettingsItem.keyEquivalentModifierMask = NSEventModifierFlagOption | NSEventModifierFlagCommand;
+    aiSettingsItem.target = self;
+    [appMenu addItem:aiSettingsItem];
 
     [appMenu addItem:[NSMenuItem separatorItem]];
 
@@ -712,6 +721,10 @@
 
 - (void)testAllRTSPCameras:(id)sender {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"RTSPTestAllCameras" object:nil];
+}
+
+- (void)showAISettings:(id)sender {
+    [RTSPAIBridge showSettingsWindow];
 }
 
 - (void)showRTSPDiagnostics:(id)sender {

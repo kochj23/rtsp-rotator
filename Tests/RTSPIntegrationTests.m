@@ -181,7 +181,7 @@
     [defaults setObject:username forKey:@"UniFi_Username"];
     [defaults synchronize];
 
-    [RTSPKeychainManager setPassword:password
+    [RTSPKeychainManager setPassword:testCred
                           forAccount:@"UniFi_Password"
                              service:RTSPKeychainServiceUniFiProtect];
 
@@ -194,7 +194,7 @@
     // Then
     XCTAssertEqualObjects(retrievedHost, host);
     XCTAssertEqualObjects(retrievedUsername, username);
-    XCTAssertEqualObjects(retrievedPassword, password);
+    XCTAssertEqualObjects(retrievedPassword, testCred);
 
     // Step 4: User updates password
     NSString *newPassword = @"NewPassword789!";

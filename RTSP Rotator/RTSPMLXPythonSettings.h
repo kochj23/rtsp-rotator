@@ -61,7 +61,7 @@ typedef NS_ENUM(NSInteger, RTSPPythonMLXStatus) {
  * Check Python MLX toolkit availability
  * @param completion Completion handler with status and error
  */
-- (void)checkMLXAvailability:(void (^)(RTSPPythonMLXStatus status, NSError * _Nullable error))completion;
+- (void)checkMLXAvailability:(nullable void (^)(RTSPPythonMLXStatus status, NSError * _Nullable error))completion;
 
 /**
  * Check Python MLX toolkit availability synchronously

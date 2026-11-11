@@ -9,6 +9,9 @@
 #import "RTSP_RotatorView.h"
 #import "RTSPWallpaperController.h"
 
+// Some tests pass nil on purpose to check it is handled.
+#pragma clang diagnostic ignored "-Wnonnull"
+
 @interface RTSP_RotatorTests : XCTestCase
 @end
 
@@ -310,7 +313,9 @@ NSArray<NSString *> *testLoadFeedsFromString(NSString *content) {
     for (NSString *urlString in invalidURLs) {
         NSURL *url = [NSURL URLWithString:urlString];
         if (url) {
-            XCTAssertNotEqualObjects(url.scheme, @"rtsp", @"Should not accept non-RTSP URL: %@", urlString);
+            // A usable RTSP URL needs the rtsp scheme *and* a host ("rtsp://" alone has no host).
+            BOOL usable = [url.scheme isEqualToString:@"rtsp"] && url.host.length > 0;
+            XCTAssertFalse(usable, @"Should not accept as an RTSP feed: %@", urlString);
         }
     }
 }

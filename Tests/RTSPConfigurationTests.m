@@ -9,6 +9,9 @@
 #import "RTSPFeedMetadata.h"
 #import "RTSPPreferencesController.h"
 
+// Some tests pass nil on purpose to check it is handled.
+#pragma clang diagnostic ignored "-Wnonnull"
+
 @interface RTSPConfigurationTests : XCTestCase
 @property (nonatomic, strong) RTSPConfigurationManager *configManager;
 @end
@@ -80,7 +83,7 @@
     // Then
     XCTAssertEqual(metadata.healthStatus, RTSPFeedHealthStatusHealthy);
     XCTAssertNotNil(metadata.lastSuccessfulConnection);
-    XCTAssertEqual([metadata uptimePercentage], 1.0, @"100% uptime with 10/10 successful");
+    XCTAssertEqual([metadata uptimePercentage], 100.0, @"100%% uptime with 10/10 successful");
 }
 
 - (void)testFeedMetadataUptimeCalculation {
@@ -92,7 +95,7 @@
     metadata.totalAttempts = 100;
 
     // Then
-    XCTAssertEqual([metadata uptimePercentage], 0.75, @"Should calculate 75% uptime");
+    XCTAssertEqual([metadata uptimePercentage], 75.0, @"Should calculate 75%% uptime");
 }
 
 - (void)testFeedMetadataUptimeWithZeroAttempts {
@@ -104,7 +107,7 @@
     CGFloat uptime = [metadata uptimePercentage];
 
     // Then
-    XCTAssertEqual(uptime, 0.0, @"Should return 0% uptime with zero attempts");
+    XCTAssertEqual(uptime, 0.0, @"Should return 0%% uptime with zero attempts");
 }
 
 - (void)testFeedMetadataConsecutiveFailures {
@@ -191,36 +194,39 @@
 - (void)testAddManualFeed {
     // Given
     RTSPConfigurationManager *manager = [[RTSPConfigurationManager alloc] init];
+    manager.manualFeedMetadata = @[];
     NSString *feedURL = @"rtsp://new-camera.example.com/stream";
-    NSUInteger initialCount = manager.manualFeeds.count;
+    NSUInteger initialCount = manager.manualFeedMetadata.count;
 
     // When
     [manager addManualFeed:feedURL];
 
-    // Then
-    XCTAssertEqual(manager.manualFeeds.count, initialCount + 1, @"Should add one feed");
-    XCTAssertTrue([manager.manualFeeds containsObject:feedURL], @"Should contain new feed");
+    // Then (feeds are managed as RTSPFeedMetadata)
+    XCTAssertEqual(manager.manualFeedMetadata.count, initialCount + 1, @"Should add one feed");
+    XCTAssertTrue([[manager.manualFeedMetadata valueForKey:@"url"] containsObject:feedURL], @"Should contain new feed");
 }
 
 - (void)testRemoveManualFeedAtIndex {
     // Given
     RTSPConfigurationManager *manager = [[RTSPConfigurationManager alloc] init];
+    manager.manualFeedMetadata = @[];
     [manager addManualFeed:@"rtsp://feed1.example.com"];
     [manager addManualFeed:@"rtsp://feed2.example.com"];
     [manager addManualFeed:@"rtsp://feed3.example.com"];
-    NSUInteger countBefore = manager.manualFeeds.count;
+    NSUInteger countBefore = manager.manualFeedMetadata.count;
 
     // When
     [manager removeManualFeedAtIndex:1]; // Remove second feed
 
     // Then
-    XCTAssertEqual(manager.manualFeeds.count, countBefore - 1, @"Should remove one feed");
-    XCTAssertFalse([manager.manualFeeds containsObject:@"rtsp://feed2.example.com"], @"Removed feed should not exist");
+    XCTAssertEqual(manager.manualFeedMetadata.count, countBefore - 1, @"Should remove one feed");
+    XCTAssertFalse([[manager.manualFeedMetadata valueForKey:@"url"] containsObject:@"rtsp://feed2.example.com"], @"Removed feed should not exist");
 }
 
 - (void)testUpdateManualFeedAtIndex {
     // Given
     RTSPConfigurationManager *manager = [[RTSPConfigurationManager alloc] init];
+    manager.manualFeedMetadata = @[];
     [manager addManualFeed:@"rtsp://original.example.com"];
     NSString *newURL = @"rtsp://updated.example.com";
 
@@ -228,7 +234,7 @@
     [manager updateManualFeedAtIndex:0 withURL:newURL];
 
     // Then
-    XCTAssertEqualObjects(manager.manualFeeds[0], newURL, @"Feed should be updated");
+    XCTAssertEqualObjects([[manager.manualFeedMetadata valueForKey:@"url"] firstObject], newURL, @"Feed should be updated");
 }
 
 #pragma mark - Configuration Source Tests
@@ -383,6 +389,7 @@
 - (void)testMoveManualFeedFromIndexToIndex {
     // Given
     RTSPConfigurationManager *manager = [[RTSPConfigurationManager alloc] init];
+    manager.manualFeedMetadata = @[];
     [manager addManualFeed:@"rtsp://feed1.example.com"];
     [manager addManualFeed:@"rtsp://feed2.example.com"];
     [manager addManualFeed:@"rtsp://feed3.example.com"];
@@ -391,7 +398,7 @@
     [manager moveManualFeedFromIndex:0 toIndex:2];
 
     // Then
-    NSArray *feeds = manager.manualFeeds;
+    NSArray *feeds = [manager.manualFeedMetadata valueForKey:@"url"];
     XCTAssertEqual(feeds.count, 3, @"Should still have 3 feeds");
     XCTAssertEqualObjects(feeds[2], @"rtsp://feed1.example.com", @"First feed should be at index 2");
     XCTAssertEqualObjects(feeds[0], @"rtsp://feed2.example.com", @"Second feed should be at index 0");

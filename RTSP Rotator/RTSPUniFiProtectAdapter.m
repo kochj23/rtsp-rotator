@@ -1144,10 +1144,12 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
 /// store it in Keychain (trust on first use). On subsequent connections, compare and
 /// HARD FAIL (return NO) if the fingerprint changed — the caller cancels the connection.
 - (BOOL)verifyCertificateFingerprint:(SecTrustRef)serverTrust forHost:(NSString *)host {
-    SecCertificateRef cert = SecTrustGetCertificateAtIndex(serverTrust, 0);
-    if (!cert) return NO;
-
+    CFArrayRef chain = SecTrustCopyCertificateChain(serverTrust);
+    if (!chain) return NO;
+    if (CFArrayGetCount(chain) == 0) { CFRelease(chain); return NO; }
+    SecCertificateRef cert = (SecCertificateRef)CFArrayGetValueAtIndex(chain, 0);
     CFDataRef certData = SecCertificateCopyData(cert);
+    CFRelease(chain);
     if (!certData) return NO;
 
     // Compute SHA-256 fingerprint

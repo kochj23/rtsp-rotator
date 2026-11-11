@@ -9,6 +9,9 @@
 #import <XCTest/XCTest.h>
 #import "RTSPKeychainManager.h"
 
+// These tests pass nil on purpose to check the manager rejects it.
+#pragma clang diagnostic ignored "-Wnonnull"
+
 @interface RTSPKeychainManagerTests : XCTestCase
 @property (nonatomic, strong) NSString *testAccount;
 @property (nonatomic, strong) NSString *testService;

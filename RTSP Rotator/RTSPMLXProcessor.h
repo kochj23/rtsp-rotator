@@ -38,7 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) float confidenceThreshold;       // Minimum confidence (default: 0.5)
 @property (nonatomic, assign) float iouThreshold;              // Non-max suppression threshold (default: 0.45)
 @property (nonatomic, assign) NSInteger inferenceInterval;     // Process every N frames (default: 3)
-@property (nonatomic, copy) NSArray<NSString *> *enabledClasses; // Filter by classes (nil = all)
+@property (nonatomic, copy, nullable) NSArray<NSString *> *enabledClasses; // Filter by classes (nil = all)
 
 + (instancetype)defaultConfiguration;
 

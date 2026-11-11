@@ -238,7 +238,7 @@
     NSString *testCred = @"TestMigrationPassword";
 
     // Simulate old behavior: password in NSUserDefaults
-    [defaults setObject:password forKey:testKey];
+    [defaults setObject:testCred forKey:testKey];
     [defaults synchronize];
 
     // Migrate

@@ -126,62 +126,80 @@
 - (void)start {
     NSLog(@"[INFO] Starting RTSP Rotator");
 
-    // Setup window on main thread
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.usingExternalView) {
-            [self setupWindow];
-        }
-        [self setupPlayer];
-        [self playCurrentFeed];
-        [self startRotationTimer];
-    });
+    // Window, player and timer live on the main thread (synchronously when already there).
+    if ([NSThread isMainThread]) {
+        [self startPlayback];
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self startPlayback];
+        });
+    }
+}
+
+- (void)startPlayback {
+    if (!self.usingExternalView) {
+        [self setupWindow];
+    }
+    [self setupPlayer];
+    [self playCurrentFeed];
+    [self startRotationTimer];
 }
 
 - (void)stop {
     NSLog(@"[INFO] Stopping RTSP Rotator");
 
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.rotationTimer invalidate];
-        self.rotationTimer = nil;
+    if ([NSThread isMainThread]) {
+        [self teardownPlayback];
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self teardownPlayback];
+        });
+    }
+}
 
-        // Remove observers
-        [[NSNotificationCenter defaultCenter] removeObserver:self];
-        if (self.timeObserver) {
-            [self.player removeTimeObserver:self.timeObserver];
-            self.timeObserver = nil;
+/// Stops the timer, observers, player and proxies. Main thread only.
+- (void)teardownPlayback {
+    [self.rotationTimer invalidate];
+    self.rotationTimer = nil;
+
+    // Remove observers
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    if (self.timeObserver) {
+        [self.player removeTimeObserver:self.timeObserver];
+        self.timeObserver = nil;
+    }
+
+    // Remove KVO observer from current player item
+    if (self.currentObservedItem) {
+        @try {
+            [self.currentObservedItem removeObserver:self forKeyPath:@"status"];
+        } @catch (NSException *exception) {
+            NSLog(@"[INFO] Observer already removed in stop: %@", exception.reason);
         }
+        self.currentObservedItem = nil;
+    }
 
-        // Remove KVO observer from current player item
-        if (self.currentObservedItem) {
-            @try {
-                [self.currentObservedItem removeObserver:self forKeyPath:@"status"];
-            } @catch (NSException *exception) {
-                NSLog(@"[INFO] Observer already removed in stop: %@", exception.reason);
-            }
-            self.currentObservedItem = nil;
-        }
+    [self.player pause];
+    [self.player replaceCurrentItemWithPlayerItem:nil];
+    self.player = nil;
 
-        [self.player pause];
-        [self.player replaceCurrentItemWithPlayerItem:nil];
-        self.player = nil;
+    [self.playerLayer removeFromSuperlayer];
+    self.playerLayer = nil;
 
-        [self.playerLayer removeFromSuperlayer];
-        self.playerLayer = nil;
+    // Stop all FFmpeg proxies
+    NSLog(@"[INFO] Stopping FFmpeg proxies...");
+    [[RTSPFFmpegProxy sharedProxy] stopAllProxies];
 
-        // Stop all FFmpeg proxies
-        NSLog(@"[INFO] Stopping FFmpeg proxies...");
-        [[RTSPFFmpegProxy sharedProxy] stopAllProxies];
-
-        // Only close window if we created it (not using external view)
-        if (!self.usingExternalView && self.window) {
-            [self.window close];
-            self.window = nil;
-        }
-    });
+    // Only close window if we created it (not using external view)
+    if (!self.usingExternalView && self.window) {
+        [self.window close];
+        self.window = nil;
+    }
 }
 
 - (void)dealloc {
-    [self stop];
+    // Tear down synchronously: a block dispatched from dealloc would capture an object that is already gone.
+    [self teardownPlayback];
 }
 
 #pragma mark - Setup
@@ -202,6 +220,9 @@
         NSLog(@"[ERROR] Failed to create window");
         return;
     }
+
+    // ARC owns the window; AppKit must not also release it on close (over-release crash on stop).
+    self.window.releasedWhenClosed = NO;
 
     // Enable layer backing for video playback
     [self.window.contentView setWantsLayer:YES];
@@ -399,8 +420,9 @@
                     NSLog(@"[ERROR] ========================================");
 
                     // Show user-friendly alert for first failure
+                    // (Never under XCTest: a modal alert would block the test run.)
                     static BOOL hasShownAlert = NO;
-                    if (!hasShownAlert) {
+                    if (!hasShownAlert && NSProcessInfo.processInfo.environment[@"XCTestConfigurationFilePath"] == nil) {
                         hasShownAlert = YES;
                         dispatch_async(dispatch_get_main_queue(), ^{
                             NSAlert *alert = [[NSAlert alloc] init];
